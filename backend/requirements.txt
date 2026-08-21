@@ -7,4 +7,5 @@ python-dotenv
 email-validator
 python-jose[cryptography]
 passlib[bcrypt]
-# pyodbc  # Comentado porque requiere herramientas de compilación y no es necesario para SQLite
+psycopg2-binary
+aiofiles

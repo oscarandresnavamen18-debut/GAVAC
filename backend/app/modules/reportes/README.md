@@ -1,34 +1,16 @@
-# Módulo `reportes` — Consultas y Reportes
+# Módulo de Consultas y Reportes (GAVAC)
 
 **Responsable:** Jorge Botero
 
-Sigue exactamente el mismo patrón del módulo `cattle` (carpeta hermana):
+Este módulo se encarga de procesar la información del inventario ganadero y generar vistas consolidadas para la toma de decisiones. 
 
-```
-reportes/
-├── __init__.py
-├── schemas.py        # Schemas de Pydantic: forma de los reportes/respuestas
-├── repository.py     # Consultas a la base de datos (lectura, principalmente)
-├── service.py         # Lógica de negocio: cálculos, agrupaciones, generación de PDF/Excel
-└── router.py          # Endpoints HTTP, montados en /api/reportes
-```
+## Estructura Profesional del Módulo
+- `router.py`: Define los puntos de entrada (API) protegidos por JWT.
+- `service.py`: Contiene la lógica de negocio y el registro de auditoría de cada consulta.
+- `repository.py`: Ejecuta las consultas SQL optimizadas sobre el modelo central de animales.
+- `schemas.py`: Define las estructuras de datos para entrada y salida (Pydantic).
 
-Este módulo probablemente NO necesita `models.py` propio, ya que va a
-**leer** datos del modelo `Animal` que está en `../cattle/models.py`
-(por ejemplo, para generar reportes de ganado por raza o estado).
+## Integración y Seguridad
+El módulo utiliza la seguridad centralizada del proyecto. Cada vez que se genera un reporte, se registra automáticamente en la tabla de auditoría para garantizar la trazabilidad de la información sensible.
 
-## Pasos para empezar
-
-1. Importa el modelo que necesites así: `from app.modules.cattle.models import Animal`.
-2. En `router.py`, usa `prefix="/api/reportes"` para no chocar con `/api/ganado` ni `/api/auth`.
-3. Regístralo en `backend/app/main.py`:
-   ```python
-   from app.modules.reportes.router import router as reportes_router
-   app.include_router(reportes_router)
-   ```
-4. **No modifiques `app/database.py`** ni los archivos dentro de `../cattle/` — si necesitas un dato que no existe en el modelo `Animal`, coordina con Oscar (líder) antes de agregarlo.
-5. Para exportar a PDF o Excel se recomienda `reportlab` o `openpyxl` (agrégalas a `requirements.txt` si las usas).
-
-## Dudas de arranque
-- Instala dependencias con `pip install -r ../requirements.txt` (compartido por todo el backend).
-- Corre el backend con `uvicorn app.main:app --reload --port 8000` y prueba tus endpoints en `http://localhost:8000/docs`.
+Para agregar nuevos reportes, se debe seguir la arquitectura de capas (Router -> Service -> Repository) respetando los modelos definidos por el equipo de base de datos.

@@ -1,21 +1,27 @@
 from typing import List
-from fastapi import APIRouter, Depends, Header, HTTPException, status
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from datetime import datetime
+
+from app.database import get_db
+from app.modules.auth.service import get_usuario_actual
 from .service import ReportService
-from .schemas import ReportResponse
-from app.security.jwt import verify_token
+from .schemas import ReporteGeneralOut
 
-router = APIRouter(prefix="/api/reportes", tags=["reportes"])
-
+router = APIRouter(prefix="/api/reportes", tags=["Reportes y Consultas"])
 _service = ReportService()
 
-
-def get_current_user(authorization: str | None = Header(default=None)):
-    if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
-    token = authorization.split(" ", 1)[1]
-    return verify_token(token)
-
-
-@router.get("/", response_model=List[ReportResponse])
-def get_reports(current_user=Depends(get_current_user)):
-    return _service.list_reports()
+@router.get("/resumen", response_model=ReporteGeneralOut)
+def obtener_resumen_ganado(
+    db: Session = Depends(get_db),
+    usuario_actual = Depends(get_usuario_actual)
+):
+    """
+    Endpoint protegido que genera un resumen del inventario actual.
+    Registra automáticamente una entrada en la auditoría.
+    """
+    resumen = _service.generar_resumen_inventario(db, usuario_actual)
+    return {
+        "fecha_generacion": datetime.now(),
+        "resumen": resumen
+    }

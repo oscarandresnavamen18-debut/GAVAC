@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAVAC - Acceso al Sistema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
+        <div class="text-center mb-8">
+            <div class="bg-emerald-800 w-16 h-16 rounded-xl mx-auto flex items-center justify-center text-white text-2xl font-bold mb-4">G</div>
+            <h1 class="text-2xl font-bold text-slate-800">GAVAC</h1>
+            <p class="text-slate-500">Gestión Ganadera Profesional</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Email Corporativo</label>
+                <input type="email" id="email" required class="w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-emerald-800 outline-none transition-all">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Contraseña</label>
+                <input type="password" id="password" required class="w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-emerald-800 outline-none transition-all">
+            </div>
+
+            <button type="submit" class="w-full bg-emerald-800 text-white font-bold py-3 rounded-lg hover:bg-emerald-900 transition-colors shadow-lg">
+                Iniciar Sesión
+            </button>
+        </form>
+
+        <div id="loginMessage" class="mt-4 text-center text-sm font-medium hidden"></div>
+
+        <p class="mt-8 text-center text-slate-400 text-xs uppercase tracking-widest">
+            Protocolo de seguridad activo
+        </p>
+    </div>
+
+    <script type="module">
+        // Este script será reemplazado por la lógica de Juan en main.ts
+        const form = document.getElementById('loginForm');
+        const message = document.getElementById('loginMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('access_token', data.access_token);
+                    message.innerText = "✅ ¡Acceso concedido!";
+                    message.className = "mt-4 text-center text-sm font-medium text-emerald-600";
+                    message.classList.remove('hidden');
+                    setTimeout(() => window.location.href = "/ganado", 1000);
+                } else {
+                    message.innerText = "❌ " + (data.detail || "Error de credenciales");
+                    message.className = "mt-4 text-center text-sm font-medium text-red-600";
+                    message.classList.remove('hidden');
+                }
+            } catch (err) {
+                message.innerText = "❌ Error al conectar con el servidor";
+                message.className = "mt-4 text-center text-sm font-medium text-red-600";
+                message.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

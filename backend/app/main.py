@@ -6,6 +6,7 @@ from fastapi.responses import FileResponse
 import os
 
 from app.database import Base, engine
+from app.middleware.security import SecurityHeadersMiddleware
 
 # ============================================================
 # IMPORTAR MODELOS
@@ -20,6 +21,8 @@ from app.modules.cattle.models import Animal
 # ============================================================
 
 from app.modules.cattle.router import router as cattle_router
+from app.modules.auth.router import router as auth_router
+from app.modules.reportes.router import router as reportes_router
 
 
 # ============================================================
@@ -28,7 +31,8 @@ from app.modules.cattle.router import router as cattle_router
 
 app = FastAPI(
     title="GAVAC API",
-    version="0.1.0"
+    description="Sistema de Gestión Ganadera Profesional",
+    version="1.0.0"
 )
 
 
@@ -42,12 +46,18 @@ Base.metadata.create_all(bind=engine)
 
 
 # ============================================================
-# CONFIGURACIÓN CORS
+# MIDDLEWARES DE SEGURIDAD
 # ============================================================
+
+# 1. Cabeceras de seguridad (Helmet)
+app.add_middleware(SecurityHeadersMiddleware)
+
+# 2. Configuración CORS Profesional
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -58,38 +68,35 @@ app.add_middleware(
 # CONFIGURACIÓN DEL FRONTEND
 # ============================================================
 
-frontend_dir = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        "../../frontend"
-    )
-)
+# Ruta robusta para encontrar la carpeta frontend en Windows/Linux
+current_file_dir = os.path.dirname(os.path.abspath(__file__))
+frontend_dir = os.path.normpath(os.path.join(current_file_dir, "..", "..", "frontend"))
 
 
 # ============================================================
 # ARCHIVOS ESTÁTICOS
 # ============================================================
 
-app.mount(
-    "/static",
-    StaticFiles(directory=frontend_dir),
-    name="static"
-)
+if os.path.exists(frontend_dir):
+    app.mount(
+        "/static",
+        StaticFiles(directory=frontend_dir),
+        name="static"
+    )
 
 
 # ============================================================
-# PÁGINA PRINCIPAL
+# PÁGINA PRINCIPAL (Landing / Login)
 # ============================================================
 
 @app.get("/")
 def index_page():
+    # Por ahora servimos el index principal que redirige al login o dashboard
+    return FileResponse(os.path.join(frontend_dir, "index.html"))
 
-    return FileResponse(
-        os.path.join(
-            frontend_dir,
-            "index.html"
-        )
-    )
+@app.get("/login")
+def login_page():
+    return FileResponse(os.path.join(frontend_dir, "src/modules/auth/index.html"))
 
 
 # ============================================================
@@ -98,20 +105,25 @@ def index_page():
 
 @app.get("/ganado")
 def ganado_page():
-
-    return FileResponse(
-        os.path.join(
-            frontend_dir,
-            "ganado.html"
-        )
-    )
+    return FileResponse(os.path.join(frontend_dir, "src/modules/ganado/index.html"))
 
 
 # ============================================================
-# RUTAS DEL MÓDULO DE GANADO
+# PÁGINA DE REPORTES
+# ============================================================
+
+@app.get("/reportes")
+def reportes_page():
+    return FileResponse(os.path.join(frontend_dir, "src/modules/reportes/index.html"))
+
+
+# ============================================================
+# RUTAS DE LOS MÓDULOS
 # ============================================================
 
 app.include_router(cattle_router)
+app.include_router(auth_router)
+app.include_router(reportes_router)
 
 
 # ============================================================

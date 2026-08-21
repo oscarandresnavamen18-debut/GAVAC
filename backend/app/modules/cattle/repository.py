@@ -1,7 +1,4 @@
-"""
-Repository: única capa que habla directamente con la base de datos
-para este módulo.
-"""
+
 from typing import Optional
 from sqlalchemy.orm import Session
 from app.modules.cattle.models import Animal
@@ -36,6 +33,10 @@ def create(db: Session, data: AnimalCreate) -> Animal:
     db.commit()
     db.refresh(animal)
     return animal
+
+
+def setattr(animal, field, value):
+    pass
 
 
 def update(db: Session, animal: Animal, data: AnimalUpdate) -> Animal:

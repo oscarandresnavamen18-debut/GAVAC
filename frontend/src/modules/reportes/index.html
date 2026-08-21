@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAVAC - Reportes y Consultas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-green-700 text-white p-4 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">GAVAC — Reportes</h1>
+            <div class="space-x-4">
+                <a href="/" class="hover:underline">Inicio</a>
+                <a href="/ganado" class="hover:underline">Ganado</a>
+                <button id="logoutBtn" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-6 text-gray-800 border-b pb-2">Panel de Consultas y Auditoría</h2>
+
+        <div id="authStatus" class="mb-4 p-3 rounded hidden"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-6 border-2 border-green-100 rounded-xl hover:border-green-500 transition-colors cursor-pointer bg-green-50/30" onclick="fetchResumen()">
+                <div class="flex items-center mb-2">
+                    <span class="text-2xl mr-2">📊</span>
+                    <h3 class="font-bold text-green-800 text-lg">Resumen de Inventario</h3>
+                </div>
+                <p class="text-sm text-gray-600">Estadísticas actuales de ganado por sexo y estado real.</p>
+            </div>
+
+            <div class="p-6 border-2 border-blue-100 rounded-xl hover:border-blue-500 transition-colors cursor-pointer bg-blue-50/30">
+                <div class="flex items-center mb-2">
+                    <span class="text-2xl mr-2">🥛</span>
+                    <h3 class="font-bold text-blue-800 text-lg">Producción</h3>
+                </div>
+                <p class="text-sm text-gray-600">Histórico de pesaje y rendimiento por lote.</p>
+            </div>
+
+            <div class="p-6 border-2 border-purple-100 rounded-xl hover:border-purple-500 transition-colors cursor-pointer bg-purple-50/30">
+                <div class="flex items-center mb-2">
+                    <span class="text-2xl mr-2">🛡️</span>
+                    <h3 class="font-bold text-purple-800 text-lg">Logs de Auditoría</h3>
+                </div>
+                <p class="text-sm text-gray-600">Registro de accesos y acciones realizadas en el sistema.</p>
+            </div>
+        </div>
+
+        <div id="reportLoader" class="mt-8 hidden flex justify-center">
+            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-green-700"></div>
+        </div>
+
+        <div id="reportResult" class="mt-8 overflow-x-auto">
+            <!-- Los resultados se cargarán aquí con formato profesional -->
+        </div>
+    </main>
+
+    <!-- Script inline para demostración, se recomienda mover a main.ts -->
+    <script>
+        const token = localStorage.getItem('access_token');
+        const authStatus = document.getElementById('authStatus');
+
+        if (!token) {
+            authStatus.innerText = "⚠️ Acceso denegado: No se encontró una sesión activa.";
+            authStatus.classList.add('bg-yellow-100', 'text-yellow-800', 'border', 'border-yellow-200');
+            authStatus.classList.remove('hidden');
+            setTimeout(() => window.location.href = "/", 3000);
+        }
+
+        async function fetchResumen() {
+            const loader = document.getElementById('reportLoader');
+            const resultDiv = document.getElementById('reportResult');
+
+            loader.classList.remove('hidden');
+            resultDiv.innerHTML = '';
+
+            try {
+                const res = await fetch('/api/reportes/resumen', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.status === 401) {
+                    alert("Su sesión ha expirado por seguridad. Inicie sesión nuevamente.");
+                    window.location.href = "/";
+                    return;
+                }
+
+                const data = await res.json();
+
+                let html = `
+                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                        <h4 class="font-bold text-gray-700 mb-4 uppercase text-xs tracking-wider">Resultado de la consulta (${new Date(data.fecha_generacion).toLocaleString()})</h4>
+                        <table class="min-w-full bg-white rounded-lg overflow-hidden shadow-sm">
+                            <thead class="bg-green-700 text-white text-left">
+                                <tr>
+                                    <th class="py-3 px-4">Sexo</th>
+                                    <th class="py-3 px-4">Estado</th>
+                                    <th class="py-3 px-4">Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+
+                data.resumen.forEach(item => {
+                    html += `
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 px-4 capitalize">${item.sexo || 'N/A'}</td>
+                            <td class="py-3 px-4"><span class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">${item.estado}</span></td>
+                            <td class="py-3 px-4 font-bold">${item.cantidad}</td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table></div>`;
+                resultDiv.innerHTML = html;
+            } catch (err) {
+                resultDiv.innerHTML = `<div class="bg-red-50 text-red-700 p-4 rounded border border-red-200">Error al conectar con el servidor de reportes.</div>`;
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            localStorage.removeItem('access_token');
+            window.location.href = "/";
+        });
+    </script>
+</body>
+</html>

@@ -26,3 +26,15 @@ class Usuario(Base):
     password_hash = Column(String, nullable=False)
     rol = Column(Enum(RolEnum), default=RolEnum.operario, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class AuditoriaLog(Base):
+    __tablename__ = "logs_auditoria"
+
+    id = Column(Integer, primary_key=True, index=True)
+    usuario_id = Column(Integer, nullable=True)
+    email = Column(String, nullable=True)
+    accion = Column(String, nullable=False)
+    detalles = Column(String, nullable=True)
+    ip_address = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

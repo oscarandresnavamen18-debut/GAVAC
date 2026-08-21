@@ -1,8 +1,4 @@
-"""
-Modelo de datos del animal (tabla 'animales'). Cuando el compañero de
-base de datos cree la tabla en SQL Server, esta es la referencia de
-qué columnas debe tener.
-"""
+
 from sqlalchemy import Column, Integer, String, Date, DateTime, func
 from app.database import Base
 
