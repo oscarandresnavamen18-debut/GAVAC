@@ -30,6 +30,7 @@ Thumbs.db
 # Database / Prisma
 /prisma/*.db
 /prisma/*.db-journal
+backend/*.db
 
 # Python
 __pycache__/
@@ -38,6 +39,9 @@ venv/
 .venv/
 backend/venv/
 backend/venv311/
-backend/gavac.db/
+
 # Ignorar logs del backend
-backend/*.log/
+backend/*.log
+
+# Carpeta temporal GAVAC
+GAVAC/
