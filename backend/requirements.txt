@@ -8,4 +8,8 @@ email-validator
 python-jose[cryptography]
 passlib[bcrypt]
 psycopg2-binary
+<<<<<<< HEAD
 aiofiles
+=======
+# pyodbc  # Comentado porque requiere herramientas de compilación y no es necesario para SQLite
+>>>>>>> 2d2f93dc9d18a1cad29ff38af36862b7544d0f7b

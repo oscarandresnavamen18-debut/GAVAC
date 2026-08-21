@@ -1,4 +1,4 @@
-name: Repo Audit
+concurrency: name: Repo Audit
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
             if [ ! -e "$1" ]; then
               echo "WARN: falta $1"
             else
-              echo "OK: $1"
+              echo  "OK: $1"
             fi
           }
 
