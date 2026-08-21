@@ -38,4 +38,6 @@ venv/
 .venv/
 backend/venv/
 backend/venv311/
-backend/gavac.db
+backend/gavac.db/
+# Ignorar logs del backend
+backend/*.log/
