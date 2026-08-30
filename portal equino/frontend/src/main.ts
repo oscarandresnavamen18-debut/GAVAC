@@ -244,7 +244,7 @@ const setupDashboardListeners = () => {
     logger("Consultando Supabase (RBAC Activo)...", "info")
     try {
       const res = await fetch('/api/ganado', {
-        headers: { 'Authorization': \`Bearer \${state.token}\` }
+        headers: { 'Authorization': `Bearer ${state.token}` }
       });
       const data = await res.json();
       if (res.ok) logger("ÉXITO: Datos recuperados.\n" + JSON.stringify(data, null, 2), "success")
@@ -263,7 +263,7 @@ const setupDashboardListeners = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': \`Bearer \${state.token}\`
+          'Authorization': `Bearer ${state.token}`
         },
         body: JSON.stringify({ nombre, tipo, peso: 0 })
       });
