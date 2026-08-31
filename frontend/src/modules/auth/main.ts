@@ -176,8 +176,8 @@ form.addEventListener("submit", async (e) => {
             // ========================================
 
             setTimeout(() => {
-                // Redirigimos a /ganado/ para mayor compatibilidad con rutas de FastAPI
-                window.location.href = "/ganado";
+                // Redirigimos al Dashboard Central de Roles
+                window.location.href = "/dashboard";
             }, 800);
         }
 

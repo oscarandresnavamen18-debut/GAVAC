@@ -40,17 +40,28 @@ if os.path.exists(FRONTEND_PATH):
 else:
     logger.error(f"❌ FRONTEND NOT FOUND AT: {FRONTEND_PATH}")
 
-# Servir el Login como página por defecto
+# Servir la Landing Page como página principal
 @app.get("/")
 def root():
-    return RedirectResponse(url="/login")
+    landing_file = os.path.join(FRONTEND_PATH, "index.html")
+    if os.path.exists(landing_file):
+        return FileResponse(landing_file)
+    return {"error": "Landing page no encontrada"}
 
+# Servir el Login
 @app.get("/login")
 def login_page():
-    index_file = os.path.join(FRONTEND_PATH, "index.html")
-    if os.path.exists(index_file):
-        return FileResponse(index_file)
-    return {"error": "Index.html no encontrado en la ruta configurada"}
+    login_file = os.path.join(FRONTEND_PATH, "login.html")
+    if os.path.exists(login_file):
+        return FileResponse(login_file)
+    return FileResponse(os.path.join(FRONTEND_PATH, "index.html"))
+
+@app.get("/dashboard")
+def dashboard_page():
+    dash_file = os.path.join(FRONTEND_PATH, "dashboard.html")
+    if os.path.exists(dash_file):
+        return FileResponse(dash_file)
+    return {"error": "Dashboard no encontrado"}
 
 @app.get("/ganado")
 def ganado_page():

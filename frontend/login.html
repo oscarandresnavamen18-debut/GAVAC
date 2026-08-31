@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAVAC — Acceso Profesional</title>
+    <link href="/static/dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap">
+    <style>
+        body { font-family: 'DM Sans', sans-serif; background-color: #F7F4EF; margin: 0; overflow: hidden; }
+        .font-serif { font-family: 'DM Serif Display', serif; }
+
+        .login-container { display: grid; grid-template-columns: 1.2fr 0.8fr; min-height: 100vh; }
+
+        /* Lado de la Imagen */
+        .login-visual {
+            background: linear-gradient(rgba(27, 94, 32, 0.6), rgba(15, 51, 36, 0.8)),
+                        url('https://images.unsplash.com/photo-1545468843-02604245997a?q=80&w=1200&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 80px;
+            color: white;
+        }
+
+        /* Lado del Formulario */
+        .login-form-side {
+            background-color: #F7F4EF;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 10%;
+        }
+
+        .input-elegant {
+            width: 100%;
+            background: white;
+            border: 1px solid #D8D3C7;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 15px;
+            transition: all 0.3s;
+            color: #1A1A14;
+        }
+        .input-elegant:focus {
+            border-color: #1B5E20;
+            box-shadow: 0 0 0 4px rgba(27, 94, 32, 0.08);
+            outline: none;
+        }
+
+        .btn-gold {
+            background: #1B5E20;
+            color: white;
+            padding: 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(27, 94, 32, 0.2);
+            transition: all 0.3s;
+        }
+        .btn-gold:hover { transform: translateY(-2px); background: #2E7D32; box-shadow: 0 15px 35px rgba(27, 94, 32, 0.3); }
+
+        @media (max-width: 1024px) { .login-container { grid-template-columns: 1fr; } .login-visual { display: none; } }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Visual Background Side -->
+        <div class="login-visual">
+            <div class="max-w-xl">
+                <div class="w-16 h-1 bg-emerald-400 mb-8"></div>
+                <h1 class="font-serif text-6xl leading-tight mb-6">El control de su hato, <br><em class="italic text-emerald-300">en sus manos.</em></h1>
+                <p class="text-emerald-50/80 text-lg leading-relaxed">Bienvenido al ecosistema GAVAC. Inicie sesión para gestionar inventarios, salud y producción con el estándar más alto de la industria ganadera.</p>
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="login-form-side">
+            <div class="mb-12">
+                <div class="w-14 h-14 bg-emerald-900 rounded-2xl flex items-center justify-center text-white font-bold text-2xl mb-6 shadow-xl">G</div>
+                <h2 class="font-serif text-4xl text-slate-900 mb-2">Acceso al Sistema</h2>
+                <p class="text-slate-500 font-medium">Introduzca sus credenciales corporativas</p>
+            </div>
+
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Email Institucional</label>
+                    <input type="email" id="email" required placeholder="admin@gavac.com" class="input-elegant">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Contraseña Segura</label>
+                    <input type="password" id="password" required placeholder="••••••••" class="input-elegant">
+                </div>
+                <button type="submit" id="submitBtn" class="btn-gold w-full">Ingresar al Panel</button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <a href="#" id="toggleMode" class="text-emerald-800 font-bold text-sm hover:underline">
+                    ¿No tiene cuenta? Regístrese aquí
+                </a>
+            </div>
+
+            <div id="loginMessage" class="mt-6 text-center text-sm font-bold hidden p-4 rounded-xl"></div>
+
+            <div class="mt-12 pt-8 border-t border-slate-200">
+                <a href="/" class="text-slate-400 font-bold text-sm hover:text-emerald-800 flex items-center gap-2 transition-colors">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    Volver al sitio público
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/static/dist/modules/auth/main.js"></script>
+</body>
+</html>

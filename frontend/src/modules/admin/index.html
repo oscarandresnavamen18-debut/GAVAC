@@ -3,119 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC — Administración</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap">
+    <title>GAVAC Admin — Command Center</title>
+    <link href="/static/dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700;900&display=swap">
     <style>
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background:
-                radial-gradient(circle at top right, rgba(200, 230, 201, 0.2), transparent 30%),
-                linear-gradient(135deg, #F7F4EF 0%, #EAF3DE 100%);
-            color: #1A1A14;
-            min-height: 100vh;
-        }
-        .header-admin {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        .card-admin {
-            background: white;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-        }
-        h1, h2 {
-            font-family: 'DM Serif Display', serif;
-        }
-        .btn-back {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.2s ease;
-        }
-        .btn-back:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateX(-3px);
-        }
+        body { font-family: 'DM Sans', sans-serif; background-color: #F1F5F9; color: #0F172A; margin: 0; }
+        .font-serif { font-family: 'DM Serif Display', serif; }
+
+        .sidebar { width: 280px; background: #0F172A; height: 100vh; position: fixed; color: white; border-right: 1px solid #1E293B; z-index: 50; }
+        .main-view { margin-left: 280px; padding: 40px; min-height: 100vh; }
+
+        .kpi-box { background: white; border-radius: 24px; padding: 24px; border: 1px solid #E2E8F0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .kpi-trend-up { color: #10B981; font-size: 11px; font-weight: 800; }
+
+        .board-column { background: #E2E8F0/50; border-radius: 16px; padding: 16px; min-width: 320px; }
+        .board-card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #CBD5E1; cursor: grab; transition: all 0.2s; }
+        .board-card:hover { transform: rotate(1deg) translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: #1B5E20; }
+
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 12px; color: #94A3B8; transition: 0.3s; font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; cursor: pointer; }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.05); color: white; }
+        .nav-item.active { border-left: 4px solid #10B981; }
+
+        @media (max-width: 1024px) { .sidebar { width: 80px; } .sidebar span { display: none; } .main-view { margin-left: 80px; } }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="flex">
 
-    <header class="header-admin text-white sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="bg-emerald-600 w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">A</div>
-                <div>
-                    <h1 class="text-xl font-bold tracking-tight">Panel de Control Admin</h1>
-                    <p class="text-slate-400 text-[10px] uppercase tracking-widest font-bold">Seguridad y Gestión</p>
-                </div>
-            </div>
-            <!-- Botón de Volver -->
-            <a href="/ganado" class="btn-back flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
-                </svg>
-                Volver
+    <aside class="sidebar p-6 flex flex-col">
+        <div class="flex items-center gap-4 mb-12">
+            <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center font-black text-2xl shadow-xl shadow-emerald-900/40">G</div>
+            <span class="font-serif text-2xl">GAVAC <small class="block text-[9px] font-black text-emerald-500 tracking-[.3em]">ADMIN</small></span>
+        </div>
+
+        <nav class="flex-1 space-y-4">
+            <div class="nav-item active"><span class="text-2xl">📊</span> <span>Dashboard</span></div>
+            <div class="nav-item"><span class="text-2xl">🏛️</span> <span>Mis Fincas</span></div>
+            <div class="nav-item"><span class="text-2xl">🥛</span> <span>Producción</span></div>
+            <div class="nav-item"><span class="text-2xl">👨‍🌾</span> <span>Personal</span></div>
+            <div class="nav-item"><span class="text-2xl">🛡️</span> <span>Permisos</span></div>
+        </nav>
+
+        <div class="mt-auto pt-6 border-t border-slate-800">
+            <a href="/dashboard" class="flex items-center justify-center gap-2 bg-emerald-900/50 hover:bg-emerald-800 p-4 rounded-2xl text-xs font-bold transition-all">
+                ↩️ <span>SISTEMA</span>
             </a>
         </div>
-    </header>
+    </aside>
 
-    <main class="max-w-6xl mx-auto px-6 py-12">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Gestión de Usuarios -->
-            <section class="card-admin p-8 lg:col-span-1">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-2 h-8 bg-emerald-600 rounded-full"></div>
-                    <h2 class="text-xl font-bold">Usuarios</h2>
-                </div>
-                <div class="space-y-3" id="users-list">
-                    <p class="text-sm text-slate-500 italic">Cargando usuarios...</p>
-                </div>
-            </section>
+    <main class="main-view flex-1">
 
-            <!-- Resumen de Auditoría -->
-            <section class="card-admin p-8 lg:col-span-2">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-2 h-8 bg-amber-600 rounded-full"></div>
-                    <h2 class="text-xl font-bold text-slate-800">Seguridad y Auditoría</h2>
-                </div>
-                <div class="bg-slate-900 text-emerald-500/90 p-6 rounded-2xl font-mono text-xs h-[400px] overflow-y-auto border-4 border-slate-800 shadow-inner" id="audit-logs">
-                    [INFO] Cargando registros de auditoría...
-                </div>
-            </section>
+        <header class="flex justify-between items-end mb-10">
+            <div>
+                <h1 class="font-serif text-5xl text-slate-900 mb-2">Control Maestro</h1>
+                <p class="text-slate-400 font-bold uppercase tracking-widest text-xs">Visión Global de Operaciones</p>
+            </div>
+            <div class="flex gap-4">
+                <button class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm hover:bg-slate-50 transition-all">📅 Últimos 30 días</button>
+                <button class="bg-emerald-800 text-white px-6 py-3 rounded-xl font-bold shadow-lg shadow-emerald-900/20 hover:bg-emerald-900 transition-all">+ Nueva Finca</button>
+            </div>
+        </header>
+
+        <!-- KPI ROW -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div class="kpi-box">
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Ganado Total</p>
+                <h4 class="text-4xl font-black text-slate-800" id="stat-ganado">...</h4>
+                <p class="kpi-trend-up">▲ 12.5% vs mes ant.</p>
+            </div>
+            <div class="kpi-box">
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Leche Hoy (Lts)</p>
+                <h4 class="text-4xl font-black text-emerald-600" id="stat-leche">...</h4>
+                <p class="text-[10px] text-slate-400 font-bold">Meta: 1,000 Lts</p>
+            </div>
+            <div class="kpi-box">
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Fincas Activas</p>
+                <h4 class="text-4xl font-black text-slate-800" id="stat-fincas">...</h4>
+                <p class="text-[10px] text-slate-400 font-bold">Sincronizadas</p>
+            </div>
+            <div class="kpi-box">
+                <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Alertas Salud</p>
+                <h4 class="text-4xl font-black text-red-500" id="stat-alertas">...</h4>
+                <p class="text-[10px] text-red-400 font-bold underline cursor-pointer">Ver urgencias</p>
+            </div>
         </div>
+
+        <h2 class="font-serif text-2xl mb-6">Estado de Producción por Finca</h2>
+        <div class="flex gap-8 overflow-x-auto pb-10" id="board-container">
+            <!-- Cargando dinámicamente -->
+            <p class="text-slate-400 italic">Cargando tablero de control...</p>
+        </div>
+
     </main>
 
-    <footer class="text-center text-slate-400 text-xs py-8">
-        GAVAC Admin — Control de Acceso y Seguridad
-    </footer>
-
     <script type="module">
-        // Lógica simple para cargar datos de prueba
-        document.addEventListener('DOMContentLoaded', () => {
-            const auditBox = document.getElementById('audit-logs');
-            const usersBox = document.getElementById('users-list');
+        async function fetchDashboard() {
+            const token = localStorage.getItem('gavac_token');
+            if (!token) {
+                window.location.href = "/login";
+                return;
+            }
 
-            // Simulación de carga (esto se conectaría a la API real)
-            setTimeout(() => {
-                auditBox.innerHTML = `
-                    <div class="mb-1 text-emerald-400">[2026-08-31 11:20] Login Exitoso: admin@gavac.com</div>
-                    <div class="mb-1 text-amber-400">[2026-08-31 11:22] Modificación Ganado: TAG-23111</div>
-                    <div class="mb-1 text-blue-400">[2026-08-31 11:25] Consulta de Reporte: Inventario General</div>
-                `;
+            const headers = {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            };
 
-                usersBox.innerHTML = `
-                    <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
-                        <span>admin@gavac.com</span>
-                        <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded uppercase font-bold">Admin</span>
-                    </div>
-                    <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
-                        <span>operario1@test.com</span>
-                        <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded uppercase font-bold">Operario</span>
-                    </div>
-                `;
-            }, 800);
-        });
+            try {
+                // 1. Cargar Métricas con Seguridad
+                const resStats = await fetch('/api/admin/dashboard-stats', { headers });
+                if (!resStats.ok) throw new Error("Error en métricas");
+                const stats = await resStats.json();
+
+                document.getElementById('stat-ganado').textContent = stats.ganado_total;
+                document.getElementById('stat-leche').textContent = stats.leche_hoy_lts;
+                document.getElementById('stat-fincas').textContent = stats.fincas_activas;
+                document.getElementById('stat-alertas').textContent = stats.alertas_salud;
+
+                // 2. Cargar Tablero con Seguridad
+                const resBoard = await fetch('/api/admin/board-data', { headers });
+                if (!resBoard.ok) throw new Error("Error en tablero");
+                const board = await resBoard.json();
+
+                const container = document.getElementById('board-container');
+                container.innerHTML = '';
+
+                if (board.length === 0) {
+                    container.innerHTML = '<p class="text-slate-400 italic py-10">No hay fincas registradas aún.</p>';
+                    return;
+                }
+
+                board.forEach(finca => {
+                    const col = document.createElement('div');
+                    col.className = 'board-column w-80 flex-shrink-0';
+                    col.innerHTML = `
+                        <div class="flex justify-between items-center mb-4 px-2">
+                            <h5 class="font-black text-[11px] text-slate-500 uppercase tracking-widest">${finca.nombre}</h5>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-[10px] font-bold">${finca.estado}</span>
+                        </div>
+                        <div class="task-list">
+                            ${finca.tareas && finca.tareas.length > 0 ? finca.tareas.map(t => `
+                                <div class="board-card">
+                                    <p class="text-[10px] font-bold text-emerald-600 mb-1">${t.categoria}</p>
+                                    <p class="text-sm font-bold text-slate-800">${t.titulo}</p>
+                                    <p class="text-[11px] text-slate-400 mt-1">${t.descripcion || ''}</p>
+                                </div>
+                            `).join('') : '<p class="text-center text-slate-300 text-xs py-10 italic">Sin tareas activas</p>'}
+                        </div>
+                    `;
+                    container.appendChild(col);
+                });
+            } catch (e) {
+                console.error("Error Dashboard:", e);
+                // Si hay error de auth, enviamos a login
+                if (e.message.includes("401") || e.message.includes("403")) {
+                    window.location.href = "/login";
+                }
+            }
+        }
+        document.addEventListener('DOMContentLoaded', fetchDashboard);
     </script>
 </body>
 </html>

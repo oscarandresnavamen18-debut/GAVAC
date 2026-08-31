@@ -3,96 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC - Reportes y Consultas</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap">
+    <title>GAVAC Analytics — Business Intelligence</title>
+    <link href="/static/dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap">
     <style>
-        body {
-            font-family: "DM Sans", sans-serif;
-            background:
-                radial-gradient(circle at top right, rgba(200, 230, 201, 0.2), transparent 30%),
-                linear-gradient(135deg, #F7F4EF 0%, #EAF3DE 100%);
-            color: #1A1A14;
-            min-height: 100vh;
-        }
-        .card-reporte {
+        body { font-family: 'DM Sans', sans-serif; background-color: #F1F5F9; color: #0F172A; }
+        .font-serif { font-family: 'DM Serif Display', serif; }
+
+        /* Dashboard Header */
+        .top-nav { background: #0F172A; border-bottom: 1px solid #1E293B; }
+
+        /* Premium Card Style */
+        .kpi-card {
             background: white;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-            transition: all 0.2s ease;
+            border-radius: 16px;
+            border: 1px solid #E2E8F0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
-        h1, h2, h3 {
-            font-family: 'DM Serif Display', serif;
+        .kpi-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-color: #10B981;
         }
-        .card-reporte:hover {
-            transform: translateY(-3px);
-            border-color: #1B5E20;
+        .kpi-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, transparent, #10B981, transparent);
+            opacity: 0; transition: opacity 0.3s;
         }
-        .header-gradient {
-            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+        .kpi-card:hover::after { opacity: 1; }
+
+        .btn-action {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
         }
+        .sidebar-indicator { width: 4px; height: 24px; border-radius: 99px; }
     </style>
 </head>
 <body class="min-h-screen">
-    <nav class="header-gradient text-white p-5 shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <a href="/ganado" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl text-sm flex items-center gap-2 transition-colors border border-white/20">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
-                        <path d="M19 12H5M12 19l-7-7 7-7"/>
-                    </svg>
-                    Volver
-                </a>
-                <h1 class="text-xl font-bold tracking-tight">GAVAC — Reportes</h1>
-            </div>
+
+    <!-- Header Profesional -->
+    <nav class="top-nav text-white sticky top-0 z-50 px-8 py-5">
+        <div class="max-w-[1600px] mx-auto flex justify-between items-center">
             <div class="flex items-center gap-6">
-                <a href="/admin" class="text-sm font-medium hover:text-emerald-200 transition-colors">Administración</a>
-                <button id="logoutBtn" class="bg-red-500/80 hover:bg-red-600 px-4 py-2 rounded-xl text-sm font-bold shadow-lg transition-all">Cerrar Sesión</button>
+                <a href="/dashboard" class="btn-action hover:bg-white/10 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="w-3 h-3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    Inicio
+                </a>
+                <div class="h-8 w-[1px] bg-slate-800"></div>
+                <h1 class="font-serif text-2xl tracking-wide">Reportes & Analytics</h1>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="text-right hidden sm:block">
+                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Conectado como</p>
+                    <p class="text-xs font-bold text-emerald-400">Administrador Pro</p>
+                </div>
+                <a href="/admin" class="text-[11px] font-bold text-slate-300 hover:text-white transition-colors uppercase tracking-[0.2em]">Consola</a>
+                <button id="logoutBtn" class="bg-red-600/90 hover:bg-red-500 px-6 py-2.5 rounded-xl text-xs font-black tracking-widest shadow-lg shadow-red-900/40 transition-all">SALIR</button>
             </div>
         </div>
     </nav>
 
-    <main class="container mx-auto mt-10 p-8 card-reporte">
-        <div class="flex items-center gap-3 mb-8">
-            <div class="w-2 h-8 bg-emerald-600 rounded-full"></div>
-            <h2 class="text-2xl font-bold text-gray-800">Panel de Consultas y Auditoría</h2>
-        </div>
+    <main class="max-w-[1400px] mx-auto px-8 py-12">
+        <header class="mb-12 flex justify-between items-end">
+            <div>
+                <h2 class="font-serif text-5xl text-slate-900 mb-3">Gestión de Datos</h2>
+                <p class="text-slate-500 font-medium text-lg">Monitoreo centralizado de activos biológicos y seguridad.</p>
+            </div>
+            <div class="bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-xs font-bold text-slate-600 uppercase tracking-widest">Sincronizado con Supabase</span>
+            </div>
+        </header>
 
-        <div id="authStatus" class="mb-4 p-3 rounded hidden"></div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div id="card-resumen" class="card-reporte p-6 hover:border-emerald-500 cursor-pointer bg-white">
-                <div class="flex items-center mb-3">
-                    <span class="text-3xl mr-3">📊</span>
-                    <h3 class="font-bold text-emerald-900 text-lg">Resumen de Inventario</h3>
+        <!-- KPI Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
+            <!-- Inventario Pro -->
+            <div id="card-resumen" class="kpi-card p-10 cursor-pointer">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-4xl shadow-inner">🐄</div>
+                    <div class="text-right">
+                        <span class="text-[10px] font-black text-emerald-600 uppercase bg-emerald-100 px-3 py-1 rounded-lg">Real-Time</span>
+                    </div>
                 </div>
-                <p class="text-sm text-slate-500 leading-relaxed">Estadísticas actuales de ganado por sexo y estado real.</p>
+                <h3 class="font-serif text-2xl mb-2">Inventario General</h3>
+                <p class="text-slate-400 text-sm mb-6 leading-relaxed">Análisis demográfico por raza y distribución de género.</p>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-emerald-500 w-3/4 h-full"></div>
+                </div>
             </div>
 
-            <div id="card-produccion" class="card-reporte p-6 hover:border-blue-500 cursor-pointer bg-white">
-                <div class="flex items-center mb-3">
-                    <span class="text-3xl mr-3">🥛</span>
-                    <h3 class="font-bold text-blue-900 text-lg">Producción</h3>
+            <!-- Producción Pro -->
+            <div id="card-produccion" class="kpi-card p-10 cursor-pointer">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-4xl shadow-inner">📉</div>
+                    <div class="text-right">
+                        <span class="text-[10px] font-black text-blue-600 uppercase bg-blue-100 px-3 py-1 rounded-lg">Performance</span>
+                    </div>
                 </div>
-                <p class="text-sm text-slate-500 leading-relaxed">Histórico de pesaje y rendimiento por lote.</p>
+                <h3 class="font-serif text-2xl mb-2">Producción de Leche</h3>
+                <p class="text-slate-400 text-sm mb-6 leading-relaxed">Rendimiento por lote y eficiencia del hato.</p>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-blue-500 w-1/2 h-full"></div>
+                </div>
             </div>
 
-            <div id="card-auditoria" class="card-reporte p-6 hover:border-purple-500 cursor-pointer bg-white">
-                <div class="flex items-center mb-3">
-                    <span class="text-3xl mr-3">🛡️</span>
-                    <h3 class="font-bold text-purple-900 text-lg">Logs de Auditoría</h3>
+            <!-- Seguridad Pro -->
+            <div id="card-auditoria" class="kpi-card p-10 cursor-pointer">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center text-4xl shadow-inner">🛡️</div>
+                    <div class="text-right">
+                        <span class="text-[10px] font-black text-slate-100 uppercase bg-slate-900 px-3 py-1 rounded-lg">Secure</span>
+                    </div>
                 </div>
-                <p class="text-sm text-slate-500 leading-relaxed">Registro de accesos y acciones realizadas en el sistema.</p>
+                <h3 class="font-serif text-2xl mb-2">Trazabilidad Web</h3>
+                <p class="text-slate-400 text-sm mb-6 leading-relaxed">Registro inmutable de auditoría y accesos.</p>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div class="bg-slate-900 w-full h-full"></div>
+                </div>
             </div>
         </div>
 
-        <div id="reportLoader" class="mt-8 hidden flex justify-center">
-            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-green-700"></div>
-        </div>
-
-        <div id="reportResult" class="mt-8 overflow-x-auto">
-            <!-- Los resultados se cargarán aquí con formato profesional -->
-        </div>
+        <!-- Data Visualization Area -->
+        <section class="bg-white rounded-[32px] border border-slate-200 shadow-2xl overflow-hidden">
+            <div class="bg-slate-50 px-10 py-6 border-b border-slate-100 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="sidebar-indicator bg-emerald-600"></div>
+                    <h3 class="font-bold text-slate-800 uppercase tracking-widest text-sm">Visualización de Reporte</h3>
+                </div>
+            </div>
+            <div class="p-10 min-h-[500px]" id="reportResult">
+                <div id="reportLoader" class="hidden flex flex-col items-center justify-center py-32">
+                    <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-emerald-700 mb-6"></div>
+                    <p class="text-slate-400 font-black uppercase tracking-[0.3em] text-xs">Consultando base de datos...</p>
+                </div>
+                <div class="text-center py-32 opacity-20 grayscale">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2620/2620612.png" class="w-32 mx-auto mb-6" alt="No data">
+                    <p class="font-serif text-3xl">Seleccione una métrica para visualizar</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script type="module" src="/static/dist/modules/reportes/main.js"></script>

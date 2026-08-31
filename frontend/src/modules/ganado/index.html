@@ -3,254 +3,180 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GAVAC — Registro de Ganado</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap">
+  <title>GAVAC Inventory — Enterprise Management</title>
+  <link href="/static/dist/output.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap">
   <style>
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in { animation: fadeIn 0.4s ease-out both; }
-    .delay-1 { animation-delay: 0.04s; }
-    .delay-2 { animation-delay: 0.08s; }
-    .delay-3 { animation-delay: 0.12s; }
+    body { font-family: 'DM Sans', sans-serif; background-color: #F1F5F9; color: #0F172A; }
+    .font-serif { font-family: 'DM Serif Display', serif; }
 
-    body {
-      font-family: "DM Sans", sans-serif;
-      background:
-        radial-gradient(circle at top right, rgba(200, 230, 201, 0.3), transparent 30%),
-        linear-gradient(135deg, #F7F4EF 0%, #EAF3DE 100%);
-      color: #1A1A14;
-      min-height: 100vh;
-    }
+    /* Header & Navigation */
+    .top-nav { background: #0F172A; border-bottom: 1px solid #1E293B; }
+    .nav-link { color: #94A3B8; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.3s; }
+    .nav-link:hover, .nav-link.active { color: #F8FAFC; }
+    .nav-link.active { border-bottom: 2px solid #10B981; }
 
-    .brand-mark {
-      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+    /* Component Styling */
+    .card-pro {
+        background: white;
+        border-radius: 20px;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
     }
-
-    .btn-primary {
-      background: linear-gradient(90deg, #1b5e20 0%, #2e7d32 100%);
-      box-shadow: 0 4px 14px rgba(27, 94, 32, 0.25);
-      transition: all 0.2s ease;
-      border: none;
-      color: white;
+    .input-pro {
+        width: 100%;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 0.875rem;
+        transition: all 0.2s;
     }
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(27, 94, 32, 0.35);
-      opacity: 0.9;
+    .input-pro:focus {
+        background: white;
+        border-color: #10B981;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+        outline: none;
     }
-
-    .card-ganadero {
-      background: white;
-      border-radius: 18px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    .btn-pro {
+        background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%);
+        color: white;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 12px 24px;
+        border-radius: 12px;
+        transition: all 0.3s;
+        box-shadow: 0 10px 20px rgba(27, 94, 32, 0.2);
     }
-
-    h1, h2, h3 {
-      font-family: 'DM Serif Display', serif;
-    }
-
-    nav a {
-      color: #4A4A40;
-      transition: color 0.2s;
-    }
-    nav a:hover, nav a.active {
-      color: #1B5E20;
-    }
-    nav a.active {
-      border-bottom: 2px solid #1B5E20;
+    .btn-pro:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(27, 94, 32, 0.3);
+        opacity: 0.95;
     }
 
-    .icon {
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.6;
-    }
-
-    /* Fallback styles in case Tailwind fails to load */
-    input, select, button {
-      font-family: inherit;
-    }
-    .field-input {
-      display: block;
-      width: 100%;
-      border: 1px solid #cbd5e1;
-      border-radius: 0.375rem;
-      padding: 0.5rem 0.75rem;
-      font-size: 0.875rem;
-    }
-    .btn-primary {
-      display: inline-block;
-      padding: 0.5rem 1.25rem;
-      border-radius: 0.375rem;
-      border: none;
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: white;
-      background-color: #1c4d33; /* Respaldo de color */
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th {
-      text-align: left;
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid #e2e8f0;
-      background: #f8fafc;
-    }
-    td {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid #f1f5f9;
-    }
-    nav {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-    nav a {
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #64748b;
-    }
-    nav a.active {
-      color: #1c4d33;
-      border-bottom: 2px solid #1c4d33;
-    }
-
-    .hidden {
-      display: none !important;
-    }
+    /* Table Styling */
+    .table-header { background: #F8FAFC; text-transform: uppercase; font-size: 11px; font-weight: 800; color: #64748B; letter-spacing: 0.05em; }
+    .table-row { border-bottom: 1px solid #F1F5F9; transition: background 0.2s; }
+    .table-row:hover { background: #F8FAFC; }
   </style>
 </head>
-<body class="min-h-screen text-slate-700">
+<body class="min-h-screen">
 
-  <header class="border-b border-slate-200 bg-white sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="brand-mark w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-semibold">G</div>
-        <div class="hidden sm:block">
-          <h1 class="text-base font-bold text-slate-900 leading-tight">GAVAC</h1>
-          <p class="text-slate-500 text-[10px]">Gestión Ganadera</p>
+  <!-- Header Enterprise -->
+  <header class="top-nav text-white sticky top-0 z-50 px-8 py-4">
+    <div class="max-w-[1600px] mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-emerald-900/40">G</div>
+        <div>
+          <h1 class="font-serif text-xl leading-tight">GAVAC Inventory</h1>
+          <p class="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em]">Asset Management System</p>
         </div>
       </div>
 
-      <nav>
-        <a href="/ganado" class="active">Inventario</a>
-        <a href="/reportes">Reportes</a>
-        <a href="/admin">Admin</a>
+      <nav class="flex items-center gap-10">
+        <a href="/dashboard" class="nav-link">Inicio</a>
+        <a href="/ganado" class="nav-link active pb-1">Inventario</a>
+        <a href="/reportes" class="nav-link pb-1">Reportes</a>
+        <a href="/admin" class="nav-link pb-1">Consola Admin</a>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <div class="hidden md:flex flex-col items-end">
-          <div class="flex items-center gap-1.5">
-            <span id="api-status-dot" class="w-2 h-2 rounded-full bg-slate-300"></span>
-            <span id="api-status-text" class="text-[10px] font-bold text-slate-500 uppercase">Conectando</span>
-          </div>
+      <div class="flex items-center gap-5">
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-800/50 rounded-full border border-slate-700/50">
+            <span id="api-status-dot" class="w-2 h-2 rounded-full bg-slate-500"></span>
+            <span id="api-status-text" class="text-[10px] font-bold text-slate-400">...</span>
         </div>
-        <button id="logoutBtn" class="text-slate-400 hover:text-red-600 transition-colors">
-          <svg viewBox="0 0 24 24" class="icon w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg>
+        <button id="logoutBtn" class="text-slate-500 hover:text-red-400 transition-colors">
+          <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/></svg>
         </button>
       </div>
     </div>
   </header>
 
-  <div class="max-w-5xl mx-auto px-6 py-8">
+  <main class="max-w-[1400px] mx-auto px-8 py-12">
 
-    <!-- Formulario de registro con estilo Landing -->
-    <section class="card-ganadero p-8 mb-8 fade-in delay-1">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-2 h-8 bg-emerald-600 rounded-full"></div>
-        <h2 class="font-bold text-xl text-slate-900">Registro de Animales</h2>
+    <div class="grid grid-cols-1 xl:grid-cols-4 gap-10">
+
+      <!-- Form Section (Sidebar style) -->
+      <aside class="xl:col-span-1">
+        <section class="card-pro p-8 sticky top-28">
+          <h2 class="font-serif text-2xl mb-6 text-slate-800">Alta de Registro</h2>
+          <form id="animal-form" class="space-y-5">
+            <div>
+              <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2" for="tag">Identificador (Tag)</label>
+              <input id="tag" name="tag" type="text" required placeholder="GAV-000" class="input-pro" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2" for="breed">Raza Genética</label>
+              <input id="breed" name="breed" type="text" placeholder="Ej: Brahman" class="input-pro" />
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2" for="sex">Género</label>
+              <select id="sex" name="sex" class="input-pro bg-white">
+                <option value="">Seleccionar...</option>
+                <option value="hembra">Hembra</option>
+                <option value="macho">Macho</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2" for="birth_date">Fecha Nacimiento</label>
+              <input id="birth_date" name="birth_date" type="date" class="input-pro" />
+            </div>
+            <div class="pt-4">
+              <p id="form-error" class="text-red-500 text-[11px] font-bold mb-3"></p>
+              <button type="submit" class="btn-pro w-full">Registrar Activo</button>
+            </div>
+          </form>
+        </section>
+      </aside>
+
+      <!-- Table Section (Main View) -->
+      <div class="xl:col-span-3 space-y-8">
+
+        <!-- Filters Header -->
+        <section class="bg-white rounded-2xl border border-slate-200 p-6 flex flex-wrap gap-4 items-center justify-between shadow-sm">
+          <div class="flex flex-wrap gap-4">
+            <input id="filter-tag" type="text" placeholder="Buscar por TAG..." class="input-pro !py-2 !w-48" />
+            <input id="filter-breed" type="text" placeholder="Filtrar por Raza..." class="input-pro !py-2 !w-48" />
+            <button id="filter-btn" class="bg-slate-900 text-white px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-emerald-600 transition-all">Filtrar</button>
+            <button id="clear-filter-btn" class="text-slate-400 hover:text-slate-900 text-xs font-bold transition-all px-2">Limpiar</button>
+          </div>
+          <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+            Visualizando Registros en Tiempo Real
+          </div>
+        </section>
+
+        <!-- Main Data Table -->
+        <section class="card-pro overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="table-header">
+              <tr>
+                <th class="px-6 py-4 text-left">Identificador</th>
+                <th class="px-6 py-4 text-left">Raza</th>
+                <th class="px-6 py-4 text-left">Género</th>
+                <th class="px-6 py-4 text-left">Nacimiento</th>
+                <th class="px-6 py-4 text-left">Estado</th>
+                <th class="px-6 py-4 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="animal-table-body" class="divide-y divide-slate-50">
+              <!-- JS Injected -->
+            </tbody>
+          </table>
+          <div id="empty-state" class="text-center py-32 hidden">
+            <img src="https://cdn-icons-png.flaticon.com/512/2620/2620612.png" class="w-20 mx-auto opacity-10 mb-6" alt="Empty">
+            <p class="text-slate-400 font-serif text-xl">Sin activos registrados en el inventario</p>
+          </div>
+        </section>
       </div>
 
-      <form id="animal-form" class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-4">
-        <div>
-          <label class="block text-xs font-medium mb-1.5 text-slate-500 tracking-wide" for="tag">N.° CHAPETA</label>
-          <input id="tag" name="tag" type="text" required
-                 class="field-input w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-medium mb-1.5 text-slate-500 tracking-wide" for="breed">RAZA</label>
-          <input id="breed" name="breed" type="text"
-                 class="field-input w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-medium mb-1.5 text-slate-500 tracking-wide" for="sex">SEXO</label>
-          <select id="sex" name="sex"
-                  class="field-input w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none bg-white">
-            <option value="">Selecciona</option>
-            <option value="hembra">Hembra</option>
-            <option value="macho">Macho</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-medium mb-1.5 text-slate-500 tracking-wide" for="birth_date">FECHA DE NACIMIENTO</label>
-          <input id="birth_date" name="birth_date" type="date"
-                 class="field-input w-full border border-slate-300 rounded-md px-3 py-2 text-sm focus:outline-none" />
-        </div>
-        <div class="sm:col-span-2 flex items-center justify-between pt-2 border-t border-slate-100 mt-1">
-          <p id="form-error" class="text-red-600 text-xs"></p>
-          <button type="submit"
-                  class="btn-primary text-white text-sm font-medium px-5 py-2 rounded-md">
-            Registrar
-          </button>
-        </div>
-      </form>
-    </section>
+    </div>
 
-    <!-- Filtros con estilo Landing -->
-    <section class="bg-white/50 backdrop-blur-sm rounded-2xl border border-slate-200 p-5 mb-6 flex flex-wrap gap-4 items-end fade-in delay-2">
-      <div>
-        <label class="block text-xs font-medium mb-1.5 text-slate-500 tracking-wide" for="filter-tag">BUSCAR POR TAG</label>
-        <input id="filter-tag" type="text" placeholder="VACA-001"
-               class="field-input border border-slate-300 rounded-md px-3 py-1.5 text-sm focus:outline-none" />
-      </div>
-      <div>
-        <label class="block text-xs font-medium mb-1.5 text-slate-500 tracking-wide" for="filter-breed">RAZA</label>
-        <input id="filter-breed" type="text" placeholder="Holstein"
-               class="field-input border border-slate-300 rounded-md px-3 py-1.5 text-sm focus:outline-none" />
-      </div>
-      <button id="filter-btn"
-              class="bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium px-4 py-1.5 rounded-md transition-colors">
-        Filtrar
-      </button>
-      <button id="clear-filter-btn"
-              class="text-slate-500 hover:text-slate-800 text-sm px-2 py-1.5 transition-colors">
-        Limpiar
-      </button>
-    </section>
-
-    <!-- Tabla con estilo Landing -->
-    <section class="card-ganadero overflow-hidden fade-in delay-3">
-      <table class="w-full text-sm">
-        <thead class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wide">
-          <tr>
-            <th class="text-left px-4 py-3 font-medium">Tag</th>
-            <th class="text-left px-4 py-3 font-medium">Raza</th>
-            <th class="text-left px-4 py-3 font-medium">Sexo</th>
-            <th class="text-left px-4 py-3 font-medium">Nacimiento</th>
-            <th class="text-left px-4 py-3 font-medium">Estado</th>
-            <th class="text-left px-4 py-3 font-medium">Acciones</th>
-          </tr>
-        </thead>
-        <tbody id="animal-table-body" class="divide-y divide-slate-100">
-          <!-- filas insertadas por main.ts -->
-        </tbody>
-      </table>
-      <div id="empty-state" class="text-center text-slate-400 text-sm py-10 hidden">
-        No hay animales registrados todavía.
-      </div>
-    </section>
-
-    <footer class="text-center text-xs text-slate-400 pt-8 pb-4">
-      GAVAC — Sistema de Registro de Ganado
+    <footer class="text-center text-[10px] font-black text-slate-400 tracking-[0.3em] uppercase pt-20 pb-10">
+      GAVAC Enterprise Asset Management — © 2026
     </footer>
-  </div>
+  </main>
 
   <script type="module" src="/static/dist/modules/ganado/main.js"></script>
 </body>

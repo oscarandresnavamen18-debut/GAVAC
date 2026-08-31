@@ -3,74 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC - Acceso al Sistema</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap">
+    <title>GAVAC — Excelencia en Gestión Ganadera</title>
+    <!-- Fuentes de Alta Gama -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background:
-                radial-gradient(circle at top right, rgba(200, 230, 201, 0.4), transparent 30%),
-                radial-gradient(circle at bottom left, rgba(234, 243, 222, 0.5), transparent 30%),
-                linear-gradient(135deg, #F7F4EF 0%, #EAF3DE 100%);
-            color: #1A1A14;
+        :root { --primary: #1B5E20; --accent: #C8E6C9; --bg: #F7F4EF; --text: #1A1A14; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; scroll-behavior: smooth; }
+        .serif { font-family: 'DM Serif Display', serif; }
+
+        /* Hero cinemático */
+        .hero-section {
             min-height: 100vh;
+            background: linear-gradient(to right, rgba(247, 244, 239, 0.95) 30%, rgba(247, 244, 239, 0.1) 100%),
+                        url('https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover; background-position: center;
         }
-        .login-card {
-            background: white;
-            border-radius: 24px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 25px 60px rgba(27, 94, 32, 0.12);
-            backdrop-filter: blur(10px);
+
+        .nav-glass {
+            backdrop-filter: blur(15px); background: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        .login-title {
-            font-family: 'DM Serif Display', serif;
-            font-size: 42px;
-            color: #1A1A14;
+
+        .btn-premium {
+            background: var(--primary); color: white; border-radius: 50px;
+            padding: 16px 40px; font-weight: 800; letter-spacing: 1px;
+            box-shadow: 0 20px 40px rgba(27, 94, 32, 0.2); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .btn-gradient {
-            background: linear-gradient(90deg, #1b5e20 0%, #2e7d32 100%);
-            box-shadow: 0 10px 24px rgba(27, 94, 32, 0.22);
-            transition: all 0.3s ease;
+        .btn-premium:hover { transform: scale(1.05) translateY(-5px); box-shadow: 0 30px 60px rgba(27, 94, 32, 0.3); }
+
+        .feature-card {
+            background: white; border-radius: 30px; padding: 50px;
+            border: 1px solid rgba(0,0,0,0.03); transition: all 0.4s ease;
         }
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(27, 94, 32, 0.3);
-        }
+        .feature-card:hover { transform: translateY(-15px); box-shadow: 0 40px 80px rgba(0,0,0,0.05); }
+
+        footer { background: #0F172A; color: rgba(255,255,255,0.6); }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
-    <div class="login-card p-10 w-full max-w-md fade-in">
-        <div class="text-center mb-10">
-            <div class="w-20 h-20 rounded-2xl mx-auto flex items-center justify-center text-white text-3xl font-bold mb-4 shadow-xl"
-                 style="background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);">
-                G
-            </div>
-            <h1 class="login-title font-bold tracking-tight">GAVAC</h1>
-            <p class="text-slate-500 font-medium">Gestión Ganadera Profesional</p>
+<body>
+
+    <nav class="nav-glass fixed w-full z-50 px-10 py-5 flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-[#1B5E20] rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl">G</div>
+            <span class="serif text-3xl tracking-tighter text-slate-900">GAVAC</span>
         </div>
+        <div class="hidden lg:flex gap-12 text-[11px] font-black uppercase tracking-[0.2em] text-slate-500">
+            <a href="#inicio" class="hover:text-[#1B5E20] transition-colors">Inicio</a>
+            <a href="#soluciones" class="hover:text-[#1B5E20] transition-colors">Soluciones</a>
+            <a href="#tecnologia" class="hover:text-[#1B5E20] transition-colors">Tecnología</a>
+        </div>
+        <a href="/login" class="bg-slate-900 text-white px-8 py-3 rounded-full text-[10px] font-black tracking-widest hover:bg-[#1B5E20] transition-all">ACCESO PRO</a>
+    </nav>
 
-        <form id="loginForm" class="space-y-5">
+    <header id="inicio" class="hero-section flex items-center px-10 lg:px-24">
+        <div class="max-w-3xl">
+            <span class="inline-block bg-emerald-100 text-emerald-800 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-8">Líder en Agrotech 2026</span>
+            <h1 class="serif text-7xl lg:text-9xl leading-[0.95] text-slate-900 mb-10">
+                Evolucione la <br><em class="italic text-[#1B5E20]">gestión ganadera.</em>
+            </h1>
+            <p class="text-xl text-slate-600 font-medium leading-relaxed mb-12 max-w-xl">
+                Plataforma integral para el monitoreo de activos biológicos. Decisiones basadas en datos, no en suposiciones.
+            </p>
+            <a href="/login" class="btn-premium inline-block">EMPEZAR AHORA</a>
+        </div>
+    </header>
+
+    <section class="bg-[#1B5E20] py-32 text-center text-white">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-20">
             <div>
-                <label class="block text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">Email Corporativo</label>
-                <input type="email" id="email" required placeholder="admin@gavac.com"
-                       class="w-full border border-slate-200 rounded-xl px-4 py-3.5 focus:ring-4 focus:ring-emerald-600/10 focus:border-emerald-600 outline-none transition-all">
+                <h3 class="serif text-7xl mb-4">+2,400</h3>
+                <p class="text-emerald-200 text-xs font-black uppercase tracking-widest">Haciendas Digitalizadas</p>
             </div>
             <div>
-                <label class="block text-xs font-bold text-slate-600 uppercase tracking-widest mb-2">Contraseña</label>
-                <input type="password" id="password" required placeholder="••••••••"
-                       class="w-full border border-slate-200 rounded-xl px-4 py-3.5 focus:ring-4 focus:ring-emerald-600/10 focus:border-emerald-600 outline-none transition-all">
+                <h3 class="serif text-7xl mb-4">98%</h3>
+                <p class="text-emerald-200 text-xs font-black uppercase tracking-widest">Tasa de Eficiencia</p>
             </div>
-            <button type="submit" id="submitBtn" class="w-full btn-gradient text-white font-bold py-4 rounded-xl shadow-lg mt-4">
-                ENTRAR AL PANEL
-            </button>
-        </form>
+            <div>
+                <h3 class="serif text-7xl mb-4">+120k</h3>
+                <p class="text-emerald-200 text-xs font-black uppercase tracking-widest">Activos Monitoreados</p>
+            </div>
+        </div>
+    </section>
 
-        <p class="mt-4 text-center text-sm text-slate-500">
-            <a href="#" id="toggleMode" class="text-emerald-800 font-medium hover:underline">¿No tienes cuenta? Regístrate</a>
-        </p>
-        <div id="loginMessage" class="mt-4 text-center text-sm font-medium hidden"></div>
-    </div>
+    <section id="soluciones" class="py-40 px-10 lg:px-24">
+        <div class="flex flex-col lg:flex-row justify-between items-end mb-24 gap-10">
+            <h2 class="serif text-6xl text-slate-900">Soluciones de Clase <br>Mundial para el Agro.</h2>
+            <p class="text-slate-500 max-w-sm font-medium">Diseñado para operar en entornos complejos con la simplicidad de una app moderna.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="feature-card">
+                <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-3xl mb-8">🧬</div>
+                <h4 class="serif text-3xl mb-6">Trazabilidad Genética</h4>
+                <p class="text-slate-500 leading-relaxed">Control absoluto de árboles genealógicos, cruces y mejora selectiva del hato con reportes forenses.</p>
+            </div>
+            <div class="feature-card">
+                <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-3xl mb-8">🛡️</div>
+                <h4 class="serif text-3xl mb-6">Bio-Seguridad</h4>
+                <p class="text-slate-500 leading-relaxed">Alertas sanitarias en tiempo real sincronizadas con calendarios oficiales de vacunación regional.</p>
+            </div>
+        </div>
+    </section>
 
-    <script type="module" src="/static/dist/modules/auth/main.js"></script>
+    <footer class="py-24 px-10 lg:px-24">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-24 mb-20">
+                <div class="lg:col-span-2">
+                    <h2 class="serif text-4xl text-white mb-8">GAVAC <span class="text-emerald-500">Enterprise</span></h2>
+                    <p class="max-w-xs leading-relaxed">Elevando el estándar tecnológico del sector agropecuario global.</p>
+                </div>
+                <div>
+                    <h5 class="text-white text-xs font-black uppercase tracking-widest mb-8">Explorar</h5>
+                    <ul class="space-y-4 text-sm font-bold">
+                        <li><a href="#" class="hover:text-white transition-all">Consola Admin</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Analítica</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white text-xs font-black uppercase tracking-widest mb-8">Legal</h5>
+                    <ul class="space-y-4 text-sm font-bold">
+                        <li><a href="#" class="hover:text-white transition-all">Privacidad</a></li>
+                        <li><a href="#" class="hover:text-white transition-all">Términos</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-black uppercase tracking-[0.3em]">
+                <p>© 2026 GAVAC ASSET MANAGEMENT. ALL RIGHTS RESERVED.</p>
+                <div class="flex gap-10">
+                    <span>Linkedin</span>
+                    <span>Instagram</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>
