@@ -18,36 +18,12 @@ function mostrarMensaje(
     tipo: "error" | "exito"
 ): void {
     messageBox.textContent = texto;
-
-    messageBox.classList.remove(
-        "hidden",
-        "bg-red-500/10",
-        "text-red-400",
-        "bg-emerald-500/10",
-        "text-emerald-400",
-        "border-red-500/20",
-        "border-emerald-500/20"
-    );
-
-    messageBox.classList.add(
-        "block",
-        "border",
-        "p-4",
-        "rounded-2xl"
-    );
+    messageBox.className = "block mt-6 p-4 rounded-xl font-bold text-center";
 
     if (tipo === "error") {
-        messageBox.classList.add(
-            "bg-red-500/10",
-            "text-red-400",
-            "border-red-500/20"
-        );
+        messageBox.classList.add("msg-error");
     } else {
-        messageBox.classList.add(
-            "bg-emerald-500/10",
-            "text-emerald-400",
-            "border-emerald-500/20"
-        );
+        messageBox.classList.add("msg-success");
     }
 }
 
