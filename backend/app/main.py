@@ -2,7 +2,7 @@ import os
 import logging
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
 from app.database import Base, engine
@@ -19,6 +19,8 @@ app = FastAPI(title="GAVAC API", version="1.0.0")
 
 # Inicialización Silenciosa de DB
 try:
+    # Las tablas ya fueron recreadas en el paso anterior. 
+    # Mantenemos solo el create_all para uso normal.
     Base.metadata.create_all(bind=engine)
     logger.info("✅ DB SYNC OK")
 except Exception as e:
@@ -50,7 +52,21 @@ def login_page():
         return FileResponse(index_file)
     return {"error": "Index.html no encontrado en la ruta configurada"}
 
-# Routers de la API
+@app.get("/ganado")
+def ganado_page():
+    ganado_file = os.path.join(FRONTEND_PATH, "src", "modules", "ganado", "index.html")
+    if os.path.exists(ganado_file):
+        return FileResponse(ganado_file)
+    return {"error": "index.html de ganado no encontrado"}
+
+@app.get("/reportes")
+def reportes_page():
+    reportes_file = os.path.join(FRONTEND_PATH, "src", "modules", "reportes", "index.html")
+    if os.path.exists(reportes_file):
+        return FileResponse(reportes_file)
+    return {"error": "index.html de reportes no encontrado"}
+
+# Routers de la API (RESTAURADOS)
 app.include_router(cattle_router)
 app.include_router(auth_router)
 app.include_router(reportes_router)
@@ -58,3 +74,12 @@ app.include_router(reportes_router)
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+# Manejador de errores global para depuración
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"GLOBAL ERROR: {str(exc)}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Error del servidor: {str(exc)}"}
+    )

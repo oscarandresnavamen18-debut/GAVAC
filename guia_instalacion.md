@@ -1,6 +1,6 @@
 # 🏁 Guía Unificada de Producción - GAVAC
 
-Esta guía garantiza que el sistema funcione sin errores de compilación, forzando el uso de una versión estable de Python (3.11).
+Esta guía garantiza que el sistema funcione sin errores de compilación, utilizando Python 3.12 o superior.
 
 ---
 
@@ -12,8 +12,8 @@ Si tuviste errores previos, ejecuta esto para limpiar y reinstalar correctamente
 # 1. Borrar entorno anterior si existe (desde la raíz del proyecto)
 Remove-Item -Recurse -Force backend/venv
 
-# 2. Crear entorno con Python 3.11 (Versión estable instalada en tu equipo)
-py -3.11 -m venv backend/venv
+# 2. Crear entorno con Python 3.12 (O versión instalada)
+python -m venv backend/venv
 
 # 3. Activar e instalar dependencias
 .\backend\venv\Scripts\Activate.ps1

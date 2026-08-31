@@ -1,6 +1,37 @@
-export interface Report {
+// ============================================
+// API GAVAC - REPORTES Y CONSULTAS
+// Módulo: reportes (Responsable: Jorge Botero)
+// ============================================
+
+export interface ResumenItem {
+  sexo: string | null;
+  estado: string;
+  cantidad: number;
+}
+
+export interface ResumenReporte {
+  fecha_generacion: string;
+  resumen: ResumenItem[];
+}
+
+export interface AnimalReciente {
   id: number;
-  name: string;
+  tag: string;
+  breed: string | null;
+  sex: string | null;
+  birth_date: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AuditoriaLog {
+  id: number;
+  usuario_id: number | null;
+  email: string | null;
+  accion: string;
+  detalles: string | null;
+  ip_address: string | null;
   created_at: string;
 }
 
@@ -14,38 +45,91 @@ export class ApiError extends Error {
   }
 }
 
-const REPORTS_URL = "/api/reportes/";
+// ============================================
+// HELPER: CABECERAS DE AUTENTICACIÓN
+// ============================================
+function getHeaders(token: string): Record<string, string> {
+  return {
+    Accept: "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+}
 
-/** Obtiene los reportes disponibles para el usuario autenticado. */
-export async function getReports(accessToken: string): Promise<Report[]> {
-  if (!accessToken) {
+// ============================================
+// HELPER: PROCESAR MENSAJES DE ERROR
+// ============================================
+async function parseErrorMessage(res: Response): Promise<string> {
+  try {
+    const body = await res.json();
+    if (body.detail) {
+      if (Array.isArray(body.detail)) {
+        return body.detail.map((err: any) => err.msg || "Error de validación").join(", ");
+      }
+      return String(body.detail);
+    }
+    return `Error HTTP ${res.status}`;
+  } catch {
+    return `Error HTTP ${res.status}: ${res.statusText}`;
+  }
+}
+
+// ============================================
+// ENPOINTS DE REPORTES
+// ============================================
+
+/** Obtiene el resumen de inventario por sexo y estado. */
+export async function getResumenInventario(token: string): Promise<ResumenReporte> {
+  if (!token) {
     throw new ApiError("No hay una sesión activa.", 401);
   }
 
-  const response = await fetch(REPORTS_URL, {
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
+  const response = await fetch("/api/reportes/resumen", {
+    method: "GET",
+    headers: getHeaders(token),
   });
 
   if (!response.ok) {
-    let message = "No fue posible cargar los reportes.";
-
-    try {
-      const body: unknown = await response.json();
-      if (typeof body === "object" && body !== null && "detail" in body) {
-        const detail = body.detail;
-        if (typeof detail === "string") {
-          message = detail;
-        }
-      }
-    } catch {
-      // La API puede responder sin JSON ante errores de infraestructura.
-    }
-
+    const message = await parseErrorMessage(response);
     throw new ApiError(message, response.status);
   }
 
-  return (await response.json()) as Report[];
+  return (await response.json()) as ResumenReporte;
+}
+
+/** Obtiene la lista de animales agregados recientemente. */
+export async function getAnimalesRecientes(token: string): Promise<AnimalReciente[]> {
+  if (!token) {
+    throw new ApiError("No hay una sesión activa.", 401);
+  }
+
+  const response = await fetch("/api/reportes/recientes", {
+    method: "GET",
+    headers: getHeaders(token),
+  });
+
+  if (!response.ok) {
+    const message = await parseErrorMessage(response);
+    throw new ApiError(message, response.status);
+  }
+
+  return (await response.json()) as AnimalReciente[];
+}
+
+/** Obtiene la lista de logs de auditoría (Solo para rol Admin). */
+export async function getLogsAuditoria(token: string): Promise<AuditoriaLog[]> {
+  if (!token) {
+    throw new ApiError("No hay una sesión activa.", 401);
+  }
+
+  const response = await fetch("/api/auth/auditoria", {
+    method: "GET",
+    headers: getHeaders(token),
+  });
+
+  if (!response.ok) {
+    const message = await parseErrorMessage(response);
+    throw new ApiError(message, response.status);
+  }
+
+  return (await response.json()) as AuditoriaLog[];
 }

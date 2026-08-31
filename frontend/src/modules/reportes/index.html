@@ -25,7 +25,7 @@
         <div id="authStatus" class="mb-4 p-3 rounded hidden"></div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="p-6 border-2 border-green-100 rounded-xl hover:border-green-500 transition-colors cursor-pointer bg-green-50/30" onclick="fetchResumen()">
+            <div id="card-resumen" class="p-6 border-2 border-green-100 rounded-xl hover:border-green-500 transition-colors cursor-pointer bg-green-50/30">
                 <div class="flex items-center mb-2">
                     <span class="text-2xl mr-2">📊</span>
                     <h3 class="font-bold text-green-800 text-lg">Resumen de Inventario</h3>
@@ -33,7 +33,7 @@
                 <p class="text-sm text-gray-600">Estadísticas actuales de ganado por sexo y estado real.</p>
             </div>
 
-            <div class="p-6 border-2 border-blue-100 rounded-xl hover:border-blue-500 transition-colors cursor-pointer bg-blue-50/30">
+            <div id="card-produccion" class="p-6 border-2 border-blue-100 rounded-xl hover:border-blue-500 transition-colors cursor-pointer bg-blue-50/30">
                 <div class="flex items-center mb-2">
                     <span class="text-2xl mr-2">🥛</span>
                     <h3 class="font-bold text-blue-800 text-lg">Producción</h3>
@@ -41,7 +41,7 @@
                 <p class="text-sm text-gray-600">Histórico de pesaje y rendimiento por lote.</p>
             </div>
 
-            <div class="p-6 border-2 border-purple-100 rounded-xl hover:border-purple-500 transition-colors cursor-pointer bg-purple-50/30">
+            <div id="card-auditoria" class="p-6 border-2 border-purple-100 rounded-xl hover:border-purple-500 transition-colors cursor-pointer bg-purple-50/30">
                 <div class="flex items-center mb-2">
                     <span class="text-2xl mr-2">🛡️</span>
                     <h3 class="font-bold text-purple-800 text-lg">Logs de Auditoría</h3>
