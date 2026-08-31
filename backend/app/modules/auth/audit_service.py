@@ -31,3 +31,7 @@ def registrar_accion(
         # Usamos print como respaldo si el logger falla
         print(f"FALLO CRÍTICO AUDITORÍA: {str(e)}")
         return None
+
+def get_audit_logs(db: Session, limit: int = 100):
+    return db.query(AuditoriaLog).order_by(AuditoriaLog.created_at.desc()).limit(limit).all()
+

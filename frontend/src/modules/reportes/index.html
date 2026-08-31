@@ -4,49 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GAVAC - Reportes y Consultas</title>
-    <!-- Tailwind CSS Local (Production Ready) -->
-    <link href="/static/dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap">
+    <style>
+        body {
+            font-family: "DM Sans", sans-serif;
+            background:
+                radial-gradient(circle at top right, rgba(200, 230, 201, 0.2), transparent 30%),
+                linear-gradient(135deg, #F7F4EF 0%, #EAF3DE 100%);
+            color: #1A1A14;
+            min-height: 100vh;
+        }
+        .card-reporte {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+        }
+        h1, h2, h3 {
+            font-family: 'DM Serif Display', serif;
+        }
+        .card-reporte:hover {
+            transform: translateY(-3px);
+            border-color: #1B5E20;
+        }
+        .header-gradient {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <nav class="bg-green-700 text-white p-4 shadow-lg">
+<body class="min-h-screen">
+    <nav class="header-gradient text-white p-5 shadow-lg sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">GAVAC — Reportes</h1>
-            <div class="space-x-4">
-                <a href="/login" class="hover:underline">Inicio</a>
-                <a href="/ganado" class="hover:underline">Ganado</a>
-                <button id="logoutBtn" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">Cerrar Sesión</button>
+            <div class="flex items-center gap-4">
+                <a href="/ganado" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl text-sm flex items-center gap-2 transition-colors border border-white/20">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Volver
+                </a>
+                <h1 class="text-xl font-bold tracking-tight">GAVAC — Reportes</h1>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="/admin" class="text-sm font-medium hover:text-emerald-200 transition-colors">Administración</a>
+                <button id="logoutBtn" class="bg-red-500/80 hover:bg-red-600 px-4 py-2 rounded-xl text-sm font-bold shadow-lg transition-all">Cerrar Sesión</button>
             </div>
         </div>
     </nav>
 
-    <main class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold mb-6 text-gray-800 border-b pb-2">Panel de Consultas y Auditoría</h2>
+    <main class="container mx-auto mt-10 p-8 card-reporte">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-2 h-8 bg-emerald-600 rounded-full"></div>
+            <h2 class="text-2xl font-bold text-gray-800">Panel de Consultas y Auditoría</h2>
+        </div>
 
         <div id="authStatus" class="mb-4 p-3 rounded hidden"></div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div id="card-resumen" class="p-6 border-2 border-green-100 rounded-xl hover:border-green-500 transition-colors cursor-pointer bg-green-50/30">
-                <div class="flex items-center mb-2">
-                    <span class="text-2xl mr-2">📊</span>
-                    <h3 class="font-bold text-green-800 text-lg">Resumen de Inventario</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div id="card-resumen" class="card-reporte p-6 hover:border-emerald-500 cursor-pointer bg-white">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">📊</span>
+                    <h3 class="font-bold text-emerald-900 text-lg">Resumen de Inventario</h3>
                 </div>
-                <p class="text-sm text-gray-600">Estadísticas actuales de ganado por sexo y estado real.</p>
+                <p class="text-sm text-slate-500 leading-relaxed">Estadísticas actuales de ganado por sexo y estado real.</p>
             </div>
 
-            <div id="card-produccion" class="p-6 border-2 border-blue-100 rounded-xl hover:border-blue-500 transition-colors cursor-pointer bg-blue-50/30">
-                <div class="flex items-center mb-2">
-                    <span class="text-2xl mr-2">🥛</span>
-                    <h3 class="font-bold text-blue-800 text-lg">Producción</h3>
+            <div id="card-produccion" class="card-reporte p-6 hover:border-blue-500 cursor-pointer bg-white">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🥛</span>
+                    <h3 class="font-bold text-blue-900 text-lg">Producción</h3>
                 </div>
-                <p class="text-sm text-gray-600">Histórico de pesaje y rendimiento por lote.</p>
+                <p class="text-sm text-slate-500 leading-relaxed">Histórico de pesaje y rendimiento por lote.</p>
             </div>
 
-            <div id="card-auditoria" class="p-6 border-2 border-purple-100 rounded-xl hover:border-purple-500 transition-colors cursor-pointer bg-purple-50/30">
-                <div class="flex items-center mb-2">
-                    <span class="text-2xl mr-2">🛡️</span>
-                    <h3 class="font-bold text-purple-800 text-lg">Logs de Auditoría</h3>
+            <div id="card-auditoria" class="card-reporte p-6 hover:border-purple-500 cursor-pointer bg-white">
+                <div class="flex items-center mb-3">
+                    <span class="text-3xl mr-3">🛡️</span>
+                    <h3 class="font-bold text-purple-900 text-lg">Logs de Auditoría</h3>
                 </div>
-                <p class="text-sm text-gray-600">Registro de accesos y acciones realizadas en el sistema.</p>
+                <p class="text-sm text-slate-500 leading-relaxed">Registro de accesos y acciones realizadas en el sistema.</p>
             </div>
         </div>
 

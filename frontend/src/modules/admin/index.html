@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAVAC — Administración</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap">
+    <style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background:
+                radial-gradient(circle at top right, rgba(200, 230, 201, 0.2), transparent 30%),
+                linear-gradient(135deg, #F7F4EF 0%, #EAF3DE 100%);
+            color: #1A1A14;
+            min-height: 100vh;
+        }
+        .header-admin {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .card-admin {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        }
+        h1, h2 {
+            font-family: 'DM Serif Display', serif;
+        }
+        .btn-back {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s ease;
+        }
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-3px);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <header class="header-admin text-white sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="bg-emerald-600 w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">A</div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">Panel de Control Admin</h1>
+                    <p class="text-slate-400 text-[10px] uppercase tracking-widest font-bold">Seguridad y Gestión</p>
+                </div>
+            </div>
+            <!-- Botón de Volver -->
+            <a href="/ganado" class="btn-back flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Gestión de Usuarios -->
+            <section class="card-admin p-8 lg:col-span-1">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-2 h-8 bg-emerald-600 rounded-full"></div>
+                    <h2 class="text-xl font-bold">Usuarios</h2>
+                </div>
+                <div class="space-y-3" id="users-list">
+                    <p class="text-sm text-slate-500 italic">Cargando usuarios...</p>
+                </div>
+            </section>
+
+            <!-- Resumen de Auditoría -->
+            <section class="card-admin p-8 lg:col-span-2">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-2 h-8 bg-amber-600 rounded-full"></div>
+                    <h2 class="text-xl font-bold text-slate-800">Seguridad y Auditoría</h2>
+                </div>
+                <div class="bg-slate-900 text-emerald-500/90 p-6 rounded-2xl font-mono text-xs h-[400px] overflow-y-auto border-4 border-slate-800 shadow-inner" id="audit-logs">
+                    [INFO] Cargando registros de auditoría...
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="text-center text-slate-400 text-xs py-8">
+        GAVAC Admin — Control de Acceso y Seguridad
+    </footer>
+
+    <script type="module">
+        // Lógica simple para cargar datos de prueba
+        document.addEventListener('DOMContentLoaded', () => {
+            const auditBox = document.getElementById('audit-logs');
+            const usersBox = document.getElementById('users-list');
+
+            // Simulación de carga (esto se conectaría a la API real)
+            setTimeout(() => {
+                auditBox.innerHTML = `
+                    <div class="mb-1 text-emerald-400">[2026-08-31 11:20] Login Exitoso: admin@gavac.com</div>
+                    <div class="mb-1 text-amber-400">[2026-08-31 11:22] Modificación Ganado: TAG-23111</div>
+                    <div class="mb-1 text-blue-400">[2026-08-31 11:25] Consulta de Reporte: Inventario General</div>
+                `;
+
+                usersBox.innerHTML = `
+                    <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                        <span>admin@gavac.com</span>
+                        <span class="text-[10px] bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded uppercase font-bold">Admin</span>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                        <span>operario1@test.com</span>
+                        <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded uppercase font-bold">Operario</span>
+                    </div>
+                `;
+            }, 800);
+        });
+    </script>
+</body>
+</html>

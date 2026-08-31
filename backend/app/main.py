@@ -66,10 +66,19 @@ def reportes_page():
         return FileResponse(reportes_file)
     return {"error": "index.html de reportes no encontrado"}
 
+@app.get("/admin")
+def admin_page():
+    admin_file = os.path.join(FRONTEND_PATH, "src", "modules", "admin", "index.html")
+    if os.path.exists(admin_file):
+        return FileResponse(admin_file)
+    return {"error": "index.html de administración no encontrado"}
+
 # Routers de la API (RESTAURADOS)
 app.include_router(cattle_router)
 app.include_router(auth_router)
 app.include_router(reportes_router)
+from app.modules.admin.router import router as admin_api_router
+app.include_router(admin_api_router)
 
 @app.get("/health")
 def health():

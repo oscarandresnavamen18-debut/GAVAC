@@ -21,12 +21,12 @@ async function actualizarEstadoApi(): Promise<void> {
   try {
     const health = await checkApiHealth();
     statusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
-    statusText.textContent = `API: Conectada (${health.database})`;
-    statusText.classList.replace("text-slate-500", "text-emerald-700");
+    statusText.textContent = "ONLINE";
+    statusText.style.color = "#10b981";
   } catch (err) {
     statusDot.className = "w-2 h-2 rounded-full bg-red-500";
-    statusText.textContent = "API: Desconectada";
-    statusText.classList.replace("text-slate-500", "text-red-700");
+    statusText.textContent = "OFFLINE";
+    statusText.style.color = "#ef4444";
   }
 }
 
