@@ -1,6 +1,6 @@
 import os
 from datetime import datetime, timedelta
-from fastapi import Depends, HTTPException, status
+from fastapi import Cookie, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -54,7 +54,17 @@ def autenticar_usuario(db: Session, datos: schemas.UsuarioLogin, ip_address: str
     registrar_accion(db, "LOGIN_EXITOSO", usuario.id, usuario.email, ip=ip_address)
     return token, usuario
 
-def get_usuario_actual(token: str = Depends(OAuth2PasswordBearer(tokenUrl="/api/auth/login")), db: Session = Depends(get_db)):
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
+
+
+def get_usuario_actual(
+    token: str | None = Depends(oauth2_scheme),
+    session_token: str | None = Cookie(default=None),
+    db: Session = Depends(get_db),
+):
+    token = token or session_token
+    if not token:
+        raise HTTPException(status_code=401, detail="Autenticación requerida", headers={"WWW-Authenticate": "Bearer"})
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         usuario_id = int(payload.get("sub"))

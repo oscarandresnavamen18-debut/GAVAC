@@ -20,13 +20,21 @@ class AnimalBase(BaseModel):
 
 class AnimalCreate(AnimalBase):
     """Datos requeridos para registrar un animal nuevo."""
-    tag: str = Field(..., min_length=1, max_length=50, description="Identificador único (arete/chip)")
+    tag: str = Field(
+        ...,
+        pattern=r"^[A-Za-z]{2,10}-[0-9]{1,6}$",
+        description="Identificador único con formato letras-números, por ejemplo GAV-001",
+    )
     status: Estado = "active"
 
 
 class AnimalUpdate(AnimalBase):
     """Todos los campos son opcionales al actualizar."""
-    tag: Optional[str] = Field(default=None, min_length=1, max_length=50)
+    tag: Optional[str] = Field(
+        default=None,
+        pattern=r"^[A-Za-z]{2,10}-[0-9]{1,6}$",
+        description="Identificador con formato letras-números, por ejemplo GAV-001",
+    )
     status: Optional[Estado] = None
 
 

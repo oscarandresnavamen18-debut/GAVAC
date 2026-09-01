@@ -52,7 +52,7 @@
         .btn-green:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(27, 94, 32, 0.3); }
 
         /* Table */
-        .table-wrap { overflow: hidden; border-radius: 20px; border: 1px solid #E2E8F0; background: white; }
+        .table-wrap { overflow-x: auto; border-radius: 20px; border: 1px solid #E2E8F0; background: white; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { background: #FAFBFC; padding: 20px 24px; font-size: 11px; font-weight: 900; text-transform: uppercase; color: #64748B; letter-spacing: 1px; border-bottom: 1px solid #E2E8F0; }
         td { padding: 18px 24px; border-bottom: 1px solid #F1F5F9; font-size: 14px; }
@@ -64,7 +64,32 @@
         .delete-link { color: #B42318; text-decoration: none; font-weight: 700; cursor: pointer; }
         .delete-link:hover { text-decoration: underline; }
 
-        @media (max-width: 1024px) { .sidebar { width: 80px; padding: 40px 10px; } .sidebar span { display: none; } .main-content { margin-left: 80px; } }
+        @media (max-width: 1024px) {
+            .sidebar { width: 80px; padding: 40px 10px; }
+            .sidebar span { display: none; }
+            .main-content { margin-left: 80px; padding: 40px 5%; }
+            .page-header h1 { font-size: 42px; }
+        }
+        @media (max-width: 720px) {
+            .app-layout { display: block; }
+            .sidebar {
+                width: 100%; height: auto; position: static; padding: 16px;
+                display: block;
+            }
+            .sidebar-logo { margin-bottom: 16px; }
+            .sidebar nav { display: flex; gap: 6px; overflow-x: auto; }
+            .sidebar span { display: inline; }
+            .nav-item { flex: 0 0 auto; padding: 10px 12px; font-size: 11px; }
+            .sidebar > div:last-child { margin-top: 12px; }
+            .main-content { margin-left: 0; padding: 28px 16px 48px; }
+            .page-header { display: block; margin-bottom: 28px; }
+            .page-header > div:last-child { margin-top: 18px; text-align: left !important; }
+            .page-header h1 { font-size: clamp(36px, 12vw, 48px); }
+            .main-content > div { grid-template-columns: 1fr !important; gap: 24px !important; }
+            .card-panel { padding: 24px; border-radius: 18px; }
+            .table-wrap { border-radius: 14px; }
+            table { min-width: 680px; }
+        }
     </style>
 </head>
 <body>
@@ -78,10 +103,9 @@
             </div>
 
             <nav style="flex: 1;">
-                <a href="/dashboard" class="nav-item"><span>📊</span> <span>Dashboard</span></a>
-                <a href="/ganado" class="nav-item active"><span>🐄</span> <span>Inventario</span></a>
-                <a href="/reportes" class="nav-item"><span>📈</span> <span>Analítica</span></a>
-                <a href="/admin" class="nav-item"><span>🛡️</span> <span>Administración</span></a>
+                <a href="/dashboard" class="nav-item"><span>01</span> <span>Dashboard</span></a>
+                <a href="/ganado" class="nav-item active"><span>02</span> <span>Inventario</span></a>
+                <a href="/reportes" class="nav-item"><span>03</span> <span>Analítica</span></a>
             </nav>
 
             <div style="border-top: 1px solid rgba(255,255,255,0.05); pt: 20px;">
@@ -109,11 +133,29 @@
                     <form id="animal-form">
                         <div class="input-group">
                             <label class="label">Identificación (Tag)</label>
-                            <input id="tag" name="tag" type="text" required class="input" placeholder="GAV-001">
+                            <input id="tag" name="tag" type="text" required class="input" placeholder="GAV-001"
+                                   pattern="[A-Za-z]{2,10}-[0-9]{1,6}" maxlength="17"
+                                   title="Use entre 2 y 10 letras, un guion y entre 1 y 6 números. Ejemplo: GAV-001"
+                                   style="text-transform: uppercase;">
+                            <small style="display:block; margin-top:6px; color:#6F6F61; font-size:11px;">Formato obligatorio: letras-guion-números (ej. GAV-001).</small>
                         </div>
                         <div class="input-group">
                             <label class="label">Raza Genética</label>
-                            <input id="breed" name="breed" type="text" class="input" placeholder="Ej: Brahman">
+                            <select id="breed" name="breed" class="input" required style="background: #F8F9FA;">
+                                <option value="">Seleccione una raza</option>
+                                <option value="Angus">Angus</option>
+                                <option value="Brahman">Brahman</option>
+                                <option value="Brangus">Brangus</option>
+                                <option value="Brown Swiss">Brown Swiss</option>
+                                <option value="Cebu">Cebu</option>
+                                <option value="Gyr">Gyr</option>
+                                <option value="Holstein">Holstein</option>
+                                <option value="Jersey">Jersey</option>
+                                <option value="Normando">Normando</option>
+                                <option value="Pardo Suizo">Pardo Suizo</option>
+                                <option value="Simmental">Simmental</option>
+                                <option value="Otra">Otra</option>
+                            </select>
                         </div>
                         <div class="input-group">
                             <label class="label">Género</label>

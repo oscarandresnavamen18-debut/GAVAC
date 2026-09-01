@@ -1,5 +1,6 @@
 from typing import List
-from fastapi import APIRouter, Depends, Request
+import os
+from fastapi import APIRouter, Depends, Request, Response
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -15,9 +16,22 @@ def register(datos: schemas.UsuarioCreate, request: Request, db: Session = Depen
 
 
 @router.post("/login", response_model=schemas.Token)
-def login(datos: schemas.UsuarioLogin, request: Request, db: Session = Depends(get_db)):
+def login(datos: schemas.UsuarioLogin, request: Request, response: Response, db: Session = Depends(get_db)):
     token, usuario = service.autenticar_usuario(db, datos, request.client.host)
+    response.set_cookie(
+        key="session_token",
+        value=token,
+        max_age=service.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        httponly=True,
+        secure=os.getenv("COOKIE_SECURE", "false").lower() == "true",
+        samesite="lax",
+    )
     return schemas.Token(access_token=token, usuario=usuario)
+
+
+@router.post("/logout", status_code=204)
+def logout(response: Response):
+    response.delete_cookie("session_token")
 
 
 @router.get("/me", response_model=schemas.UsuarioOut)

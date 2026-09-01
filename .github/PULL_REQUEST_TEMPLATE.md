@@ -1,13 +1,13 @@
 ## 📝 Descripción
 Breve resumen del cambio realizado y el impacto esperado en el sistema GAVAC.
 
-## 🚀 Tipo de cambio
+## Tipo de cambio
 - [ ] 🐛 Bugfix (corrección de errores)
 - [ ] ✨ Feature (nueva funcionalidad)
 - [ ] 📚 Docs (cambios en documentación)
-- [ ] 🛠️ Chore (mantenimiento, configuración, dependencias)
+- [ ] Chore (mantenimiento, configuración, dependencias)
 
-## ✅ Checklist de PR
+## Checklist de PR
 - [ ] He verificado que los cambios sigan el patrón modular en `frontend/src/modules` y `backend/app/modules`.
 - [ ] He actualizado los esquemas de **SQLAlchemy** si hubo cambios en la base de datos de Supabase.
 - [ ] He compilado el frontend exitosamente usando `npm run build`.

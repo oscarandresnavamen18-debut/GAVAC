@@ -44,7 +44,7 @@ function mostrarError(mensaje: string): void {
   if (reportResult) {
     reportResult.innerHTML = `
       <div class="p-4 bg-red-50 text-red-700 border border-red-200 rounded-lg text-sm text-center">
-        ⚠️ ${mensaje}
+        ${mensaje}
       </div>
     `;
   }
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (reportResult) {
     reportResult.innerHTML = `
       <div class="text-center text-slate-400 py-12 border-2 border-dashed border-slate-200 rounded-xl bg-white">
-        <span class="text-4xl mb-3 block">📊</span>
+        <span class="text-sm font-black tracking-widest mb-3 block">BI</span>
         <p class="font-medium text-slate-500">Selecciona un reporte de arriba para ver las consultas</p>
         <p class="text-xs text-slate-400 mt-1">Los datos se cargarán en tiempo real desde Supabase</p>
       </div>

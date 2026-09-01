@@ -51,7 +51,7 @@ form.addEventListener("submit", async (e) => {
         if (modoRegistro) {
             console.log("Registrando con rol:", selectedRole);
             await registrar({ email, password, rol: selectedRole as any });
-            mostrarMensaje("✅ Cuenta creada con éxito. Iniciando sesión...", "exito");
+            mostrarMensaje("Cuenta creada con éxito. Iniciando sesión...", "exito");
         }
 
         const resultado = await login({ email, password });

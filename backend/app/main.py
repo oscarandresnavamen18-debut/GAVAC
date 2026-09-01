@@ -1,6 +1,6 @@
 import os
 import logging
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
@@ -9,6 +9,7 @@ from app.database import Base, engine
 from app.middleware.security import SecurityHeadersMiddleware
 from app.modules.cattle.router import router as cattle_router
 from app.modules.auth.router import router as auth_router
+from app.modules.auth.service import requerir_rol
 from app.modules.reportes.router import router as reportes_router
 from app.modules.empleados.router import router as empleados_router
 
@@ -21,7 +22,7 @@ app = FastAPI(title="GAVAC API", version="1.0.0")
 # La creación automática solo se permite explícitamente en desarrollo.
 if os.getenv("AUTO_CREATE_TABLES", "false").lower() == "true":
     Base.metadata.create_all(bind=engine)
-    logger.info("✅ DB SYNC OK")
+    logger.info("DB SYNC OK")
 
 # Middlewares
 app.add_middleware(SecurityHeadersMiddleware)
@@ -54,14 +55,14 @@ print(f"------------------------")
 
 if os.path.exists(FRONTEND_PATH):
     app.mount("/static", StaticFiles(directory=FRONTEND_PATH), name="static")
-    logger.info(f"✅ FRONTEND MOUNTED AT: {FRONTEND_PATH}")
+    logger.info(f"FRONTEND MOUNTED AT: {FRONTEND_PATH}")
 else:
     logger.error(f"❌ FRONTEND NOT FOUND")
 
 # Servir la Landing Page
 @app.get("/")
 def root():
-    for name in ["index.html", "landing.html"]:
+    for name in ["landing.html", "index.html"]:
         path = os.path.join(FRONTEND_PATH, name)
         if os.path.exists(path):
             return FileResponse(path)
@@ -105,14 +106,14 @@ def reportes_page():
     return {"error": "index.html de reportes no encontrado"}
 
 @app.get("/admin")
-def admin_page():
+def admin_page(_usuario=Depends(requerir_rol("admin"))):
     admin_file = os.path.join(FRONTEND_PATH, "src", "modules", "admin", "index.html")
     if os.path.exists(admin_file):
         return FileResponse(admin_file)
     return {"error": "index.html de administración no encontrado"}
 
 @app.get("/empleados")
-def empleados_page():
+def empleados_page(_usuario=Depends(requerir_rol("admin"))):
     empleados_file = os.path.join(FRONTEND_PATH, "src", "modules", "empleados", "index.html")
     if os.path.exists(empleados_file):
         return FileResponse(empleados_file)

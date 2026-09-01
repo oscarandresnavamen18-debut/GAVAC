@@ -5,6 +5,7 @@
 import { listarAnimales, registrarAnimal, eliminarAnimal, Animal, Filtros, checkApiHealth } from "./api.js";
 
 const form = document.getElementById("animal-form") as HTMLFormElement;
+const tagInput = document.getElementById("tag") as HTMLInputElement;
 const formError = document.getElementById("form-error") as HTMLParagraphElement;
 const tableBody = document.getElementById("animal-table-body") as HTMLTableSectionElement;
 const emptyState = document.getElementById("empty-state") as HTMLDivElement;
@@ -16,6 +17,10 @@ const clearFilterBtn = document.getElementById("clear-filter-btn") as HTMLButton
 
 const statusDot = document.getElementById("api-status-dot") as HTMLSpanElement;
 const statusText = document.getElementById("api-status-text") as HTMLSpanElement;
+
+tagInput.addEventListener("input", () => {
+  tagInput.value = tagInput.value.toUpperCase().replace(/[^A-Z0-9-]/g, "");
+});
 
 async function actualizarEstadoApi(): Promise<void> {
   try {
