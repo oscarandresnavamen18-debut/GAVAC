@@ -35,8 +35,8 @@
 
         .locked { opacity: 0.5; filter: grayscale(1); cursor: not-allowed; }
 
-        .user-info { text-align: right; }
-        .user-email { font-weight: 700; font-size: 14px; }
+        .user-info { text-align: right; min-width: 120px; }
+        .user-email { display: none; }
         .user-role { font-size: 11px; font-weight: 800; color: #1b5e20; text-transform: uppercase; letter-spacing: 1px; }
 
         .btn-logout { background: #EDE8E0; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-left: 20px; }
@@ -72,7 +72,7 @@
                 <a href="/admin" id="adminLink" style="display:none;">Administración</a>
             </div>
             <div class="user-info">
-                <p id="user-email" class="user-email">...</p>
+                <p class="user-email">Sesión activa</p>
                 <p id="user-role" class="user-role">...</p>
             </div>
             <button id="logoutBtn" class="btn-logout text-xs">SALIR</button>
@@ -113,8 +113,7 @@
             if (!userData) { window.location.href = "/login"; return; }
 
             const user = JSON.parse(userData);
-            document.getElementById('user-email').textContent = user.email;
-            document.getElementById('user-role').textContent = user.rol.toUpperCase() + " ACCESS";
+            document.getElementById('user-role').textContent = "ROL " + user.rol.toUpperCase();
 
             if (user.rol === "admin") {
                 document.getElementById('admin-module').style.display = "block";
