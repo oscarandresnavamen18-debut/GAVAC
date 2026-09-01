@@ -48,10 +48,16 @@ Write-Host "🛠️ Compilando Frontend (Build)..." -ForegroundColor Gray
 npm run build
 
 # --- 3. LANZAMIENTO UNIFICADO ---
+$PORT = 8000
+if (Get-NetTCPConnection -LocalPort $PORT -State Listen -ErrorAction SilentlyContinue) {
+    $PORT = 8010
+    Write-Host "⚠️ El puerto 8000 está ocupado. GAVAC usará el puerto 8010." -ForegroundColor Yellow
+}
+
 Write-Host "`n🔥 TODO LISTO. LANZANDO SERVIDOR..." -ForegroundColor Green
-Write-Host "Accede en: http://localhost:8000" -ForegroundColor White
+Write-Host "Accede en: http://127.0.0.1:$PORT" -ForegroundColor White
 Write-Host "(Presiona CTRL+C para detener)`n" -ForegroundColor Gray
 
 Set-Location -LiteralPath (Join-Path $ROOT "backend")
 $env:PYTHONPATH = "."
-.\venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+.\venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port $PORT --reload
