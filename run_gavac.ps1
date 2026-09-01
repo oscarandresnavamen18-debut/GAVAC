@@ -3,13 +3,17 @@
 # ==============================================================================
 
 $ErrorActionPreference = "Stop"
-$ROOT = Get-Location
+$ROOT = $PSScriptRoot
+
+if (-not $ROOT -or -not (Test-Path (Join-Path $ROOT "backend")) -or -not (Test-Path (Join-Path $ROOT "frontend"))) {
+    throw "No se encontró la estructura de GAVAC junto a este script."
+}
 
 Write-Host "`n🚀 INICIANDO GAVAC SYSTEM..." -ForegroundColor Cyan
 
 # --- 1. CONFIGURACIÓN DEL BACKEND ---
 Write-Host "`n🐍 Configurando Backend..." -ForegroundColor Yellow
-cd "$ROOT/backend"
+Set-Location -LiteralPath (Join-Path $ROOT "backend")
 
 if (-not (Test-Path "venv")) {
     Write-Host "📦 Creando entorno virtual (esto tardará un poco la primera vez)..." -ForegroundColor Gray
@@ -27,9 +31,13 @@ if (-not (Test-Path ".env")) {
     Copy-Item ".env.example" ".env"
 }
 
+if ((Get-Content ".env" -Raw) -match "\[CONTRASEÑA\]|\[PROJECT_ID\]|cambia-esta-clave") {
+    throw "El archivo backend\.env aún contiene valores de ejemplo. Configura DATABASE_URL y AUTH_SECRET_KEY."
+}
+
 # --- 2. CONFIGURACIÓN DEL FRONTEND ---
 Write-Host "`n🎨 Configurando Frontend..." -ForegroundColor Yellow
-cd "$ROOT/frontend"
+Set-Location -LiteralPath (Join-Path $ROOT "frontend")
 
 if (-not (Test-Path "node_modules")) {
     Write-Host "📦 Instalando paquetes de Node (npm install)..." -ForegroundColor Gray
@@ -44,6 +52,6 @@ Write-Host "`n🔥 TODO LISTO. LANZANDO SERVIDOR..." -ForegroundColor Green
 Write-Host "Accede en: http://localhost:8000" -ForegroundColor White
 Write-Host "(Presiona CTRL+C para detener)`n" -ForegroundColor Gray
 
-cd "$ROOT/backend"
+Set-Location -LiteralPath (Join-Path $ROOT "backend")
 $env:PYTHONPATH = "."
 .\venv\Scripts\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
