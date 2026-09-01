@@ -12,6 +12,7 @@
             --p-dark: #0f3324;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        .hidden { display: none !important; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -143,13 +144,13 @@
                         <input type="email" id="email" required class="input-pro" placeholder="usuario@gavac.pro">
                     </div>
 
-                    <div id="roleSelectorContainer" style="display:none; margin-bottom: 32px;">
+                    <div id="roleSelectorContainer" class="hidden" style="margin-bottom: 32px;">
                         <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #1B5E20; letter-spacing: 2px; margin-bottom: 12px;">Cargo Operativo</label>
                         <div style="display: grid; grid-gap: 12px; grid-template-columns: 1fr 1fr;">
-                            <label><input type="radio" name="rol" value="ganadero" checked style="display:none"><div class="role-card"><span style="font-size: 20px;">👨‍🌾</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">GANADERO</p></div></label>
-                            <label><input type="radio" name="rol" value="mayordomo" style="display:none"><div class="role-card"><span style="font-size: 20px;">🧑‍🌾</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">MAYORDOMO</p></div></label>
-                            <label><input type="radio" name="rol" value="veterinario" style="display:none"><div class="role-card"><span style="font-size: 20px;">🩺</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">VETERINARIO</p></div></label>
-                            <label><input type="radio" name="rol" value="operario" style="display:none"><div class="role-card"><span style="font-size: 20px;">👷</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">OPERARIO</p></div></label>
+                            <label><input type="radio" name="rol" value="ganadero" checked style="display:none"><div class="role-card"><span style="font-size: 14px; font-weight: 900; color: #1B5E20;">01</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">GANADERO</p></div></label>
+                            <label><input type="radio" name="rol" value="mayordomo" style="display:none"><div class="role-card"><span style="font-size: 14px; font-weight: 900; color: #1B5E20;">02</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">MAYORDOMO</p></div></label>
+                            <label><input type="radio" name="rol" value="veterinario" style="display:none"><div class="role-card"><span style="font-size: 14px; font-weight: 900; color: #1B5E20;">03</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">VETERINARIO</p></div></label>
+                            <label><input type="radio" name="rol" value="operario" style="display:none"><div class="role-card"><span style="font-size: 14px; font-weight: 900; color: #1B5E20;">04</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">OPERARIO</p></div></label>
                         </div>
                     </div>
 
@@ -162,9 +163,9 @@
                 </form>
 
                 <div style="margin-top: 40px; text-align: center;">
-                    <a href="#" id="toggleMode" style="color: #1B5E20; font-weight: 800; text-decoration: none; font-size: 12px; letter-spacing: 1px; border-bottom: 2px solid rgba(27, 94, 32, 0.1); padding-bottom: 4px;">SOLICITAR ALTA DE USUARIO</a>
+                    <a href="#" id="toggleMode" style="color: #1B5E20; font-weight: 800; text-decoration: none; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid rgba(27, 94, 32, 0.1); padding-bottom: 4px;">REGISTRO DE USUARIO</a>
                 </div>
-                <div id="loginMessage" style="display:none; margin-top: 30px; padding: 20px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 13px;"></div>
+                <div id="loginMessage" class="hidden" style="margin-top: 30px; padding: 20px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 13px;"></div>
             </div>
         </div>
     </div>

@@ -25,7 +25,7 @@ toggleLink.addEventListener("click", (e) => {
     formTitle.textContent = modoRegistro ? "Crear Perfil" : "Iniciar Sesión";
     formSubtitle.textContent = modoRegistro ? "Únase a la gestión inteligente del agro." : "Acceda a su ecosistema ganadero inteligente.";
     submitBtn.textContent = modoRegistro ? "Finalizar Registro" : "Entrar al Sistema";
-    toggleLink.textContent = modoRegistro ? "Volver al Acceso" : "Solicitar Registro";
+    toggleLink.textContent = modoRegistro ? "Volver al Acceso" : "Registro de usuario";
 
     roleContainer.classList.toggle("hidden", !modoRegistro);
     messageBox.classList.add("hidden");

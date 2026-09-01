@@ -8,6 +8,18 @@ export interface UsuarioLogin { email: string; password: string; }
 export interface UsuarioOut { id: number; email: string; rol: string; created_at: string; }
 export interface Token { access_token: string; token_type: string; usuario: UsuarioOut; }
 
+async function obtenerMensajeError(response: Response, fallback: string): Promise<string> {
+  try {
+    const error = await response.json();
+    if (Array.isArray(error.detail)) {
+      return error.detail.map((item: { msg?: string }) => item.msg || fallback).join(", ");
+    }
+    return String(error.detail || error.message || fallback);
+  } catch {
+    return `${fallback} (HTTP ${response.status})`;
+  }
+}
+
 export async function registrar(datos: UsuarioCreate): Promise<UsuarioOut> {
   const response = await fetch(`${API_BASE}/register`, {
     method: "POST",
@@ -16,8 +28,7 @@ export async function registrar(datos: UsuarioCreate): Promise<UsuarioOut> {
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || "Error en el registro");
+    throw new Error(await obtenerMensajeError(response, "Error en el registro"));
   }
   return await response.json();
 }
@@ -30,8 +41,8 @@ export async function login(datos: UsuarioLogin): Promise<Token> {
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.detail || "Error en login");
+    throw new Error(await obtenerMensajeError(response, "Error en login"));
   }
+
   return await response.json();
 }
