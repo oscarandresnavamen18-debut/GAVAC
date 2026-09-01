@@ -54,4 +54,4 @@ Write-Host "(Presiona CTRL+C para detener)`n" -ForegroundColor Gray
 
 Set-Location -LiteralPath (Join-Path $ROOT "backend")
 $env:PYTHONPATH = "."
-.\venv\Scripts\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+.\venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
