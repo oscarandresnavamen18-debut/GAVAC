@@ -3,107 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC — Gestión de Inventario</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>GAVAC — Inventario Estratégico</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; color: #1E293B; }
-        .font-serif { font-family: 'DM Serif Display', serif; }
-        .sidebar { background: #0F172A; width: 280px; position: fixed; height: 100vh; color: white; border-right: 1px solid rgba(255,255,255,0.05); }
-        .main-content { margin-left: 280px; padding: 40px; }
-        .card-ganadero { background: white; border-radius: 20px; border: 1px solid #E2E8F0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.3s; }
-        .card-ganadero:hover { transform: translateY(-3px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); }
-        .input-pro { width: 100%; background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px 16px; transition: all 0.2s; }
-        .input-pro:focus { background: white; border-color: #10B981; outline: none; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); }
-        .nav-item { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 12px; color: #94A3B8; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        /* CSS MAESTRO - ESTILO LANDING PREMIUM */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background-color: #F7F4EF; color: #1A1A14; line-height: 1.6; }
+
+        /* Layout */
+        .app-layout { display: flex; min-height: 100vh; }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px; background: #0F172A; position: fixed; height: 100vh; color: white; padding: 40px 24px;
+            display: flex; flex-direction: column; z-index: 100;
+        }
+        .sidebar-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 48px; }
+        .logo-box { width: 40px; height: 40px; background: #1B5E20; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-radius: 12px;
+            color: #94A3B8; text-decoration: none; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+        }
         .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.05); color: white; }
-        .nav-item.active { border-left: 4px solid #10B981; border-radius: 0 12px 12px 0; }
+        .nav-item.active { border-left: 4px solid #1B5E20; border-radius: 0 12px 12px 0; }
+
+        /* Main Content */
+        .main-content { margin-left: 280px; flex: 1; padding: 60px 8%; }
+        .page-header { margin-bottom: 48px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .page-header h1 { font-family: 'DM Serif Display', serif; font-size: 48px; line-height: 1; }
+
+        /* Premium Components */
+        .card-panel { background: white; border-radius: 24px; padding: 40px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 18px 45px rgba(27, 94, 32, 0.05); }
+
+        .input-group { margin-bottom: 24px; }
+        .label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #6F6F61; margin-bottom: 8px; }
+        .input {
+            width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid #D8D3C7; background: #F8F9FA;
+            font-size: 14px; transition: 0.3s; outline: none;
+        }
+        .input:focus { border-color: #1B5E20; background: white; box-shadow: 0 0 0 4px rgba(27, 94, 32, 0.08); }
+
+        .btn-green {
+            width: 100%; background: linear-gradient(90deg, #1B5E20 0%, #2E7D32 100%); color: white;
+            padding: 16px; border-radius: 12px; border: none; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(27, 94, 32, 0.2); transition: 0.3s;
+        }
+        .btn-green:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(27, 94, 32, 0.3); }
+
+        /* Table */
+        .table-wrap { overflow: hidden; border-radius: 20px; border: 1px solid #E2E8F0; background: white; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: #FAFBFC; padding: 20px 24px; font-size: 11px; font-weight: 900; text-transform: uppercase; color: #64748B; letter-spacing: 1px; border-bottom: 1px solid #E2E8F0; }
+        td { padding: 18px 24px; border-bottom: 1px solid #F1F5F9; font-size: 14px; }
+        .tr-hover:hover { background: #F8FAFC; }
+
+        .badge { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .badge-active { background: #DCFCE7; color: #15803D; }
+
+        .delete-link { color: #B42318; text-decoration: none; font-weight: 700; cursor: pointer; }
+        .delete-link:hover { text-decoration: underline; }
+
+        @media (max-width: 1024px) { .sidebar { width: 80px; padding: 40px 10px; } .sidebar span { display: none; } .main-content { margin-left: 80px; } }
     </style>
 </head>
-<body class="flex">
+<body>
 
-    <!-- Sidebar Enterprise -->
-    <aside class="sidebar p-6 flex flex-col">
-        <div class="flex items-center gap-3 mb-12">
-            <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">G</div>
-            <h1 class="font-serif text-2xl tracking-tighter text-white">GAVAC</h1>
-        </div>
-
-        <nav class="flex-1 space-y-2">
-            <a href="/dashboard" class="nav-item text-decoration-none"><span>📊</span> Dashboard</a>
-            <a href="/ganado" class="nav-item active text-decoration-none"><span>🐄</span> Inventario</a>
-            <a href="/reportes" class="nav-item text-decoration-none"><span>📈</span> Analítica</a>
-            <a href="/admin" class="nav-item text-decoration-none"><span>🛡️</span> Administración</a>
-        </nav>
-
-        <div class="mt-auto pt-6 border-t border-slate-800">
-            <button id="logoutBtn" class="w-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white p-3 rounded-xl text-xs font-bold transition-all">CERRAR SESIÓN</button>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content flex-1">
-        <header class="flex justify-between items-end mb-12">
-            <div>
-                <h2 class="font-serif text-4xl text-slate-900">Control de Activos</h2>
-                <p class="text-slate-400 font-medium uppercase tracking-[0.2em] text-[10px] mt-1">Hacienda El Recreo — Inventario Real</p>
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-box">G</div>
+                <span class="serif" style="font-size: 24px; color: white;">GAVAC</span>
             </div>
-            <div class="flex items-center gap-4 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-100">
-                <span id="api-status-dot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span id="api-status-text" class="text-[10px] font-black text-emerald-700 uppercase">Sistema Online</span>
-            </div>
-        </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <!-- Formulario Sidebar -->
-            <section class="lg:col-span-1">
-                <div class="card-ganadero p-8 sticky top-10">
-                    <h3 class="font-serif text-xl mb-6">Nuevo Animal</h3>
-                    <form id="animal-form" class="space-y-4">
-                        <div>
-                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-2">N.° Chapeta</label>
-                            <input id="tag" name="tag" type="text" required class="input-pro" placeholder="GAV-001">
+            <nav style="flex: 1;">
+                <a href="/dashboard" class="nav-item"><span>📊</span> <span>Dashboard</span></a>
+                <a href="/ganado" class="nav-item active"><span>🐄</span> <span>Inventario</span></a>
+                <a href="/reportes" class="nav-item"><span>📈</span> <span>Analítica</span></a>
+                <a href="/admin" class="nav-item"><span>🛡️</span> <span>Administración</span></a>
+            </nav>
+
+            <div style="border-top: 1px solid rgba(255,255,255,0.05); pt: 20px;">
+                <button id="logoutBtn" style="background:rgba(255,255,255,0.05); border:none; color:white; width:100%; padding:12px; border-radius:10px; font-weight:700; cursor:pointer;">SALIR</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <div>
+                    <div style="width: 60px; height: 3px; background: #1B5E20; margin-bottom: 20px;"></div>
+                    <h1>Inventario <br><em>Estratégico.</em></h1>
+                </div>
+                <div style="text-align: right;">
+                    <p style="font-size: 12px; font-weight: 800; color: #1B5E20; text-transform: uppercase;">Estado del Sistema</p>
+                    <p style="font-size: 14px; font-weight: 500;">Hacienda El Recreo — Online</p>
+                </div>
+            </header>
+
+            <div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 40px; align-items: flex-start;">
+                <!-- Registration Form -->
+                <section class="card-panel">
+                    <h3 class="serif" style="font-size: 24px; margin-bottom: 30px;">Nuevo Activo</h3>
+                    <form id="animal-form">
+                        <div class="input-group">
+                            <label class="label">Identificación (Tag)</label>
+                            <input id="tag" name="tag" type="text" required class="input" placeholder="GAV-001">
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-2">Raza</label>
-                            <input id="breed" name="breed" type="text" class="input-pro" placeholder="Ej: Brahman">
+                        <div class="input-group">
+                            <label class="label">Raza Genética</label>
+                            <input id="breed" name="breed" type="text" class="input" placeholder="Ej: Brahman">
                         </div>
-                        <div>
-                            <label class="block text-[10px] font-black text-slate-400 uppercase mb-2">Sexo</label>
-                            <select id="sex" name="sex" class="input-pro">
+                        <div class="input-group">
+                            <label class="label">Género</label>
+                            <select id="sex" name="sex" class="input" style="background: #F8F9FA;">
                                 <option value="hembra">Hembra</option>
                                 <option value="macho">Macho</option>
                             </select>
                         </div>
-                        <button type="submit" class="w-full bg-[#1B5E20] hover:bg-[#2E7D32] text-white py-4 rounded-xl font-bold shadow-lg transition-all mt-4 uppercase text-xs tracking-widest">Registrar Activo</button>
+                        <div class="input-group">
+                            <label class="label">Fecha Nacimiento</label>
+                            <input id="birth_date" name="birth_date" type="date" class="input">
+                        </div>
+                        <button type="submit" class="btn-green">Registrar Activo</button>
                     </form>
-                </div>
-            </section>
+                    <p id="form-error" style="color:#B42318; font-size:12px; margin-top:15px; text-align:center; font-weight:700;"></p>
+                </section>
 
-            <!-- Tabla de Datos -->
-            <section class="lg:col-span-3 space-y-6">
-                <div class="card-ganadero overflow-hidden">
-                    <table class="w-full text-left">
-                        <thead class="bg-slate-50 border-b border-slate-100 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                            <tr>
-                                <th class="px-8 py-5">TAG</th>
-                                <th class="px-8 py-5">RAZA</th>
-                                <th class="px-8 py-5">GÉNERO</th>
-                                <th class="px-8 py-5">ESTADO</th>
-                                <th class="px-8 py-5 text-right">ACCIONES</th>
-                            </tr>
-                        </thead>
-                        <tbody id="animal-table-body" class="divide-y divide-slate-50 text-sm">
-                            <!-- Inyectado por main.ts -->
-                        </tbody>
-                    </table>
-                    <div id="empty-state" class="hidden text-center py-20 opacity-30">
-                        <p class="font-serif text-2xl">No hay registros en esta sección</p>
+                <!-- Data Table -->
+                <section>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tag</th>
+                                    <th>Raza</th>
+                                    <th>Género</th>
+                                    <th>Nacimiento</th>
+                                    <th>Estado</th>
+                                    <th style="text-align: right;">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="animal-table-body">
+                                <!-- JS Managed -->
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-            </section>
-        </div>
-    </main>
+                    <div id="empty-state" style="text-align: center; padding: 100px 0; display: none;">
+                        <p class="serif" style="font-size: 32px; color: #D8D3C7;">Sin activos registrados</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
 
     <script type="module" src="/static/dist/modules/ganado/main.js"></script>
 </body>

@@ -1,65 +1,52 @@
-name: Repo Audit & CI (Portal Equino - Base Sólida)
+name: CI
 
 on:
   push:
-    branches: [ main, master, feature/** ]
+    branches: [main, master, "feature/**"]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
-  audit:
+  backend:
+    name: Validar backend
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
     steps:
-      - name: Checkout del código
+      - name: Descargar código
         uses: actions/checkout@v4
 
-      - name: Diagnóstico de Directorios
-        run: |
-          echo "Estructura detectada en la raíz:"
-          ls -F
-          echo "-----------------------------------"
-          echo "Contenido de 'portal equino':"
-          ls -F "portal equino/" || echo "No se pudo acceder a 'portal equino/'"
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
 
-      - name: Auditoría de Archivos Críticos
-        run: |
-          set -e
-          echo "Verificando integridad de la Base Sólida..."
-          
-          # Definir archivos obligatorios (Rutas relativas a la raíz del repo)
-          # Usamos comillas dobles para manejar el espacio en "portal equino"
-          FILES=(
-            "portal equino/backend/package.json"
-            "portal equino/frontend/package.json"
-            "portal equino/README.md"
-            "portal equino/.gitignore"
-            "portal equino/backend/src/modules/ganado/ganado.routes.ts"
-          )
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements.txt
 
-          for file in "${FILES[@]}"; do
-            if [ -f "$file" ]; then
-              echo "✅ OK: $file"
-            else
-              echo "❌ ERROR: No se encuentra el archivo: $file"
-              exit 1
-            fi
-          done
+      - name: Comprobar sintaxis
+        run: python -m compileall -q app
 
-      - name: Setup Node.js
+  frontend:
+    name: Validar frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: 'portal equino/backend/package.json'
+          node-version: "22"
 
-      - name: Validar Backend (Oscar)
-        working-directory: './portal equino/backend'
-        run: |
-          npm install
-          npm run build
+      - name: Instalar dependencias
+        run: npm install
 
-      - name: Validar Frontend (Elian)
-        working-directory: './portal equino/frontend'
-        run: |
-          npm install
-          npm run build
+      - name: Compilar frontend
+        run: npm run build

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GAVAC - Empleados</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-100 text-slate-900">
+  <main class="mx-auto max-w-6xl p-6 md:p-10">
+    <header class="mb-8 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-xs font-black uppercase tracking-[0.25em] text-emerald-700">Gestión de personal</p>
+        <h1 class="mt-2 text-4xl font-black">Empleados y responsables</h1>
+        <p class="mt-2 text-slate-500">Consulta el personal autorizado para operar las fincas.</p>
+      </div>
+      <a href="/admin" class="rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white">Volver a administración</a>
+    </header>
+
+    <section class="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+      <div id="message" class="hidden border-b border-slate-200 p-4 text-sm font-semibold"></div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+            <tr><th class="px-6 py-4">Correo</th><th class="px-6 py-4">Rol</th><th class="px-6 py-4">Finca</th><th class="px-6 py-4">Registro</th></tr>
+          </thead>
+          <tbody id="employees" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script>
+    const labels = { admin: "Administrador", ganadero: "Ganadero", mayordomo: "Mayordomo", veterinario: "Veterinario", operario: "Operario" };
+    const message = document.getElementById("message");
+    const body = document.getElementById("employees");
+    function showMessage(text, error = false) {
+      message.textContent = text;
+      message.className = `border-b p-4 text-sm font-semibold ${error ? "border-red-200 bg-red-50 text-red-700" : "border-emerald-200 bg-emerald-50 text-emerald-700"}`;
+    }
+    async function loadEmployees() {
+      const token = localStorage.getItem("gavac_token");
+      if (!token) { showMessage("Debes iniciar sesión como administrador.", true); return; }
+      const response = await fetch("/api/empleados/", { headers: { Authorization: `Bearer ${token}` } });
+      if (!response.ok) { showMessage("No tienes permisos para consultar empleados.", true); return; }
+      const employees = await response.json();
+      body.innerHTML = employees.map(employee => `
+        <tr>
+          <td class="px-6 py-4 font-semibold">${employee.email}</td>
+          <td class="px-6 py-4">${labels[employee.rol] || employee.rol}</td>
+          <td class="px-6 py-4">${employee.finca_id ?? "Sin asignar"}</td>
+          <td class="px-6 py-4 text-slate-500">${new Date(employee.created_at).toLocaleDateString("es-CO")}</td>
+        </tr>`).join("") || '<tr><td colspan="4" class="px-6 py-10 text-center text-slate-500">No hay empleados registrados.</td></tr>';
+    }
+    loadEmployees().catch(() => showMessage("No fue posible consultar el personal.", true));
+  </script>
+</body>
+</html>

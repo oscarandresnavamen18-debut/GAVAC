@@ -2,7 +2,6 @@
 node_modules/
 npm-debug.log
 yarn-error.log
-package-lock.json
 
 # Environment variables
 .env
@@ -40,6 +39,7 @@ venv/
 backend/venv/
 backend/venv311/
 backend/venv_stable/      # <--- SOLO AGREGA ESTA LÍNEA
+backend/scratch/
 
 # Ignorar logs del backend
 backend/*.log

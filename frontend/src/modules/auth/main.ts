@@ -6,173 +6,66 @@ const passwordInput = document.getElementById("password") as HTMLInputElement;
 const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement;
 const toggleLink = document.getElementById("toggleMode") as HTMLAnchorElement;
 const messageBox = document.getElementById("loginMessage") as HTMLDivElement;
+const roleContainer = document.getElementById("roleSelectorContainer") as HTMLDivElement;
+const formTitle = document.getElementById("form-title") as HTMLHeadingElement;
+const formSubtitle = document.getElementById("form-subtitle") as HTMLParagraphElement;
 
 let modoRegistro = false;
 
-// ============================================
-// MOSTRAR MENSAJES
-// ============================================
-
-function mostrarMensaje(
-    texto: string,
-    tipo: "error" | "exito"
-): void {
+function mostrarMensaje(texto: string, tipo: "error" | "exito"): void {
     messageBox.textContent = texto;
-    messageBox.className = "block mt-6 p-4 rounded-xl font-bold text-center";
-
-    if (tipo === "error") {
-        messageBox.classList.add("msg-error");
-    } else {
-        messageBox.classList.add("msg-success");
-    }
+    messageBox.className = `block mt-8 p-5 rounded-2xl font-bold text-center text-sm shadow-sm transition-all ${tipo === "error" ? "msg-error" : "msg-success"}`;
+    messageBox.classList.remove("hidden");
 }
-
-// ============================================
-// CAMBIAR LOGIN / REGISTRO
-// ============================================
 
 toggleLink.addEventListener("click", (e) => {
     e.preventDefault();
-
     modoRegistro = !modoRegistro;
 
-    submitBtn.textContent = modoRegistro
-        ? "Registrarme"
-        : "Iniciar Sesión";
+    formTitle.textContent = modoRegistro ? "Crear Perfil" : "Iniciar Sesión";
+    formSubtitle.textContent = modoRegistro ? "Únase a la gestión inteligente del agro." : "Acceda a su ecosistema ganadero inteligente.";
+    submitBtn.textContent = modoRegistro ? "Finalizar Registro" : "Entrar al Sistema";
+    toggleLink.textContent = modoRegistro ? "Volver al Acceso" : "Solicitar Registro";
 
-    toggleLink.textContent = modoRegistro
-        ? "¿Ya tienes cuenta? Inicia sesión"
-        : "¿No tienes cuenta? Regístrate";
-
+    roleContainer.classList.toggle("hidden", !modoRegistro);
     messageBox.classList.add("hidden");
-
     passwordInput.value = "";
 });
 
-// ============================================
-// LOGIN / REGISTRO
-// ============================================
-
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     messageBox.classList.add("hidden");
     submitBtn.disabled = true;
 
     const email = emailInput.value.trim();
     const password = passwordInput.value;
+    const selectedRole = (document.querySelector('input[name="rol"]:checked') as HTMLInputElement)?.value || "operario";
 
     if (!email || !password) {
-        mostrarMensaje(
-            "Debes ingresar email y contraseña.",
-            "error"
-        );
-
+        mostrarMensaje("Por favor, complete todos los campos.", "error");
         submitBtn.disabled = false;
         return;
     }
 
     try {
-
-        // ========================================
-        // REGISTRO
-        // ========================================
-
         if (modoRegistro) {
-
-            console.log("Creando cuenta...");
-
-            await registrar({
-                email,
-                password,
-            });
-
-            mostrarMensaje(
-                "✅ Cuenta creada correctamente. Ahora inicia sesión.",
-                "exito"
-            );
-
-            modoRegistro = false;
-
-            submitBtn.textContent = "Iniciar Sesión";
-
-            toggleLink.textContent =
-                "¿No tienes cuenta? Regístrate";
-
-            passwordInput.value = "";
-
+            console.log("Registrando con rol:", selectedRole);
+            await registrar({ email, password, rol: selectedRole as any });
+            mostrarMensaje("✅ Cuenta creada con éxito. Iniciando sesión...", "exito");
         }
 
-        // ========================================
-        // LOGIN
-        // ========================================
+        const resultado = await login({ email, password });
+        localStorage.setItem("gavac_token", resultado.access_token);
+        localStorage.setItem("gavac_usuario", JSON.stringify(resultado.usuario));
 
-        else {
+        setTimeout(() => {
+            window.location.href = "/dashboard";
+        }, 1000);
 
-            console.log("Iniciando sesión...");
-
-            const resultado = await login({
-                email,
-                password,
-            });
-
-            console.log("Login exitoso.");
-            console.log("Usuario:", resultado.usuario);
-
-            // ========================================
-            // GUARDAR TOKEN
-            // ========================================
-
-            localStorage.setItem(
-                "gavac_token",
-                resultado.access_token
-            );
-
-            // ========================================
-            // GUARDAR USUARIO
-            // ========================================
-
-            localStorage.setItem(
-                "gavac_usuario",
-                JSON.stringify(resultado.usuario)
-            );
-
-            console.log(
-                "Token guardado:",
-                localStorage.getItem("gavac_token")
-            );
-
-            mostrarMensaje(
-                "✅ Sesión iniciada. Redirigiendo...",
-                "exito"
-            );
-
-            // ========================================
-            // REDIRECCIÓN CORRECTA
-            // ========================================
-
-            setTimeout(() => {
-                // Redirigimos al Dashboard Central de Roles
-                window.location.href = "/dashboard";
-            }, 800);
-        }
-
-    } catch (err: unknown) {
-
-        console.error("Error:", err);
-
-        const mensaje =
-            err instanceof Error
-                ? err.message
-                : "Ocurrió un error inesperado.";
-
-        mostrarMensaje(
-            `⚠️ ${mensaje}`,
-            "error"
-        );
-
+    } catch (err: any) {
+        console.error("Auth Error:", err);
+        mostrarMensaje(err.message || "Error al procesar la solicitud.", "error");
     } finally {
-
         submitBtn.disabled = false;
     }
 });

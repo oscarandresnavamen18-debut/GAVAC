@@ -14,7 +14,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 # ============================================================
 # 1. CARGAR VARIABLES DEL ARCHIVO .env
 # ============================================================
-load_dotenv()
+load_dotenv(encoding="utf-8-sig")
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 

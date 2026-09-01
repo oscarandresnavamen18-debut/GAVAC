@@ -3,83 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC — Acceso Profesional</title>
-    <link href="/static/dist/output.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;700&display=swap">
+    <title>GAVAC — Acceso Elite</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'DM Sans', sans-serif; background-color: #F7F4EF; margin: 0; overflow-x: hidden; }
-        .font-serif { font-family: 'DM Serif Display', serif; }
-        .login-container { display: grid; grid-template-columns: 1.2fr 0.8fr; min-height: 100vh; }
-        .login-visual {
-            background: linear-gradient(rgba(27, 94, 32, 0.6), rgba(15, 51, 36, 0.8)),
-                        url('https://images.unsplash.com/photo-1545468843-02604245997a?q=80&w=1200&auto=format&fit=crop');
-            background-size: cover; background-position: center; display: flex; align-items: center; padding: 80px; color: white;
+        :root {
+            --p: #1B5E20; /* Sincronizado con landing */
+            --bg: #F7F4EF;
+            --p-dark: #0f3324;
         }
-        .login-form-side { background-color: #F7F4EF; display: flex; flex-direction: column; justify-content: center; padding: 60px 10%; }
-        .input-elegant {
-            width: 100%; background: white; border: 1px solid #D8D3C7; border-radius: 12px; padding: 16px 20px; font-size: 15px; transition: all 0.3s; color: #1A1A14;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            /* Textura de grano premium */
+            background-image: url("https://www.transparenttextures.com/patterns/felt.png");
+            background-attachment: fixed;
         }
-        .input-elegant:focus { border-color: #1B5E20; box-shadow: 0 0 0 4px rgba(27, 94, 32, 0.08); outline: none; }
-        .btn-gold {
-            background: #1B5E20; color: white; padding: 18px; border-radius: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; border: none; cursor: pointer; box-shadow: 0 10px 25px rgba(27, 94, 32, 0.2); transition: all 0.3s;
+
+        .split-container { display: grid; grid-template-columns: 1.1fr 0.9fr; min-height: 100vh; }
+
+        /* Fondo Cinemático con Overlay de Lujo */
+        .visual-side {
+            background: linear-gradient(135deg, rgba(20, 54, 33, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%),
+                        url('https://images.unsplash.com/photo-1545465241-ac4d5285fb7f?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; padding: 10%; color: white;
+            position: relative; overflow: hidden;
         }
-        .btn-gold:hover { transform: translateY(-2px); background: #2E7D32; box-shadow: 0 15px 35px rgba(27, 94, 32, 0.3); }
-        #loginMessage { margin-top: 20px; padding: 15px; border-radius: 12px; font-weight: 600; text-align: center; }
-        .msg-error { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
-        .msg-success { background: #DCFCE7; color: #166534; border: 1px solid #BBF7D0; }
-        @media (max-width: 1024px) { .login-container { grid-template-columns: 1fr; } .login-visual { display: none; } }
+
+        /* Efecto de luz Glimmer en el fondo */
+        .visual-side::before {
+            content: ''; position: absolute; top: -10%; left: -10%; width: 70%; height: 70%;
+            background: radial-gradient(circle, rgba(110, 231, 183, 0.15) 0%, transparent 70%);
+            filter: blur(100px);
+            pointer-events: none;
+        }
+
+        .visual-side::after {
+            content: ''; position: absolute; bottom: -10%; right: -10%; width: 50%; height: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .form-side {
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 12%;
+            position: relative;
+            z-index: 10;
+            box-shadow: -40px 0 80px rgba(0,0,0,0.08);
+        }
+
+        .serif { font-family: 'DM Serif Display', serif; }
+        .input-pro {
+            width: 100%;
+            padding: 20px 24px;
+            border-radius: 20px;
+            border: 1px solid #E2E8F0;
+            background: #F8FAFC;
+            transition: all 0.4s ease;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        .input-pro:focus {
+            border-color: var(--p);
+            background: white;
+            box-shadow: 0 0 0 6px rgba(27, 94, 32, 0.08);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        .btn-elite {
+            width: 100%;
+            background: var(--p);
+            color: white;
+            padding: 22px;
+            border-radius: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 20px 40px rgba(20, 54, 33, 0.2);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 12px;
+        }
+        .btn-elite:hover {
+            transform: translateY(-6px) scale(1.01);
+            background: #2E7D32;
+            box-shadow: 0 30px 60px rgba(20, 54, 33, 0.3);
+        }
+
+        .role-card {
+            border: 2px solid #F1F5F9;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .role-card:hover { border-color: #CBD5E1; background: #F8FAFC; }
+        input[type="radio"]:checked + .role-card {
+            border-color: var(--p);
+            background: #F0FDF4;
+            box-shadow: 0 10px 20px rgba(27, 94, 32, 0.05);
+        }
+
+        @media (max-width: 1100px) {
+            .split-container { grid-template-columns: 1fr; }
+            .visual-side { display: none; }
+            .form-side { padding: 80px 10%; box-shadow: none; }
+        }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-visual">
-            <div class="max-w-xl">
-                <div class="w-16 h-1 bg-emerald-400 mb-8"></div>
-                <h1 class="font-serif text-6xl leading-tight mb-6">Excelencia en el <br><em class="italic text-emerald-300">control de su hato.</em></h1>
-                <p class="text-emerald-50/80 text-lg leading-relaxed">Software de gestión ganadera Enterprise. Datos reales para productores reales.</p>
+
+    <div class="split-container">
+        <div class="visual-side">
+            <div style="position: relative; z-index: 2;">
+                <div style="width: 80px; height: 2px; background: #10B981; margin-bottom: 40px;"></div>
+                <h1 class="serif" style="font-size: 80px; line-height: 0.95; margin-bottom: 24px;">GAVAC <br><em style="color: #6EE7B7;">Elite Suite.</em></h1>
+                <p style="font-size: 20px; color: #94A3B8; max-width: 500px; line-height: 1.6;">La infraestructura digital de mayor precisión para el sector ganadero global. Datos inmutables, control absoluto.</p>
             </div>
         </div>
-        <div class="login-form-side">
-            <div class="mb-12">
-                <div class="w-14 h-14 bg-emerald-900 rounded-2xl flex items-center justify-center text-white font-bold text-2xl mb-6 shadow-xl">G</div>
-                <h2 class="font-serif text-4xl text-slate-900 mb-2">Acceso al Sistema</h2>
-                <p class="text-slate-500 font-medium">Gestión Ganadera Profesional</p>
-            </div>
-            <form id="loginForm" class="space-y-6">
-                <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Email Institucional</label>
-                    <input type="email" id="email" required placeholder="admin@gavac.com" class="input-elegant">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Contraseña</label>
-                    <input type="password" id="password" required placeholder="••••••••" class="input-elegant">
-                </div>
-                <button type="submit" id="submitBtn" class="btn-gold w-full">Ingresar al Panel</button>
-            </form>
-            <div class="mt-8 text-center bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
-                <p class="text-xs text-slate-500 mb-2 uppercase font-black tracking-widest">¿Nuevo en GAVAC?</p>
-                <a href="#" id="toggleMode" class="text-emerald-800 font-black text-sm hover:underline decoration-2 underline-offset-4">REGÍSTRATE AQUÍ</a>
-            </div>
 
-            <div id="loginMessage" class="hidden"></div>
+        <div class="form-side">
+            <div style="max-width: 420px; width: 100%;">
+                <div style="width: 60px; height: 60px; background: #1B5E20; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 28px; margin-bottom: 48px; box-shadow: 0 15px 30px rgba(27, 94, 32, 0.2);">G</div>
+                <h2 class="serif" style="font-size: 42px; margin-bottom: 8px;">Autenticación</h2>
+                <p style="color: #64748B; font-weight: 500; margin-bottom: 48px;">Identifíquese para acceder al centro de comando.</p>
 
-            <script>
-                console.log("GAVAC Login Shield Initialized");
-                document.addEventListener('DOMContentLoaded', () => {
-                    const btn = document.getElementById('submitBtn');
-                    const toggle = document.getElementById('toggleMode');
-                    if(!btn) console.error("CRITICAL: submitBtn not found");
-                    if(!toggle) console.error("CRITICAL: toggleMode not found");
-                });
-            </script>
-            <div class="mt-12 pt-8 border-t border-slate-200">
-                <a href="/" class="text-slate-400 font-bold text-sm hover:text-emerald-800 flex items-center gap-2 transition-colors">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                    Volver al inicio
-                </a>
+                <form id="loginForm" class="space-y-8">
+                    <div style="margin-bottom: 24px;">
+                        <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94A3B8; letter-spacing: 2px; margin-bottom: 12px;">ID de Correo</label>
+                        <input type="email" id="email" required class="input-pro" placeholder="usuario@gavac.pro">
+                    </div>
+
+                    <div id="roleSelectorContainer" style="display:none; margin-bottom: 32px;">
+                        <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #1B5E20; letter-spacing: 2px; margin-bottom: 12px;">Cargo Operativo</label>
+                        <div style="display: grid; grid-gap: 12px; grid-template-columns: 1fr 1fr;">
+                            <label><input type="radio" name="rol" value="admin" checked style="display:none"><div class="role-card"><span style="font-size: 20px;">🛡️</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">ADMIN</p></div></label>
+                            <label><input type="radio" name="rol" value="ganadero" style="display:none"><div class="role-card"><span style="font-size: 20px;">👨‍🌾</span><p style="font-size: 10px; font-weight: 900; margin-top: 5px;">PROPIETARIO</p></div></label>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 32px;">
+                        <label style="display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; color: #94A3B8; letter-spacing: 2px; margin-bottom: 12px;">Clave Maestra</label>
+                        <input type="password" id="password" required class="input-pro" placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn-elite">Sincronizar Acceso</button>
+                </form>
+
+                <div style="margin-top: 40px; text-align: center;">
+                    <a href="#" id="toggleMode" style="color: #1B5E20; font-weight: 800; text-decoration: none; font-size: 12px; letter-spacing: 1px; border-bottom: 2px solid rgba(27, 94, 32, 0.1); padding-bottom: 4px;">SOLICITAR ALTA DE USUARIO</a>
+                </div>
+                <div id="loginMessage" style="display:none; margin-top: 30px; padding: 20px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 13px;"></div>
             </div>
         </div>
     </div>
+
     <script type="module" src="/static/dist/modules/auth/main.js"></script>
 </body>
 </html>

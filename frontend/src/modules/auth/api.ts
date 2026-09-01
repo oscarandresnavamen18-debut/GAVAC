@@ -3,7 +3,7 @@
 
 const API_BASE = "/api/auth";
 
-export interface UsuarioCreate { email: string; password: string; }
+export interface UsuarioCreate { email: string; password: string; rol?: string; }
 export interface UsuarioLogin { email: string; password: string; }
 export interface UsuarioOut { id: number; email: string; rol: string; created_at: string; }
 export interface Token { access_token: string; token_type: string; usuario: UsuarioOut; }
