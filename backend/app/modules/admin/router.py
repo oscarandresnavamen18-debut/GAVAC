@@ -14,7 +14,7 @@ def obtener_metricas_dashboard(
     db: Session = Depends(get_db),
     usuario_actual = Depends(get_usuario_actual)
 ):
-    if usuario_actual.rol not in ["admin", "ganadero"]:
+    if usuario_actual.rol != "admin":
         raise HTTPException(status_code=403, detail="Permisos insuficientes")
 
     total_ganado = db.query(Animal).count()
@@ -33,6 +33,9 @@ def obtener_tablero_control(
     db: Session = Depends(get_db),
     usuario_actual = Depends(get_usuario_actual)
 ):
+    if usuario_actual.rol != "admin":
+        raise HTTPException(status_code=403, detail="Permisos insuficientes")
+
     fincas = db.query(Finca).all()
     resultado = []
     for finca in fincas:

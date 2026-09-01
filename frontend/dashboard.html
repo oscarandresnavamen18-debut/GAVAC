@@ -41,6 +41,18 @@
 
         .btn-logout { background: #EDE8E0; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-left: 20px; }
         .btn-logout:hover { background: #fee2e2; color: #b42318; }
+        .menu-toggle { display: none; background: #EDE8E0; border: none; border-radius: 10px; padding: 10px 14px; font-size: 22px; cursor: pointer; }
+        .role-menu { display: flex; gap: 18px; align-items: center; }
+        .role-menu a { color: #1b5e20; font-size: 12px; font-weight: 800; text-decoration: none; }
+        @media (max-width: 720px) {
+            nav { padding: 20px 5%; }
+            .menu-toggle { display: block; }
+            .role-menu { display: none; position: absolute; top: 78px; right: 5%; flex-direction: column; align-items: stretch; background: white; padding: 16px; border-radius: 14px; box-shadow: 0 12px 30px rgba(0,0,0,.12); z-index: 20; }
+            .role-menu.open { display: flex; }
+            .user-info { display: none; }
+            .btn-logout { margin-left: 8px; }
+            .header-section h2 { font-size: 42px; }
+        }
     </style>
 </head>
 <body>
@@ -50,7 +62,15 @@
             <div class="logo-box">G</div>
             <span>GAVAC</span>
         </div>
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex; align-items: center; position: relative;">
+            <button id="menuToggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
+            <div id="roleMenu" class="role-menu">
+                <a href="/dashboard">Inicio</a>
+                <a href="/ganado">Ganado</a>
+                <a href="/reportes">Reportes</a>
+                <a href="/empleados" id="employeesLink" style="display:none;">Empleados</a>
+                <a href="/admin" id="adminLink" style="display:none;">Administración</a>
+            </div>
             <div class="user-info">
                 <p id="user-email" class="user-email">...</p>
                 <p id="user-role" class="user-role">...</p>
@@ -96,13 +116,18 @@
             document.getElementById('user-email').textContent = user.email;
             document.getElementById('user-role').textContent = user.rol.toUpperCase() + " ACCESS";
 
-            if (user.rol !== "admin" && user.rol !== "ganadero") {
+            if (user.rol === "admin") {
+                document.getElementById('admin-module').style.display = "block";
+                document.getElementById('adminLink').style.display = "inline";
+                document.getElementById('employeesLink').style.display = "inline";
+            } else {
                 const adminCard = document.getElementById('admin-module');
-                adminCard.classList.add('locked');
-                adminCard.href = "javascript:void(0)";
-                adminCard.querySelector('p').innerHTML = "🔒 Acceso restringido a nivel corporativo.";
+                adminCard.style.display = "none";
             }
 
+            document.getElementById('menuToggle').addEventListener('click', () => {
+                document.getElementById('roleMenu').classList.toggle('open');
+            });
             document.getElementById('logoutBtn').addEventListener('click', () => {
                 localStorage.clear();
                 window.location.href = "/login";

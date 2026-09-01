@@ -31,6 +31,9 @@ def crear_token(usuario_id: int, rol: str) -> str:
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 def registrar_usuario(db: Session, datos: schemas.UsuarioCreate, ip_address: str = None):
+    if datos.rol == schemas.RolEnum.admin:
+        raise HTTPException(status_code=403, detail="El rol administrador debe ser asignado por otro administrador")
+
     if repository.get_usuario_by_email(db, datos.email):
         raise HTTPException(status_code=400, detail="El email ya está registrado")
     
