@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAVAC — Seleccionar Finca</title>
+    <link rel="stylesheet" href="dist/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .finca-card:hover { transform: translateY(-8px); border-color: #1A3A32; background: white; }
+    </style>
+</head>
+<body class="bg-gavac-bg font-jakarta antialiased min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-4xl w-full">
+        <header class="text-center mb-16">
+            <h1 class="text-6xl font-extrabold tracking-tighter text-gavac-primary mb-4">GAVAC</h1>
+            <p class="text-xl text-slate-500 font-medium">Selecciona el contexto de trabajo para hoy</p>
+        </header>
+
+        <div id="fincas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Cargando... -->
+        </div>
+
+        <div class="mt-16 text-center">
+            <button id="logoutBtn" class="text-slate-400 font-bold hover:text-red-500 transition-colors uppercase tracking-widest text-sm">Cerrar sesión</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userData = JSON.parse(localStorage.getItem('gavac_usuario') || '{}');
+            const fincas = userData.fincas_autorizadas || [];
+            const grid = document.getElementById('fincas-grid');
+
+            if (fincas.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center p-20 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
+                        <p class="text-slate-400 italic font-medium">No tienes fincas asignadas. Contacta con tu administrador.</p>
+                    </div>
+                `;
+            } else {
+                grid.innerHTML = fincas.map(f => `
+                    <div onclick="selectFinca(${f.id}, '${f.nombre}', '${f.rol}')"
+                         class="finca-card p-10 rounded-[3rem] border-2 border-slate-100 bg-slate-50/50 cursor-pointer transition-all shadow-sm">
+                        <div class="w-16 h-16 bg-gavac-primary rounded-2xl flex items-center justify-center mb-6 text-white">
+                            <i data-lucide="map-pin" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gavac-primary mb-2">${f.nombre}</h3>
+                        <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-400">${f.rol}</p>
+                    </div>
+                `).join('');
+                if (window.lucide) lucide.createIcons();
+            }
+
+            window.selectFinca = (id, nombre, rol) => {
+                localStorage.setItem('gavac_active_finca', JSON.stringify({ id, nombre, rol }));
+                window.location.href = 'dashboard.html';
+            };
+
+            document.getElementById('logoutBtn').onclick = () => {
+                localStorage.clear();
+                window.location.href = 'login.html';
+            };
+        });
+    </script>
+</body>
+</html>

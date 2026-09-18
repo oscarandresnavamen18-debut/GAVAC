@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAVAC — Sanidad</title>
+    <link rel="stylesheet" href="../../../dist/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .app-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+        .sidebar { background-color: #1A3A32; color: white; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
+        .nav-link {
+            display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px;
+            color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 600; transition: all 0.3s;
+        }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.05); }
+        .nav-link.active { background: #E8F1EC; color: #1A3A32; }
+
+        .table-gavac { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+        .table-gavac th { text-align: left; padding: 12px 24px; font-size: 13px; font-weight: 800; color: #94A3B8; text-transform: uppercase; }
+        .table-gavac td { padding: 20px 24px; background: white; border-top: 1px solid #F1F5F9; border-bottom: 1px solid #F1F5F9; }
+        .table-gavac td:first-child { border-left: 1px solid #F1F5F9; border-top-left-radius: 20px; border-bottom-left-radius: 20px; }
+        .table-gavac td:last-child { border-right: 1px solid #F1F5F9; border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
+
+        .badge { padding: 6px 14px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; }
+        .badge-done { background: #ECFDF5; color: #059669; }
+        .badge-pending { background: #FFF7ED; color: #EA580C; }
+
+        @media (max-width: 1024px) {
+            .app-layout { grid-template-columns: 80px 1fr; }
+            .sidebar span { display: none; }
+            .sidebar { padding: 20px 10px; align-items: center; }
+        }
+    </style>
+</head>
+<body class="bg-gavac-bg font-jakarta antialiased text-gavac-primary">
+    <div class="app-layout">
+        <aside class="sidebar p-8">
+            <div class="flex items-center gap-3 mb-12 px-2">
+                <span class="text-4xl font-extrabold tracking-tighter">GAVAC</span>
+            </div>
+            <nav class="flex-1 space-y-3" id="main-nav">
+                <a href="../../../dashboard.html" class="nav-link" data-module="inicio"><i data-lucide="layout-dashboard" class="w-6 h-6 opacity-70"></i><span>Inicio</span></a>
+                <a href="../ganado/index.html" class="nav-link" data-module="animales"><i data-lucide="layout-grid" class="w-6 h-6 opacity-70"></i><span>Animales</span></a>
+                <a href="index.html" class="nav-link active" data-module="sanidad"><i data-lucide="shield-plus" class="w-6 h-6 opacity-70"></i><span>Sanidad</span></a>
+                <a href="../reproduccion/index.html" class="nav-link" data-module="reproduccion"><i data-lucide="heart" class="w-6 h-6 opacity-70"></i><span>Reproducción</span></a>
+                <a href="../produccion/index.html" class="nav-link" data-module="produccion"><i data-lucide="droplets" class="w-6 h-6 opacity-70"></i><span>Producción</span></a>
+                <a href="../inventario/index.html" class="nav-link" data-module="inventario"><i data-lucide="package" class="w-6 h-6 opacity-70"></i><span>Inventario</span></a>
+                <a href="../reportes/index.html" class="nav-link" data-module="reportes"><i data-lucide="bar-chart-3" class="w-6 h-6 opacity-70"></i><span>Reportes</span></a>
+                <a href="../admin/index.html" class="nav-link" data-module="admin"><i data-lucide="shield-check" class="w-6 h-6 opacity-70"></i><span>Admin</span></a>
+            </nav>
+            <div class="mt-auto pt-8 border-t border-white/10">
+                <button id="logoutBtn" class="flex items-center gap-3 w-full py-4 px-6 rounded-2xl bg-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all font-bold text-sm text-white">
+                    <i data-lucide="log-out" class="w-5 h-5 opacity-70"></i>
+                    <span>Cerrar sesión</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="p-10 lg:p-16">
+            <header class="flex justify-between items-end mb-12">
+                <div>
+                    <h1 class="text-4xl font-extrabold mb-2 text-gavac-primary">Sanidad</h1>
+                    <p class="text-slate-500 font-medium text-lg">Control sanitario y protocolos de vacunación</p>
+                </div>
+                <button id="open-modal-btn" class="bg-gavac-primary text-white px-8 py-4 rounded-2xl font-extrabold shadow-2xl shadow-gavac-primary/20 hover:bg-gavac-accent transition-all active:scale-95">
+                    <span>+ Nueva vacunación</span>
+                </button>
+            </header>
+
+            <div class="relative mb-10">
+                <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-400"></i>
+                <input type="text" placeholder="Buscar por chapeta o producto..." class="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-14 pr-6 outline-none focus:ring-4 focus:ring-gavac-primary/5 shadow-sm">
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="table-gavac">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Animal</th>
+                            <th>Producto / Tipo</th>
+                            <th>Dosis</th>
+                            <th>Próxima Dosis</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sanidad-table-body">
+                    </tbody>
+                </table>
+                <div id="empty-state" class="py-32 flex flex-col items-center justify-center text-slate-300">
+                    <i data-lucide="activity" class="w-20 h-20 mb-4 opacity-20"></i>
+                    <p class="text-xl font-bold italic">No hay registros sanitarios</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Sanidad -->
+    <div id="sanidad-modal" class="hidden fixed inset-0 bg-gavac-primary/20 backdrop-blur-md flex items-center justify-center z-50 p-6">
+        <div class="bg-white rounded-[3rem] w-full max-w-xl p-12 shadow-2xl border border-slate-100">
+            <h2 class="text-4xl font-extrabold text-gavac-primary mb-10">Nueva Vacunación</h2>
+            <form id="sanidad-form" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Número de Chapeta</label>
+                    <input name="animal_tag" type="text" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none focus:bg-white focus:ring-4 focus:ring-gavac-primary/5" placeholder="Ej: GAV-0010">
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 ml-1">Tipo</label>
+                        <select name="tipo" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none">
+                            <option value="Vacuna">Vacuna</option>
+                            <option value="Tratamiento">Tratamiento</option>
+                            <option value="Control">Control Rutina</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 ml-1">Producto / Marca</label>
+                        <input name="producto" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none" placeholder="Ej: Aftosa">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 ml-1">Fecha Aplicación</label>
+                        <input name="fecha_aplicacion" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-bold text-slate-700 ml-1">Próxima Dosis</label>
+                        <input name="proxima_fecha" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+                    </div>
+                </div>
+                <div class="flex gap-6 pt-6">
+                    <button type="button" id="close-modal-btn" class="flex-1 border-2 border-slate-100 py-5 rounded-2xl font-extrabold text-slate-400">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-gavac-primary text-white py-5 rounded-2xl font-extrabold text-lg shadow-xl shadow-gavac-primary/20">Guardar Registro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../../../dist/modules/sanidad/main.js"></script>
+    <script>
+        if (window.lucide) { lucide.createIcons(); }
+
+        const userData = JSON.parse(localStorage.getItem('gavac_usuario') || '{}');
+        const navLinks = document.querySelectorAll('#main-nav .nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const moduleName = link.getAttribute('data-module');
+                if (moduleName === 'inicio' || userData.rol === 'admin') return;
+
+                if (userData.permisos && userData.permisos[moduleName] === false) {
+                    e.preventDefault();
+                    alert("Este módulo está deshabilitado para tu perfil. Comunícate con el administrador.");
+                }
+            });
+        });
+
+        const modal = document.getElementById('sanidad-modal');
+        document.getElementById('open-modal-btn').onclick = () => modal.classList.remove('hidden');
+        document.getElementById('close-modal-btn').onclick = () => modal.classList.add('hidden');
+    </script>
+</body>
+</html>

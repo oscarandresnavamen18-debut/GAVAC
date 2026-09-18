@@ -22,13 +22,13 @@ toggleLink.addEventListener("click", (e) => {
     e.preventDefault();
     modoRegistro = !modoRegistro;
 
-    formTitle.textContent = modoRegistro ? "Crear Perfil" : "Iniciar Sesión";
-    formSubtitle.textContent = modoRegistro ? "Únase a la gestión inteligente del agro." : "Acceda a su ecosistema ganadero inteligente.";
-    submitBtn.textContent = modoRegistro ? "Finalizar Registro" : "Entrar al Sistema";
-    toggleLink.textContent = modoRegistro ? "Volver al Acceso" : "Registro de usuario";
+    if (formTitle) formTitle.textContent = modoRegistro ? "Crear Perfil" : "Iniciar Sesión";
+    if (formSubtitle) formSubtitle.textContent = modoRegistro ? "Únase a la gestión inteligente del agro." : "Introduce tus credenciales para acceder al centro de mando.";
+    if (submitBtn) submitBtn.textContent = modoRegistro ? "Finalizar Registro" : "Ingresar al Sistema";
+    if (toggleLink) toggleLink.textContent = modoRegistro ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate aquí";
 
-    roleContainer.classList.toggle("hidden", !modoRegistro);
-    messageBox.classList.add("hidden");
+    roleContainer?.classList.toggle("hidden", !modoRegistro);
+    messageBox?.classList.add("hidden");
     passwordInput.value = "";
 });
 
@@ -39,7 +39,7 @@ form.addEventListener("submit", async (e) => {
 
     const email = emailInput.value.trim();
     const password = passwordInput.value;
-    const selectedRole = (document.querySelector('input[name="rol"]:checked') as HTMLInputElement)?.value || "operario";
+    const selectedRole = (document.getElementById('selected-rol-input') as HTMLInputElement)?.value || "operario";
 
     if (!email || !password) {
         mostrarMensaje("Por favor, complete todos los campos.", "error");
@@ -49,9 +49,9 @@ form.addEventListener("submit", async (e) => {
 
     try {
         if (modoRegistro) {
-            console.log("Registrando con rol:", selectedRole);
-            await registrar({ email, password, rol: selectedRole as any });
-            mostrarMensaje("✅ Cuenta creada con éxito. Iniciando sesión...", "exito");
+            const nombreOrg = (document.getElementById('org-name-input') as HTMLInputElement)?.value || "";
+            await registrar({ email, password, nombre_organizacion: nombreOrg } as any);
+            mostrarMensaje("✅ Registro exitoso. Iniciando sesión...", "exito");
         }
 
         const resultado = await login({ email, password });
@@ -59,11 +59,15 @@ form.addEventListener("submit", async (e) => {
         localStorage.setItem("gavac_usuario", JSON.stringify(resultado.usuario));
 
         setTimeout(() => {
-            window.location.href = "/dashboard";
+            window.location.href = "/fincas.html";
         }, 1000);
 
     } catch (err: any) {
-        console.error("Auth Error:", err);
+        console.error("DEBUG AUTH ERROR:", {
+            mensaje: err.message,
+            stack: err.stack,
+            error: err
+        });
         mostrarMensaje(err.message || "Error al procesar la solicitud.", "error");
     } finally {
         submitBtn.disabled = false;

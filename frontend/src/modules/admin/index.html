@@ -3,114 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC Admin — Command Center</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>GAVAC — Administración</title>
+    <link rel="stylesheet" href="../../../dist/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F1F5F9; color: #0F172A; }
-        .serif { font-family: 'DM Serif Display', serif; }
-        .sidebar { width: 280px; background: #0F172A; position: fixed; height: 100vh; color: white; border-right: 1px solid rgba(255,255,255,0.05); }
-        .main-view { margin-left: 280px; padding: 40px; }
-        .kpi-card { background: white; border-radius: 20px; padding: 24px; border: 1px solid #E2E8F0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        .board-card {
-            background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #CBD5E1;
-            transition: all 0.3s; cursor: grab;
+        .app-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+        .sidebar { background-color: #1A3A32; color: white; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
+        .nav-link {
+            display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px;
+            color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 600; transition: all 0.3s;
         }
-        .board-card:hover { transform: translateY(-3px) rotate(0.5deg); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: #10B981; }
-        .nav-item { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 12px; color: #94A3B8; font-weight: 700; transition: 0.2s; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.05); color: white; }
-        .nav-item.active { border-left: 4px solid #10B981; border-radius: 0 12px 12px 0; }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.05); }
+        .nav-link.active { background: #E8F1EC; color: #1A3A32; }
+
+        @media (max-width: 1024px) {
+            .app-layout { grid-template-columns: 80px 1fr; }
+            .sidebar span { display: none; }
+            .sidebar { padding: 20px 10px; align-items: center; }
+        }
     </style>
 </head>
-<body class="flex">
-
-    <!-- Sidebar Enterprise -->
-    <aside class="sidebar p-6 flex flex-col">
-        <div class="flex items-center gap-4 mb-12">
-            <div class="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center font-black text-xl shadow-xl">G</div>
-            <span class="serif text-2xl tracking-tighter">GAVAC <small class="block text-[8px] font-black text-emerald-500 uppercase tracking-widest">Admin</small></span>
-        </div>
-
-        <nav class="flex-1 space-y-3">
-            <div class="nav-item active"><span>01</span> Dashboard</div>
-            <div class="nav-item"><span>02</span> Mis Fincas</div>
-            <a href="/empleados" class="nav-item"><span>03</span> Personal</a>
-            <div class="nav-item"><span>04</span> Permisos</div>
-        </nav>
-
-        <div class="mt-auto pt-6 border-t border-slate-800">
-            <a href="/dashboard" class="flex items-center justify-center gap-2 bg-emerald-900/40 hover:bg-emerald-800 p-4 rounded-2xl text-[10px] font-black tracking-widest uppercase transition-all">
-                ← Volver al Inicio
-            </a>
-        </div>
-    </aside>
-
-    <!-- Content -->
-    <main class="main-view flex-1">
-        <header class="flex justify-between items-end mb-12">
-            <div>
-                <h1 class="serif text-5xl text-slate-900">Centro de Comando</h1>
-                <p class="text-slate-400 font-bold uppercase tracking-widest text-[10px] mt-2">Monitoreo Global de Activos Ganaderos</p>
+<body class="bg-gavac-bg font-jakarta antialiased text-gavac-primary">
+    <div class="app-layout">
+        <aside class="sidebar p-8">
+            <div class="flex items-center gap-3 mb-12 px-2">
+                <span class="text-4xl font-extrabold tracking-tighter">GAVAC</span>
             </div>
-            <button class="bg-emerald-800 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:bg-emerald-900 transition-all text-xs uppercase tracking-widest">+ Registrar Finca</button>
-        </header>
-
-        <!-- Métricas Reales -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-            <div class="kpi-card">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Ganado Total</p>
-                <h4 class="text-4xl font-black text-slate-800" id="stat-ganado">...</h4>
+            <nav class="flex-1 space-y-3" id="main-nav">
+                <a href="../../../dashboard.html" class="nav-link" data-module="inicio"><i data-lucide="layout-dashboard" class="w-6 h-6 opacity-70"></i><span>Inicio</span></a>
+                <a href="../ganado/index.html" class="nav-link" data-module="animales"><i data-lucide="layout-grid" class="w-6 h-6 opacity-70"></i><span>Animales</span></a>
+                <a href="index.html" class="nav-link active" data-module="admin"><i data-lucide="shield-check" class="w-6 h-6 opacity-70"></i><span>Admin</span></a>
+            </nav>
+            <div class="mt-auto pt-8 border-t border-white/10">
+                <button id="logoutBtn" class="flex items-center gap-3 w-full py-4 px-6 rounded-2xl bg-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all font-bold text-sm text-white">
+                    <i data-lucide="log-out" class="w-5 h-5 opacity-70"></i>
+                    <span>Cerrar sesión</span>
+                </button>
             </div>
-            <div class="kpi-card">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Leche Hoy (Lts)</p>
-                <h4 class="text-4xl font-black text-emerald-600" id="stat-leche">...</h4>
-            </div>
-            <div class="kpi-card">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Fincas</p>
-                <h4 class="text-4xl font-black text-slate-800" id="stat-fincas">...</h4>
-            </div>
-            <div class="kpi-card">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Alertas</p>
-                <h4 class="text-4xl font-black text-red-500" id="stat-alertas">...</h4>
-            </div>
-        </div>
+        </aside>
 
-        <h2 class="serif text-3xl mb-8 text-slate-800">Estado de Operaciones</h2>
-        <div class="flex gap-8 overflow-x-auto pb-10" id="board-container">
-            <!-- Dinámico -->
-            <p class="text-slate-400 italic">Cargando tablero táctico...</p>
-        </div>
-    </main>
+        <main class="p-10 lg:p-16">
+            <header class="flex justify-between items-end mb-12">
+                <div>
+                    <h1 class="text-4xl font-extrabold mb-2 text-gavac-primary">Administración</h1>
+                    <p class="text-slate-500 font-medium text-lg">Panel de control maestro y configuración</p>
+                </div>
+                <div class="flex gap-4">
+                    <button id="open-finca-modal" class="bg-white border-2 border-gavac-primary text-gavac-primary px-8 py-4 rounded-2xl font-extrabold shadow-sm hover:bg-slate-50 transition-all">+ Nueva Finca</button>
+                    <button id="open-user-modal" class="bg-emerald-600 text-white px-8 py-4 rounded-2xl font-extrabold shadow-lg hover:bg-emerald-700 transition-all">+ Nuevo Usuario</button>
+                    <button id="open-assign-modal" class="bg-gavac-primary text-white px-8 py-4 rounded-2xl font-extrabold shadow-lg hover:bg-gavac-accent transition-all">+ Asignar Personal</button>
+                </div>
+            </header>
 
-    <script type="module">
-        async function fetchDashboard() {
-            const token = localStorage.getItem('gavac_token');
-            const headers = { 'Authorization': `Bearer ${token}` };
-            try {
-                const resStats = await fetch('/api/admin/dashboard-stats', { headers });
-                const stats = await resStats.json();
-                document.getElementById('stat-ganado').textContent = stats.ganado_total;
-                document.getElementById('stat-leche').textContent = stats.leche_hoy_lts;
-                document.getElementById('stat-fincas').textContent = stats.fincas_activas;
-                document.getElementById('stat-alertas').textContent = stats.alertas_salud;
-
-                const resBoard = await fetch('/api/admin/board-data', { headers });
-                const board = await resBoard.json();
-                const container = document.getElementById('board-container');
-                container.innerHTML = board.map(f => `
-                    <div class="w-80 flex-shrink-0 bg-slate-200/50 p-4 rounded-2xl">
-                        <h5 class="font-black text-[10px] text-slate-500 uppercase tracking-widest mb-4">${f.nombre}</h5>
-                        <div>${f.tareas.map(t => `
-                            <div class="board-card">
-                                <p class="text-[9px] font-black text-emerald-600 uppercase mb-1">${t.categoria}</p>
-                                <p class="text-sm font-bold text-slate-800">${t.titulo}</p>
-                            </div>
-                        `).join('')}</div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Listado de Fincas -->
+                <div class="card-gavac p-0 overflow-hidden">
+                    <div class="bg-slate-50 p-6 border-b border-slate-100">
+                        <h3 class="font-extrabold">Fincas Registradas</h3>
                     </div>
-                `).join('') || '<p class="text-slate-400 italic">Sin datos registrados.</p>';
-            } catch (e) { console.error(e); }
-        }
-        document.addEventListener('DOMContentLoaded', fetchDashboard);
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="text-xs uppercase font-bold text-slate-400 bg-slate-50/50">
+                                <tr>
+                                    <th class="px-6 py-4">Nombre</th>
+                                    <th class="px-6 py-4">Ubicación</th>
+                                    <th class="px-6 py-4 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fincas-table-body" class="text-sm">
+                                <!-- JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Listado de Usuarios -->
+                <div class="card-gavac p-0 overflow-hidden">
+                    <div class="bg-slate-50 p-6 border-b border-slate-100">
+                        <h3 class="font-extrabold">Gestión de Usuarios y Permisos</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="text-xs uppercase font-bold text-slate-400 bg-slate-50/50">
+                                <tr>
+                                    <th class="px-6 py-4">Email / Rol</th>
+                                    <th class="px-6 py-4">Permisos Módulos (Bloqueo)</th>
+                                    <th class="px-6 py-4 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usuarios-table-body" class="text-sm">
+                                <!-- JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Finca -->
+    <div id="finca-modal" class="hidden fixed inset-0 bg-gavac-primary/20 backdrop-blur-md flex items-center justify-center z-50 p-6">
+        <div class="bg-white rounded-[3rem] w-full max-w-lg p-12 shadow-2xl border border-slate-100">
+            <h2 class="text-3xl font-bold mb-8 text-gavac-primary">Nueva Finca</h2>
+            <form id="finca-form" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Nombre de la Finca</label>
+                    <input name="nombre" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Ubicación</label>
+                    <input name="ubicacion" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+                </div>
+                <div class="flex gap-6 pt-4">
+                    <button type="button" id="close-finca-modal" class="flex-1 border-2 border-slate-100 py-4 rounded-xl font-bold text-slate-400">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-gavac-primary text-white py-4 rounded-xl font-bold">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Asignación -->
+    <div id="assign-modal" class="hidden fixed inset-0 bg-gavac-primary/20 backdrop-blur-md flex items-center justify-center z-50 p-6">
+        <div class="bg-white rounded-[3rem] w-full max-w-lg p-12 shadow-2xl border border-slate-100">
+            <h2 class="text-3xl font-bold mb-8 text-gavac-primary">Asignar a Finca</h2>
+            <form id="assign-form" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Seleccionar Usuario</label>
+                    <select id="assign-user-select" name="usuario_id" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none"></select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Seleccionar Finca</label>
+                    <select id="assign-finca-select" name="finca_id" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none"></select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Asignar Rol en esta Finca</label>
+                    <select name="rol" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none">
+                        <option value="operario">Operario</option>
+                        <option value="veterinario">Veterinario</option>
+                        <option value="mayordomo">Mayordomo</option>
+                        <option value="ganadero">Ganadero</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="flex gap-6 pt-4">
+                    <button type="button" id="close-assign-modal" class="flex-1 border-2 border-slate-100 py-4 rounded-xl font-bold text-slate-400">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-gavac-primary text-white py-4 rounded-xl font-bold">Vincular</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Usuario (Crear/Editar) -->
+    <div id="user-modal" class="hidden fixed inset-0 bg-gavac-primary/20 backdrop-blur-md flex items-center justify-center z-50 p-6">
+        <div class="bg-white rounded-[3rem] w-full max-w-lg p-12 shadow-2xl border border-slate-100">
+            <h2 id="user-modal-title" class="text-3xl font-bold mb-8 text-gavac-primary">Nuevo Usuario</h2>
+            <form id="user-form" class="space-y-6">
+                <input type="hidden" name="id" id="edit-user-id">
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Correo Electrónico</label>
+                    <input name="email" id="user-email" type="email" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+                </div>
+                <div id="password-field" class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Contraseña Inicial</label>
+                    <input name="password" id="user-password" type="password" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700 ml-1">Rol / Cargo</label>
+                    <select name="rol" id="user-rol" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none">
+                        <option value="operario">Operario</option>
+                        <option value="veterinario">Veterinario</option>
+                        <option value="mayordomo">Mayordomo</option>
+                        <option value="ganadero">Ganadero</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div class="flex gap-6 pt-4">
+                    <button type="button" id="close-user-modal" class="flex-1 border-2 border-slate-100 py-4 rounded-xl font-bold text-slate-400">Cancelar</button>
+                    <button type="submit" class="flex-1 bg-gavac-primary text-white py-4 rounded-xl font-bold">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../../../dist/modules/admin/main.js"></script>
+    <script>
+        if (window.lucide) { lucide.createIcons(); }
+
+        const userData = JSON.parse(localStorage.getItem('gavac_usuario') || '{}');
+        const navLinks = document.querySelectorAll('#main-nav .nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const moduleName = link.getAttribute('data-module');
+                if (moduleName === 'inicio' || userData.rol === 'admin') return;
+
+                if (userData.permisos && userData.permisos[moduleName] === false) {
+                    e.preventDefault();
+                    alert("Este módulo está deshabilitado para tu perfil. Comunícate con el administrador.");
+                }
+            });
+        });
+
+        const fModal = document.getElementById('finca-modal');
+        const aModal = document.getElementById('assign-modal');
+        const uModal = document.getElementById('user-modal');
+
+        document.getElementById('open-finca-modal').onclick = () => fModal.classList.remove('hidden');
+        document.getElementById('close-finca-modal').onclick = () => fModal.classList.add('hidden');
+        document.getElementById('open-assign-modal').onclick = () => aModal.classList.remove('hidden');
+        document.getElementById('close-assign-modal').onclick = () => aModal.classList.add('hidden');
+        document.getElementById('open-user-modal').onclick = () => {
+            document.getElementById('user-modal-title').textContent = "Nuevo Usuario";
+            document.getElementById('edit-user-id').value = "";
+            document.getElementById('password-field').classList.remove('hidden');
+            document.getElementById('user-form').reset();
+            uModal.classList.remove('hidden');
+        };
+        document.getElementById('close-user-modal').onclick = () => uModal.classList.add('hidden');
     </script>
 </body>
 </html>

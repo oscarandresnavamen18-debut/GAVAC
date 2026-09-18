@@ -3,9 +3,39 @@ Service: lógica de negocio del módulo de ganado.
 """
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
-from app.modules.cattle import repository as repo
-from app.modules.cattle.schemas import AnimalCreate, AnimalUpdate
+from .models import Animal, TrasladoAnimal
+from .schemas import AnimalCreate, AnimalUpdate, TrasladoCreate
+from . import repository as repo
 from app.modules.auth.audit_service import registrar_accion
+
+def move_animal(db: Session, data: TrasladoCreate, usuario, ip_address: str):
+    animal = repo.find_by_tag(db, data.animal_tag)
+    if not animal:
+        raise HTTPException(status_code=404, detail="Animal no encontrado")
+
+    # Registrar el traslado
+    traslado = TrasladoAnimal(
+        animal_id=animal.id,
+        origen_finca_id=animal.finca_id,
+        destino_finca_id=data.destino_finca_id or animal.finca_id,
+        origen_lote=animal.lote,
+        destino_lote=data.destino_lote or animal.lote,
+        motivo=data.motivo,
+        usuario_responsable_id=usuario.id
+    )
+
+    # Actualizar animal
+    if data.destino_finca_id:
+        animal.finca_id = data.destino_finca_id
+    if data.destino_lote:
+        animal.lote = data.destino_lote
+
+    db.add(traslado)
+    db.commit()
+    db.refresh(animal)
+
+    registrar_accion(db, "TRASLADO_ANIMAL", usuario.id, usuario.email, f"Movió animal {animal.tag} a finca {animal.finca_id}", ip_address)
+    return animal
 
 
 def list_animals(db: Session, breed=None, sex=None, status_=None, tag=None, usuario=None, ip_address: str = None):
@@ -18,7 +48,7 @@ def list_animals(db: Session, breed=None, sex=None, status_=None, tag=None, usua
             detalles="Consultó lista completa de animales",
             ip=ip_address
         )
-    return repo.find_all(db, breed=breed, sex=sex, status=status_, tag=tag)
+    return repo.find_all(db, raza=breed, sexo=sex, status=status_, tag=tag)
 
 
 def get_animal(db: Session, animal_id: int, usuario=None, ip_address: str = None):

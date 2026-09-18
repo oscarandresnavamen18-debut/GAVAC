@@ -1,55 +1,42 @@
-// Lógica de interfaz: maneja el formulario, la tabla y los filtros,
-// llamando a las funciones de api.ts.
 
-
-import { listarAnimales, registrarAnimal, eliminarAnimal, Animal, Filtros, checkApiHealth } from "./api.js";
+import { listarAnimales, registrarAnimal, eliminarAnimal, Animal, Filtros } from "./api.js";
 
 const form = document.getElementById("animal-form") as HTMLFormElement;
-const formError = document.getElementById("form-error") as HTMLParagraphElement;
 const tableBody = document.getElementById("animal-table-body") as HTMLTableSectionElement;
-const emptyState = document.getElementById("empty-state") as HTMLDivElement;
-
-const filterTagInput = document.getElementById("filter-tag") as HTMLInputElement;
-const filterBreedInput = document.getElementById("filter-breed") as HTMLInputElement;
-const filterBtn = document.getElementById("filter-btn") as HTMLButtonElement;
-const clearFilterBtn = document.getElementById("clear-filter-btn") as HTMLButtonElement;
-
-const statusDot = document.getElementById("api-status-dot") as HTMLSpanElement;
-const statusText = document.getElementById("api-status-text") as HTMLSpanElement;
-
-async function actualizarEstadoApi(): Promise<void> {
-  try {
-    const health = await checkApiHealth();
-    statusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
-    statusText.textContent = "ONLINE";
-    statusText.style.color = "#10b981";
-  } catch (err) {
-    statusDot.className = "w-2 h-2 rounded-full bg-red-500";
-    statusText.textContent = "OFFLINE";
-    statusText.style.color = "#ef4444";
-  }
-}
+const searchInput = document.getElementById("search-input") as HTMLInputElement;
 
 function renderAnimales(animales: Animal[]): void {
   tableBody.innerHTML = "";
-  emptyState.classList.toggle("hidden", animales.length > 0);
 
   for (const animal of animales) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td class="px-4 py-3 text-slate-800">${animal.tag}</td>
-      <td class="px-4 py-3 text-slate-600">${animal.breed ?? "—"}</td>
-      <td class="px-4 py-3 text-slate-600">${animal.sex ?? "—"}</td>
-      <td class="px-4 py-3 text-slate-600">${animal.birth_date ?? "—"}</td>
-      <td class="px-4 py-3">
-        <span class="text-xs font-bold uppercase">${animal.status}</span>
+      <td><span class="font-bold text-gavac-primary">${animal.tag}</span></td>
+      <td><span class="font-medium text-slate-600">${animal.nombre ?? "—"}</span></td>
+      <td><span class="text-slate-500">${animal.raza ?? "—"}</span></td>
+      <td><span class="text-slate-500 capitalize">${animal.sexo ?? "—"}</span></td>
+      <td>
+        <span class="badge ${animal.status === 'active' ? 'badge-active' : 'badge-alert'}">
+          ${animal.status === 'active' ? 'Activo' : animal.status}
+        </span>
       </td>
-      <td class="px-4 py-3">
-        <button data-id="${animal.id}" class="delete-btn text-red-600 hover:underline font-medium">Eliminar</button>
+      <td><span class="text-slate-500 font-medium">${animal.lote ?? "—"}</span></td>
+      <td>
+        <div class="flex gap-2">
+            <button class="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+                <i data-lucide="edit-2" class="w-4 h-4 text-slate-400"></i>
+            </button>
+            <button data-id="${animal.id}" class="delete-btn p-2 hover:bg-red-50 rounded-lg transition-colors">
+                <i data-lucide="trash-2" class="w-4 h-4 text-red-400"></i>
+            </button>
+        </div>
       </td>
     `;
     tableBody.appendChild(tr);
   }
+
+  // @ts-ignore
+  if (window.lucide) { window.lucide.createIcons(); }
 
   document.querySelectorAll<HTMLButtonElement>(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
@@ -66,62 +53,52 @@ function renderAnimales(animales: Animal[]): void {
 }
 
 async function cargarAnimales(filtros: Filtros = {}): Promise<void> {
-  console.log("Cargando animales con filtros:", filtros);
   try {
     const animales = await listarAnimales(filtros);
-    console.log("Animales recibidos:", animales);
     renderAnimales(animales);
+    document.getElementById("empty-state")?.classList.toggle("hidden", animales.length > 0);
   } catch (err) {
     console.error("Error al cargar animales:", err);
-    formError.textContent = "Error al conectar con la API. Verifica que el backend esté corriendo.";
+    alert(`Error: ${(err as Error).message || "No se pudo conectar con el servidor"}`);
   }
 }
 
-form.addEventListener("submit", async (event) => {
+searchInput?.addEventListener("input", () => {
+    cargarAnimales({ tag: searchInput.value.trim() });
+});
+
+form?.addEventListener("submit", async (event) => {
   event.preventDefault();
-  formError.textContent = "";
-  console.log("Intentando registrar animal...");
-
   const formData = new FormData(form);
-  const tag = String(formData.get("tag") ?? "").trim();
-  const breed = String(formData.get("breed") ?? "").trim();
-  const sex = String(formData.get("sex") ?? "").trim();
-  const birthDate = String(formData.get("birth_date") ?? "").trim();
-
   const animalData = {
-    tag,
-    breed: breed || undefined,
-    sex: (sex || undefined) as any,
-    birth_date: birthDate || undefined,
+    tag: String(formData.get("tag") ?? "").trim(),
+    nombre: String(formData.get("nombre") ?? "").trim() || undefined,
+    especie: String(formData.get("especie") ?? "Bovino"),
+    raza: String(formData.get("raza") ?? "").trim() || undefined,
+    sexo: (String(formData.get("sexo") ?? "").trim() || undefined) as any,
+    peso_actual: formData.get("peso_actual") ? Number(formData.get("peso_actual")) : undefined,
+    edad_meses: formData.get("edad_meses") ? Number(formData.get("edad_meses")) : undefined,
+    lote: String(formData.get("lote") ?? "").trim() || undefined,
   };
 
-  console.log("Enviando datos:", animalData);
-
   try {
-    const nuevoAnimal = await registrarAnimal(animalData);
-    console.log("Registro exitoso:", nuevoAnimal);
+    await registrarAnimal(animalData);
     alert("¡Animal registrado con éxito!");
     form.reset();
+    document.getElementById('animal-modal')?.classList.add('hidden');
     await cargarAnimales();
   } catch (err) {
     console.error("Error en registro:", err);
-    formError.textContent = (err as Error).message;
+    alert((err as Error).message);
   }
 });
 
-filterBtn.addEventListener("click", () => {
-  cargarAnimales({
-    tag: filterTagInput.value.trim() || undefined,
-    breed: filterBreedInput.value.trim() || undefined,
-  });
-});
-
-clearFilterBtn.addEventListener("click", () => {
-  filterTagInput.value = "";
-  filterBreedInput.value = "";
-  cargarAnimales();
+// Botón de salir
+document.getElementById('logoutBtn')?.addEventListener('click', () => {
+    localStorage.removeItem("gavac_token");
+    localStorage.removeItem("gavac_usuario");
+    window.location.href = "/login.html";
 });
 
 // Carga inicial
-actualizarEstadoApi();
 cargarAnimales();

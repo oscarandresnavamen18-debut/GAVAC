@@ -1,6 +1,7 @@
 import os
 import logging
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
@@ -11,6 +12,11 @@ from app.modules.cattle.router import router as cattle_router
 from app.modules.auth.router import router as auth_router
 from app.modules.reportes.router import router as reportes_router
 from app.modules.empleados.router import router as empleados_router
+from app.modules.sanidad.router import router as sanidad_router
+from app.modules.reproduccion.router import router as reproduccion_router
+from app.modules.inventario.router import router as inventario_router
+from app.modules.produccion.router import router as produccion_router
+from app.modules.admin.router import router as admin_api_router
 
 # Configuración de Logs
 logging.basicConfig(level=logging.INFO)
@@ -23,21 +29,25 @@ if os.getenv("AUTO_CREATE_TABLES", "false").lower() == "true":
     Base.metadata.create_all(bind=engine)
     logger.info("✅ DB SYNC OK")
 
-# Middlewares
+# --- CONFIGURACIÓN DE MIDDLEWARES (ORDEN CRÍTICO) ---
+
+# 1. Seguridad Profesional
 app.add_middleware(SecurityHeadersMiddleware)
-allowed_origins = [
-    origin.strip()
-    for origin in os.getenv(
-        "CORS_ORIGINS",
-        "http://localhost:8000,http://127.0.0.1:8000",
-    ).split(",")
-    if origin.strip()
-]
+
+# 2. CORS - DEBE SER EL ÚLTIMO AGREGADO PARA SER EL ENVOLTORIO MÁS EXTERNO
+# (Garantiza que los errores 500 también tengan cabeceras CORS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "Accept"],
+    allow_origins=[
+        "http://localhost:5434",
+        "http://127.0.0.1:5434",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 # Rutas de Archivos Estáticos
@@ -53,19 +63,19 @@ print(f"LOGIN EXISTS: {os.path.exists(os.path.join(FRONTEND_PATH, 'login.html'))
 print(f"------------------------")
 
 if os.path.exists(FRONTEND_PATH):
+    app.mount("/dist", StaticFiles(directory=os.path.join(FRONTEND_PATH, "dist")), name="dist")
     app.mount("/static", StaticFiles(directory=FRONTEND_PATH), name="static")
     logger.info(f"✅ FRONTEND MOUNTED AT: {FRONTEND_PATH}")
 else:
     logger.error(f"❌ FRONTEND NOT FOUND")
 
-# Servir la Landing Page
+# Servir el Login como página de inicio
 @app.get("/")
 def root():
-    for name in ["index.html", "landing.html"]:
-        path = os.path.join(FRONTEND_PATH, name)
-        if os.path.exists(path):
-            return FileResponse(path)
-    return {"error": "No se encontró el archivo de inicio"}
+    path = os.path.join(FRONTEND_PATH, "login.html")
+    if os.path.exists(path):
+        return FileResponse(path)
+    return {"error": "No se encontró el archivo login.html"}
 
 # Servir el Login
 @app.get("/login")
@@ -82,6 +92,13 @@ def login_page():
         return FileResponse(auth_path)
 
     return {"error": f"Archivo login.html no encontrado en {FRONTEND_PATH}"}
+
+@app.get("/fincas")
+def fincas_page():
+    path = os.path.join(FRONTEND_PATH, "fincas.html")
+    if os.path.exists(path):
+        return FileResponse(path)
+    return {"error": "Archivo fincas.html no encontrado"}
 
 @app.get("/dashboard")
 def dashboard_page():
@@ -118,23 +135,67 @@ def empleados_page():
         return FileResponse(empleados_file)
     return {"error": "index.html de empleados no encontrado"}
 
+@app.get("/sanidad")
+def sanidad_page():
+    sanidad_file = os.path.join(FRONTEND_PATH, "src", "modules", "sanidad", "index.html")
+    if os.path.exists(sanidad_file):
+        return FileResponse(sanidad_file)
+    return {"error": "index.html de sanidad no encontrado"}
+
+@app.get("/reproduccion")
+def reproduccion_page():
+    reproduccion_file = os.path.join(FRONTEND_PATH, "src", "modules", "reproduccion", "index.html")
+    if os.path.exists(reproduccion_file):
+        return FileResponse(reproduccion_file)
+    return {"error": "index.html de reproducción no encontrado"}
+
+@app.get("/inventario")
+def inventario_page():
+    inventario_file = os.path.join(FRONTEND_PATH, "src", "modules", "inventario", "index.html")
+    if os.path.exists(inventario_file):
+        return FileResponse(inventario_file)
+    return {"error": "index.html de inventario no encontrado"}
+
+@app.get("/produccion")
+def produccion_page():
+    produccion_file = os.path.join(FRONTEND_PATH, "src", "modules", "produccion", "index.html")
+    if os.path.exists(produccion_file):
+        return FileResponse(produccion_file)
+    return {"error": "index.html de producción no encontrado"}
+
 # Routers de la API (RESTAURADOS)
 app.include_router(cattle_router)
 app.include_router(auth_router)
 app.include_router(reportes_router)
 app.include_router(empleados_router)
-from app.modules.admin.router import router as admin_api_router
 app.include_router(admin_api_router)
+app.include_router(sanidad_router)
+app.include_router(reproduccion_router)
+app.include_router(inventario_router)
+app.include_router(produccion_router)
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
-# Manejador de errores global para depuración
+# Manejador de errores de validación (422) para ver el detalle en consola
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = exc.errors()
+    logger.error(f"❌ ERROR DE VALIDACIÓN: {errors}")
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={"detail": errors, "mensaje": "Los datos enviados no son válidos"}
+    )
+
+# Manejador de errores global para depuración con blindaje CORS
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     logger.error(f"GLOBAL ERROR: {str(exc)}", exc_info=True)
-    return JSONResponse(
+    response = JSONResponse(
         status_code=500,
         content={"detail": f"Error del servidor: {str(exc)}"}
     )
+    # Blindaje CORS Manual (Último recurso)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response

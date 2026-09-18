@@ -32,7 +32,7 @@ if not DATABASE_URL:
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
-    echo=False  # Cambia a True si quieres ver el SQL real en la terminal para depurar
+    echo=True  # HABILITADO PARA VER ERRORES DE SQL
 )
 
 # ============================================================

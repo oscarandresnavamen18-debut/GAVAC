@@ -46,7 +46,7 @@ Para una guía detallada con comandos de copiado rápido, consulta la **[Guía d
 ### Backend (FastAPI)
 ```powershell
 cd backend
-.\venv\Scripts\Activate.ps1
+.\venv\Scripts\Activate+.ps1
 $env:PYTHONPATH="."
 $env:PYO3_USE_ABI3_FORWARD_COMPATIBILITY=1
 python -m uvicorn app.main:app --reload --port 8000

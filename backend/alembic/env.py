@@ -18,7 +18,8 @@ load_dotenv(encoding="utf-8-sig")
 
 # Importar la Base de SQLAlchemy y los modelos para autogeneración
 from app.database import Base
-from app.modules.auth.models import Usuario, Finca, ProduccionLeche, TareaFinca, AuditoriaLog
+from app.modules.auth.models import Usuario, Finca, TareaFinca, AuditoriaLog
+from app.modules.produccion.models import ProduccionLeche
 from app.modules.cattle.models import Animal
 
 # Metadata del proyecto

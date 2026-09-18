@@ -4,11 +4,20 @@ from fastapi import APIRouter, Depends, status, Request
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.modules.cattle.schemas import AnimalCreate, AnimalUpdate, AnimalOut
+from app.modules.cattle.schemas import AnimalCreate, AnimalUpdate, AnimalOut, TrasladoCreate
 from app.modules.cattle import service
 from app.modules.auth.service import get_usuario_actual
 
 router = APIRouter(prefix="/api/ganado", tags=["Ganado"])
+
+@router.post("/mover/", response_model=AnimalOut)
+def mover_animal(
+    data: TrasladoCreate,
+    request: Request,
+    db: Session = Depends(get_db),
+    usuario_actual = Depends(get_usuario_actual)
+):
+    return service.move_animal(db, data, usuario_actual, request.client.host)
 
 
 @router.get("/", response_model=List[AnimalOut])

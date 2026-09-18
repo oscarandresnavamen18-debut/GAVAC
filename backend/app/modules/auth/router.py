@@ -1,6 +1,7 @@
 from typing import List
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Header, HTTPException
 from sqlalchemy.orm import Session
+import os
 
 from app.database import get_db
 
@@ -39,3 +40,19 @@ def ver_auditoria(
 @router.get("/solo-admin")
 def solo_admin(usuario=Depends(service.requerir_rol("admin"))):
     return {"mensaje": f"Bienvenido admin {usuario.email}"}
+
+@router.post("/provision", response_model=schemas.ProvisionResponse)
+def provisionar_cuenta(
+    data: schemas.ProvisionRequest,
+    db: Session = Depends(get_db),
+    x_api_key: str = Header(None, alias="X-GAVAC-Provision-Key")
+):
+    """
+    Endpoint especial para la Landing Page.
+    Crea una nueva organización y un usuario administrador.
+    """
+    secret_key = os.getenv("GAVAC_PROVISION_KEY")
+    if not secret_key or x_api_key != secret_key:
+        raise HTTPException(status_code=401, detail="API Key de provisión inválida o ausente")
+
+    return service.provisionar_nueva_cuenta(db, data)

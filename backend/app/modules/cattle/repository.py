@@ -5,13 +5,13 @@ from app.modules.cattle.models import Animal
 from app.modules.cattle.schemas import AnimalCreate, AnimalUpdate
 
 
-def find_all(db: Session, breed: Optional[str] = None, sex: Optional[str] = None,
+def find_all(db: Session, raza: Optional[str] = None, sexo: Optional[str] = None,
              status: Optional[str] = None, tag: Optional[str] = None):
     query = db.query(Animal)
-    if breed:
-        query = query.filter(Animal.breed == breed)
-    if sex:
-        query = query.filter(Animal.sex == sex)
+    if raza:
+        query = query.filter(Animal.raza == raza)
+    if sexo:
+        query = query.filter(Animal.sexo == sexo)
     if status:
         query = query.filter(Animal.status == status)
     if tag:

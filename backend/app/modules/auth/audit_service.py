@@ -12,11 +12,13 @@ def registrar_accion(
     usuario_id: Optional[int] = None, 
     email: Optional[str] = None, 
     detalles: Optional[str] = None, 
-    ip: Optional[str] = None
+    ip: Optional[str] = None,
+    organizacion_id: Optional[int] = None
 ):
     try:
         log = AuditoriaLog(
             usuario_id=usuario_id,
+            organizacion_id=organizacion_id,
             email=email,
             accion=accion,
             detalles=detalles,
@@ -34,4 +36,3 @@ def registrar_accion(
 
 def get_audit_logs(db: Session, limit: int = 100):
     return db.query(AuditoriaLog).order_by(AuditoriaLog.created_at.desc()).limit(limit).all()
-

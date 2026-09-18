@@ -16,9 +16,14 @@ def get_logs_auditoria(db: Session, limit: int = 100):
 
 
 def crear_usuario(
-    db: Session, email: str, password_hash: str, rol: models.RolEnum
+    db: Session, email: str, password_hash: str, organizacion_id: int, rol_organizacion: str = "operario"
 ) -> models.Usuario:
-    db_usuario = models.Usuario(email=email, password_hash=password_hash, rol=rol)
+    db_usuario = models.Usuario(
+        email=email,
+        password_hash=password_hash,
+        organizacion_id=organizacion_id,
+        rol_organizacion=rol_organizacion
+    )
     db.add(db_usuario)
     db.commit()
     db.refresh(db_usuario)

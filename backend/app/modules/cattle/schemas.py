@@ -1,41 +1,40 @@
-"""
-Schemas de Pydantic: validan automáticamente los datos que entran y
-definen qué datos salen en las respuestas. Esta es la gran ventaja de
-FastAPI: si el cliente manda datos mal formados, FastAPI responde con
-un error 422 claro sin que tengas que validar manualmente.
-"""
+
 from datetime import date, datetime
 from typing import Optional, Literal
 from pydantic import BaseModel, Field, ConfigDict
+from decimal import Decimal
 
 Sexo = Literal["macho", "hembra"]
 Estado = Literal["active", "inactive", "sold", "deceased"]
 
-
 class AnimalBase(BaseModel):
-    breed: Optional[str] = Field(default=None, max_length=50, description="Raza del animal")
-    sex: Optional[Sexo] = Field(default=None, description="Sexo: macho o hembra")
-    birth_date: Optional[date] = Field(default=None, description="Fecha de nacimiento")
-
+    nombre: Optional[str] = Field(default=None, max_length=100)
+    especie: str = Field(default="Bovino", max_length=50)
+    raza: Optional[str] = Field(default=None, max_length=50)
+    sexo: Optional[Sexo] = Field(default=None)
+    peso_actual: Optional[Decimal] = None
+    edad_meses: Optional[int] = None
+    lote: Optional[str] = Field(default=None, max_length=50)
+    finca_id: Optional[int] = None
 
 class AnimalCreate(AnimalBase):
-    """Datos requeridos para registrar un animal nuevo."""
-    tag: str = Field(..., min_length=1, max_length=50, description="Identificador único (arete/chip)")
+    tag: str = Field(..., min_length=1, max_length=50)
     status: Estado = "active"
 
-
 class AnimalUpdate(AnimalBase):
-    """Todos los campos son opcionales al actualizar."""
     tag: Optional[str] = Field(default=None, min_length=1, max_length=50)
     status: Optional[Estado] = None
 
-
 class AnimalOut(AnimalBase):
-    """Lo que devolvemos al cliente."""
     model_config = ConfigDict(from_attributes=True)
-
     id: int
     tag: str
     status: Estado
     created_at: datetime
     updated_at: datetime
+
+class TrasladoCreate(BaseModel):
+    animal_tag: str
+    destino_finca_id: Optional[int] = None
+    destino_lote: Optional[str] = None
+    motivo: Optional[str] = None

@@ -3,134 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC — Dashboard Principal</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>GAVAC — Centro de Mando</title>
+    <link rel="stylesheet" href="dist/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* CSS DUPLICADO DE LANDING PROFESIONAL */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'DM Sans', sans-serif; background-color: #F7F4EF; color: #1A1A14; min-height: 100vh; }
-
-        nav { padding: 32px 8%; display: flex; justify-content: space-between; align-items: center; }
-        .logo { display: flex; align-items: center; gap: 12px; font-family: 'DM Serif Display', serif; font-size: 28px; }
-        .logo-box { width: 44px; height: 44px; background: #1b5e20; border-radius: 12px; color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; }
-
-        .main-container { padding: 0 8% 100px; max-width: 1400px; margin: 0 auto; }
-        .header-section { margin-bottom: 64px; }
-        .header-section h2 { font-family: 'DM Serif Display', serif; font-size: 56px; line-height: 1.1; margin-bottom: 16px; }
-        .header-section p { color: #4A4A40; font-size: 18px; }
-
-        .grid-modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
-
-        /* Estilo de Tarjeta Premium de la Landing */
-        .module-card {
-            background: #fff; border-radius: 20px; padding: 48px; border: 1px solid rgba(0, 0, 0, 0.08);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, .02); text-decoration: none; display: block;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .app-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+        .sidebar { background-color: #1A3A32; color: white; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
+        .nav-link {
+            display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px;
+            color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 600; transition: all 0.3s;
         }
-        .module-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(27, 94, 32, 0.08); border-color: #1b5e20; }
-
-        .module-icon { width: 48px; height: 48px; border-radius: 14px; margin-bottom: 24px; display: grid; place-items: center; background: #EAF3DE; color: #1B5E20; font-size: 14px; font-weight: 900; letter-spacing: .08em; }
-        .module-card h3 { font-family: 'DM Serif Display', serif; font-size: 24px; color: #1b5e20; margin-bottom: 12px; }
-        .module-card p { color: #6f6f61; font-size: 14px; line-height: 1.6; }
-
-        .locked { opacity: 0.5; filter: grayscale(1); cursor: not-allowed; }
-
-        .user-info { text-align: right; }
-        .user-email { font-weight: 700; font-size: 14px; }
-        .user-role { font-size: 11px; font-weight: 800; color: #1b5e20; text-transform: uppercase; letter-spacing: 1px; }
-
-        .btn-logout { background: #EDE8E0; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-left: 20px; }
-        .btn-logout:hover { background: #fee2e2; color: #b42318; }
-        .menu-toggle { display: none; background: #EDE8E0; border: none; border-radius: 10px; padding: 10px 14px; font-size: 22px; cursor: pointer; }
-        .role-menu { display: flex; gap: 18px; align-items: center; }
-        .role-menu a { color: #1b5e20; font-size: 12px; font-weight: 800; text-decoration: none; }
-        @media (max-width: 720px) {
-            nav { padding: 20px 5%; }
-            .menu-toggle { display: block; }
-            .role-menu { display: none; position: absolute; top: 78px; right: 5%; flex-direction: column; align-items: stretch; background: white; padding: 16px; border-radius: 14px; box-shadow: 0 12px 30px rgba(0,0,0,.12); z-index: 20; }
-            .role-menu.open { display: flex; }
-            .user-info { display: none; }
-            .btn-logout { margin-left: 8px; }
-            .header-section h2 { font-size: 42px; }
+        .nav-link:hover { color: white; background: rgba(255,255,255,0.05); }
+        .nav-link.active { background: #E8F1EC; color: #1A3A32; }
+        @media (max-width: 1024px) {
+            .app-layout { grid-template-columns: 80px 1fr; }
+            .sidebar span { display: none; }
+            .sidebar { padding: 20px 10px; align-items: center; }
         }
     </style>
 </head>
-<body>
-
-    <nav>
-        <div class="logo">
-            <div class="logo-box">G</div>
-            <span>GAVAC</span>
-        </div>
-        <div style="display: flex; align-items: center; position: relative;">
-            <button id="menuToggle" class="menu-toggle" aria-label="Abrir menú">☰</button>
-            <div id="roleMenu" class="role-menu">
-                <a href="/dashboard">Inicio</a>
-                <a href="/ganado">Ganado</a>
-                <a href="/reportes">Reportes</a>
-                <a href="/empleados" id="employeesLink" style="display:none;">Empleados</a>
-                <a href="/admin" id="adminLink" style="display:none;">Administración</a>
+<body class="bg-gavac-bg font-jakarta antialiased text-gavac-primary">
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar p-8">
+            <div class="flex items-center gap-3 mb-12 px-2">
+                <span class="text-4xl font-extrabold tracking-tighter">GAVAC</span>
             </div>
-            <div class="user-info">
-                <p id="user-email" class="user-email">...</p>
-                <p id="user-role" class="user-role">...</p>
+
+            <nav class="flex-1 space-y-3" id="main-nav">
+                <a href="dashboard.html" class="nav-link active" data-module="inicio">
+                    <i data-lucide="layout-dashboard" class="w-6 h-6 opacity-70"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="src/modules/ganado/index.html" class="nav-link" data-module="animales">
+                    <i data-lucide="layout-grid" class="w-6 h-6 opacity-70"></i>
+                    <span>Animales</span>
+                </a>
+                <a href="src/modules/sanidad/index.html" class="nav-link" data-module="sanidad">
+                    <i data-lucide="shield-plus" class="w-6 h-6 opacity-70"></i>
+                    <span>Sanidad</span>
+                </a>
+                <a href="src/modules/reproduccion/index.html" class="nav-link" data-module="reproduccion">
+                    <i data-lucide="heart" class="w-6 h-6 opacity-70"></i>
+                    <span>Reproducción</span>
+                </a>
+                <a href="src/modules/produccion/index.html" class="nav-link" data-module="produccion">
+                    <i data-lucide="droplets" class="w-6 h-6 opacity-70"></i>
+                    <span>Producción</span>
+                </a>
+                <a href="src/modules/inventario/index.html" class="nav-link" data-module="inventario">
+                    <i data-lucide="package" class="w-6 h-6 opacity-70"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="src/modules/reportes/index.html" class="nav-link" data-module="reportes">
+                    <i data-lucide="bar-chart-3" class="w-6 h-6 opacity-70"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="src/modules/admin/index.html" class="nav-link" data-module="admin">
+                    <i data-lucide="shield-check" class="w-6 h-6 opacity-70"></i>
+                    <span>Admin</span>
+                </a>
+            </nav>
+
+            <div class="mt-auto pt-8 border-t border-white/10">
+                <div class="flex items-center gap-4 mb-8 px-2">
+                    <div class="w-12 h-12 rounded-2xl bg-gavac-accent flex items-center justify-center font-bold text-lg text-white">U</div>
+                    <div class="overflow-hidden">
+                        <p id="user-name" class="font-bold truncate text-white">Usuario</p>
+                        <p id="user-role" class="text-xs opacity-50 uppercase tracking-widest font-bold text-white">Cargando...</p>
+                    </div>
+                </div>
+                <button id="logoutBtn" class="flex items-center gap-3 w-full py-4 px-6 rounded-2xl bg-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all font-bold text-sm text-white">
+                    <i data-lucide="log-out" class="w-5 h-5 opacity-70"></i>
+                    <span>Cerrar sesión</span>
+                </button>
             </div>
-            <button id="logoutBtn" class="btn-logout text-xs">SALIR</button>
-        </div>
-    </nav>
+        </aside>
 
-    <main class="main-container">
-        <div class="header-section">
-            <div style="width: 80px; height: 4px; background: #1b5e20; margin-bottom: 32px;"></div>
-            <h2>Gestión de <br><em>Activos Estratégicos.</em></h2>
-            <p>Seleccione el módulo operativo para iniciar la jornada.</p>
-        </div>
+        <!-- Main Content -->
+        <main class="p-10 lg:p-16 overflow-y-auto">
+            <header class="flex justify-between items-end mb-12">
+                <div>
+                    <h1 class="text-4xl font-extrabold mb-2">Inicio</h1>
+                    <p class="text-slate-500 font-medium text-lg">Resumen general de tu finca</p>
+                </div>
+                <div class="flex items-center gap-6">
+                    <div onclick="window.location.href='fincas.html'" class="bg-white border border-slate-200 rounded-2xl px-6 py-3 flex items-center gap-3 shadow-sm cursor-pointer hover:bg-slate-50 transition-colors">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-slate-400"></i>
+                        <span id="active-finca-name" class="font-bold">Cargando...</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                    </div>
+                    <button class="w-12 h-12 bg-white rounded-2xl border border-slate-200 flex items-center justify-center shadow-sm hover:bg-slate-50 transition-colors">
+                        <i data-lucide="bell" class="w-6 h-6 text-slate-400"></i>
+                    </button>
+                </div>
+            </header>
 
-        <div class="grid-modules">
-            <a href="/ganado" class="module-card">
-                <span class="module-icon">INV</span>
-                <h3>Inventario</h3>
-                <p>Trazabilidad total de chapetas, razas y genealogía en tiempo real.</p>
-            </a>
+            <!-- Hero Welcome -->
+            <div class="relative rounded-[3rem] overflow-hidden mb-12 min-h-[240px] flex items-center px-16 text-white shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="Campo">
+                <div class="absolute inset-0 bg-gavac-primary/60 backdrop-blur-[2px]"></div>
+                <div class="relative z-10">
+                    <h2 class="text-5xl font-extrabold mb-4">Bienvenido, <span id="welcome-name">...</span></h2>
+                    <p class="text-2xl font-light opacity-90 leading-relaxed">Este es el estado actual de tu <br> activo ganadero hoy.</p>
+                </div>
+            </div>
 
-            <a href="/reportes" class="module-card">
-                <span class="module-icon">BI</span>
-                <h3>Analítica BI</h3>
-                <p>Informes de producción y rendimiento financiero de la hacienda.</p>
-            </a>
+            <!-- KPIs (Sin datos de ejemplo) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div class="card-gavac">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="layout-grid" class="w-7 h-7 text-gavac-primary"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-400">—</span>
+                    </div>
+                    <p class="text-slate-500 font-bold text-sm mb-1 uppercase tracking-widest">Total animales</p>
+                    <h3 class="text-4xl font-extrabold" id="kpi-total">0</h3>
+                </div>
+                <div class="card-gavac">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="shield-plus" class="w-7 h-7 text-emerald-600"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-400">—</span>
+                    </div>
+                    <p class="text-slate-500 font-bold text-sm mb-1 uppercase tracking-widest">En sanidad</p>
+                    <h3 class="text-4xl font-extrabold" id="kpi-sanidad">0</h3>
+                </div>
+                <div class="card-gavac">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="heart" class="w-7 h-7 text-red-600"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-400">—</span>
+                    </div>
+                    <p class="text-slate-500 font-bold text-sm mb-1 uppercase tracking-widest">Reproducción</p>
+                    <h3 class="text-4xl font-extrabold" id="kpi-reproduccion">0</h3>
+                </div>
+                <div class="card-gavac">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center">
+                            <i data-lucide="alert-triangle" class="w-7 h-7 text-orange-600"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-400">—</span>
+                    </div>
+                    <p class="text-slate-500 font-bold text-sm mb-1 uppercase tracking-widest">Alertas</p>
+                    <h3 class="text-4xl font-extrabold" id="kpi-alertas">0</h3>
+                </div>
+            </div>
 
-            <a href="/admin" id="admin-module" class="module-card">
-                <span class="module-icon">ADM</span>
-                <h3>Consola Admin</h3>
-                <p>Gestión de fincas, mayordomos y control de seguridad maestro.</p>
-            </a>
-        </div>
-    </main>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Activity Feed -->
+                <div class="lg:col-span-2 card-gavac">
+                    <div class="flex justify-between items-center mb-10">
+                        <h3 class="text-2xl font-extrabold">Actividad reciente</h3>
+                        <button class="text-sm font-bold text-gavac-accent hover:underline">Ver todo</button>
+                    </div>
+                    <div id="activity-list" class="space-y-8">
+                        <div class="flex items-center justify-center py-20 text-slate-300 italic">
+                            No hay actividad registrada recientemente
+                        </div>
+                    </div>
+                </div>
 
-    <script type="module">
+                <!-- Status Chart -->
+                <div class="card-gavac">
+                    <h3 class="text-2xl font-extrabold mb-10">Estado del hato</h3>
+                    <div class="relative h-72 flex items-center justify-center mb-8">
+                        <canvas id="statusChart"></canvas>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <span class="text-5xl font-extrabold">0</span>
+                            <span class="text-xs font-black text-slate-400 uppercase tracking-widest">Animales</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-gavac-primary"></div>
+                                <span class="font-bold text-sm">Sin datos cargados</span>
+                            </div>
+                            <span class="font-bold">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) { lucide.createIcons(); }
+
             const userData = localStorage.getItem('gavac_usuario');
-            if (!userData) { window.location.href = "/login"; return; }
+            if (!userData) { window.location.href = "login.html"; return; }
 
             const user = JSON.parse(userData);
-            document.getElementById('user-email').textContent = user.email;
-            document.getElementById('user-role').textContent = user.rol.toUpperCase() + " ACCESS";
+            const activeFinca = JSON.parse(localStorage.getItem('gavac_active_finca') || '{}');
 
-            if (user.rol === "admin") {
-                document.getElementById('admin-module').style.display = "block";
-                document.getElementById('adminLink').style.display = "inline";
-                document.getElementById('employeesLink').style.display = "inline";
-            } else {
-                const adminCard = document.getElementById('admin-module');
-                adminCard.style.display = "none";
-            }
+            if (!activeFinca.id) { window.location.href = "fincas.html"; return; }
 
-            document.getElementById('menuToggle').addEventListener('click', () => {
-                document.getElementById('roleMenu').classList.toggle('open');
+            const userShort = user.email.split('@')[0];
+            document.getElementById('welcome-name').textContent = userShort.charAt(0).toUpperCase() + userShort.slice(1);
+            document.getElementById('user-name').textContent = userShort;
+            document.getElementById('user-role').textContent = activeFinca.rol;
+            document.getElementById('active-finca-name').textContent = activeFinca.nombre;
+
+            // --- GESTIÓN DE PERMISOS CONTEXTUALES ---
+            const navLinks = document.querySelectorAll('#main-nav .nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const moduleName = link.getAttribute('data-module');
+                    const userRol = activeFinca.rol;
+
+                    if (moduleName === 'inicio' || userRol === 'admin' || userRol === 'ganadero') return;
+
+                    // Restricciones simples de ejemplo para Operario
+                    if (userRol === 'operario' && ['admin', 'reportes'].includes(moduleName)) {
+                        e.preventDefault();
+                        alert("Este módulo requiere permisos administrativos. Contacta con el dueño de la finca.");
+                    }
+                });
             });
+
+            // Chart con datos vacíos
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sin datos'],
+                    datasets: [{
+                        data: [1],
+                        backgroundColor: ['#F1F5F9'],
+                        borderWidth: 0,
+                        cutout: '82%'
+                    }]
+                },
+                options: { plugins: { legend: { display: false } }, maintainAspectRatio: false }
+            });
+
             document.getElementById('logoutBtn').addEventListener('click', () => {
-                localStorage.clear();
-                window.location.href = "/login";
+                localStorage.removeItem("gavac_token");
+                localStorage.removeItem("gavac_usuario");
+                window.location.href = "index.html";
             });
         });
     </script>

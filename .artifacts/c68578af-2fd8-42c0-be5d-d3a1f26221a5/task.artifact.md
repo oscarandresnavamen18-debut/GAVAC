@@ -1,0 +1,8 @@
+- [/] Implementar Rediseño "GAVAC Elite Suite v2.0"
+    - [ ] Configurar redirección y protección de rutas en `index.html` (Landing)
+    - [ ] Rediseñar `dashboard.html` con Sidebar y Grid adaptativo
+    - [ ] Unificar diseño de `src/modules/ganado/index.html` con Sidebar
+    - [ ] Unificar diseño de `src/modules/reportes/index.html` con Sidebar
+    - [ ] Ajustar lógica de redirección en `src/modules/auth/main.ts`
+- [ ] Compilar TypeScript y verificar localmente
+- [ ] Esperar aprobación final del usuario para el commit

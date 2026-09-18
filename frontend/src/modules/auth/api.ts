@@ -1,9 +1,11 @@
-// API DE AUTENTICACIÓN - GAVAC (PRODUCCIÓN)
-// Usamos rutas relativas para evitar conflictos de CORS/CSP
+// API DE AUTENTICACIÓN - GAVAC
+const currentHost = window.location.hostname;
+const isDev = window.location.port === '5434';
+// Usar 127.0.0.1 explícitamente para evitar conflictos de localhost
+const BASE_URL = isDev ? `http://127.0.0.1:8000` : '';
+const API_BASE = `${BASE_URL}/api/auth`;
 
-const API_BASE = "/api/auth";
-
-export interface UsuarioCreate { email: string; password: string; rol?: string; }
+export interface UsuarioCreate { email: string; password: string; nombre_organizacion?: string; }
 export interface UsuarioLogin { email: string; password: string; }
 export interface UsuarioOut { id: number; email: string; rol: string; created_at: string; }
 export interface Token { access_token: string; token_type: string; usuario: UsuarioOut; }
@@ -11,10 +13,12 @@ export interface Token { access_token: string; token_type: string; usuario: Usua
 async function obtenerMensajeError(response: Response, fallback: string): Promise<string> {
   try {
     const error = await response.json();
-    if (Array.isArray(error.detail)) {
-      return error.detail.map((item: { msg?: string }) => item.msg || fallback).join(", ");
+    console.log("DETALLE ERROR API:", error);
+
+    if (error.detail && Array.isArray(error.detail)) {
+        return "Error de validación: " + error.detail.map((e: any) => `${e.loc[1]}: ${e.msg}`).join(", ");
     }
-    return String(error.detail || error.message || fallback);
+    return String(error.mensaje || error.detail || fallback);
   } catch {
     return `${fallback} (HTTP ${response.status})`;
   }
