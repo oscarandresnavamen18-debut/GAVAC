@@ -2,8 +2,40 @@
 import { listarAnimales, registrarAnimal, eliminarAnimal, Animal, Filtros } from "./api.js";
 
 const form = document.getElementById("animal-form") as HTMLFormElement;
+<<<<<<< HEAD
 const tableBody = document.getElementById("animal-table-body") as HTMLTableSectionElement;
 const searchInput = document.getElementById("search-input") as HTMLInputElement;
+=======
+const tagInput = document.getElementById("tag") as HTMLInputElement;
+const formError = document.getElementById("form-error") as HTMLParagraphElement;
+const tableBody = document.getElementById("animal-table-body") as HTMLTableSectionElement;
+const emptyState = document.getElementById("empty-state") as HTMLDivElement;
+
+const filterTagInput = document.getElementById("filter-tag") as HTMLInputElement;
+const filterBreedInput = document.getElementById("filter-breed") as HTMLInputElement;
+const filterBtn = document.getElementById("filter-btn") as HTMLButtonElement;
+const clearFilterBtn = document.getElementById("clear-filter-btn") as HTMLButtonElement;
+
+const statusDot = document.getElementById("api-status-dot") as HTMLSpanElement;
+const statusText = document.getElementById("api-status-text") as HTMLSpanElement;
+
+tagInput.addEventListener("input", () => {
+  tagInput.value = tagInput.value.toUpperCase().replace(/[^A-Z0-9-]/g, "");
+});
+
+async function actualizarEstadoApi(): Promise<void> {
+  try {
+    const health = await checkApiHealth();
+    statusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
+    statusText.textContent = "ONLINE";
+    statusText.style.color = "#10b981";
+  } catch (err) {
+    statusDot.className = "w-2 h-2 rounded-full bg-red-500";
+    statusText.textContent = "OFFLINE";
+    statusText.style.color = "#ef4444";
+  }
+}
+>>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
 
 function renderAnimales(animales: Animal[]): void {
   tableBody.innerHTML = "";

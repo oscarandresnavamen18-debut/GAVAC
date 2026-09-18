@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+<<<<<<< HEAD
         .app-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
         .sidebar { background-color: #1A3A32; color: white; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
         .nav-link {
@@ -79,6 +80,82 @@
                     <i data-lucide="log-out" class="w-5 h-5 opacity-70"></i>
                     <span>Cerrar sesión</span>
                 </button>
+=======
+        /* CSS DUPLICADO DE LANDING PROFESIONAL */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background-color: #F7F4EF; background-image: radial-gradient(circle at 8% 12%, rgba(27, 94, 32, .12), transparent 28%), radial-gradient(circle at 92% 84%, rgba(200, 230, 201, .32), transparent 30%), linear-gradient(135deg, rgba(255,255,255,.35), transparent 55%); color: #1A1A14; min-height: 100vh; }
+
+        nav { padding: 24px clamp(20px, 6vw, 80px); display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; font-family: 'DM Serif Display', serif; font-size: 28px; }
+        .logo-box { width: 44px; height: 44px; background: #1b5e20; border-radius: 12px; color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+
+        .main-container { width: min(100% - 40px, 1400px); padding: 24px 0 72px; margin: 0 auto; }
+        .header-section { margin-bottom: 40px; }
+        .header-section h2 { font-family: 'DM Serif Display', serif; font-size: clamp(38px, 4.5vw, 56px); line-height: 1.1; margin-bottom: 12px; }
+        .header-section p { color: #4A4A40; font-size: 18px; }
+
+        .grid-modules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+
+        /* Estilo de Tarjeta Premium de la Landing */
+        .module-card {
+            background: #fff; border-radius: 20px; padding: 32px; border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .02); text-decoration: none; display: block;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .module-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(27, 94, 32, 0.08); border-color: #1b5e20; }
+
+        .module-icon { width: 48px; height: 48px; border-radius: 14px; margin-bottom: 24px; display: grid; place-items: center; background: #EAF3DE; color: #1B5E20; font-size: 14px; font-weight: 900; letter-spacing: .08em; }
+        .module-card h3 { font-family: 'DM Serif Display', serif; font-size: 24px; color: #1b5e20; margin-bottom: 12px; }
+        .module-card p { color: #6f6f61; font-size: 14px; line-height: 1.6; }
+
+        .locked { opacity: 0.5; filter: grayscale(1); cursor: not-allowed; }
+
+        .user-info { text-align: right; min-width: 120px; }
+        .user-email { display: none; }
+        .user-role { font-size: 11px; font-weight: 800; color: #1b5e20; text-transform: uppercase; letter-spacing: 1px; }
+
+        .btn-logout { background: #EDE8E0; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; margin-left: 20px; }
+        .btn-logout:hover { background: #fee2e2; color: #b42318; }
+        .menu-toggle { display: none; background: #EDE8E0; border: none; border-radius: 10px; padding: 10px 14px; font-size: 22px; cursor: pointer; }
+        .role-menu { display: flex; gap: 18px; align-items: center; }
+        .role-menu a { color: #1b5e20; font-size: 12px; font-weight: 800; text-decoration: none; }
+        @media (max-width: 720px) {
+            nav { padding: 18px 20px; }
+            .menu-toggle { display: block; }
+            .role-menu { display: none; position: absolute; top: 78px; right: 5%; flex-direction: column; align-items: stretch; background: white; padding: 16px; border-radius: 14px; box-shadow: 0 12px 30px rgba(0,0,0,.12); z-index: 20; }
+            .role-menu.open { display: flex; }
+            .user-info { display: none; }
+            .btn-logout { margin-left: 8px; }
+            .header-section h2 { font-size: 42px; }
+            .main-container { width: min(100% - 32px, 520px); padding-top: 18px; }
+            .grid-modules { grid-template-columns: 1fr; gap: 16px; }
+            .module-card { padding: 24px; }
+        }
+        @media (min-width: 721px) and (max-width: 980px) {
+            .main-container { width: min(100% - 48px, 760px); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-box">G</div>
+            <span>GAVAC</span>
+        </div>
+        <div style="display: flex; align-items: center; position: relative;">
+            <button id="menuToggle" class="menu-toggle" aria-label="Abrir menú">MENU</button>
+            <div id="roleMenu" class="role-menu">
+                <a href="/dashboard">Inicio</a>
+                <a href="/ganado">Ganado</a>
+                <a href="/reportes">Reportes</a>
+                <a href="/empleados" id="employeesLink" style="display:none;">Empleados</a>
+                <a href="/admin" id="adminLink" style="display:none;">Administración</a>
+            </div>
+            <div class="user-info">
+                <p class="user-email">Sesión activa</p>
+                <p id="user-role" class="user-role">...</p>
+>>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
             </div>
         </aside>
 
@@ -201,7 +278,11 @@
             if (!userData) { window.location.href = "login.html"; return; }
 
             const user = JSON.parse(userData);
+<<<<<<< HEAD
             const activeFinca = JSON.parse(localStorage.getItem('gavac_active_finca') || '{}');
+=======
+            document.getElementById('user-role').textContent = "ROL " + user.rol.toUpperCase();
+>>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
 
             if (!activeFinca.id) { window.location.href = "fincas.html"; return; }
 
@@ -245,9 +326,16 @@
             });
 
             document.getElementById('logoutBtn').addEventListener('click', () => {
+<<<<<<< HEAD
                 localStorage.removeItem("gavac_token");
                 localStorage.removeItem("gavac_usuario");
                 window.location.href = "index.html";
+=======
+                fetch('/api/auth/logout', { method: 'POST' }).finally(() => {
+                    localStorage.clear();
+                    window.location.href = "/login";
+                });
+>>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
             });
         });
     </script>

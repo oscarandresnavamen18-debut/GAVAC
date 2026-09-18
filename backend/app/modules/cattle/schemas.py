@@ -18,11 +18,29 @@ class AnimalBase(BaseModel):
     finca_id: Optional[int] = None
 
 class AnimalCreate(AnimalBase):
+<<<<<<< HEAD
     tag: str = Field(..., min_length=1, max_length=50)
+=======
+    """Datos requeridos para registrar un animal nuevo."""
+    tag: str = Field(
+        ...,
+        pattern=r"^[A-Za-z]{2,10}-[0-9]{1,6}$",
+        description="Identificador único con formato letras-números, por ejemplo GAV-001",
+    )
+>>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
     status: Estado = "active"
 
 class AnimalUpdate(AnimalBase):
+<<<<<<< HEAD
     tag: Optional[str] = Field(default=None, min_length=1, max_length=50)
+=======
+    """Todos los campos son opcionales al actualizar."""
+    tag: Optional[str] = Field(
+        default=None,
+        pattern=r"^[A-Za-z]{2,10}-[0-9]{1,6}$",
+        description="Identificador con formato letras-números, por ejemplo GAV-001",
+    )
+>>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
     status: Optional[Estado] = None
 
 class AnimalOut(AnimalBase):

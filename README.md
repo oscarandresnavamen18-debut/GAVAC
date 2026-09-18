@@ -2,7 +2,7 @@
 
 Proyecto final ADSO — SENA CTMA (ficha 3223874).
 
-## 🚀 Stack del Proyecto
+## Stack del Proyecto
 
 - **Front-end:** HTML5 + TypeScript + Tailwind CSS
 - **Back-end:** Python 3.12+ (FastAPI)
@@ -36,12 +36,20 @@ gavac/
 │       ├── shared/           # Tipos y utilidades comunes
 │       └── modules/          # Módulos de la UI
 ├── docs/                     # Documentación técnica adicional
-└── guia_instalacion.md       # 🏁 Guía rápida de comandos
+└── run_gavac.ps1             # Inicio automatizado del sistema
 ```
 
 ## ⚙️ Cómo ejecutar el proyecto
 
-Para una guía detallada con comandos de copiado rápido, consulta la **[Guía de Instalación](guia_instalacion.md)**.
+### Inicio rápido para el equipo
+
+Desde la carpeta del proyecto, ejecuta:
+
+```powershell
+.\run_gavac.ps1
+```
+
+El script prepara el backend y frontend, valida las herramientas necesarias y muestra la URL de la landing pública y del login. La primera vez crea `backend\.env`; completa sus valores y ejecútalo nuevamente.
 
 ### Backend (FastAPI)
 ```powershell
@@ -53,13 +61,25 @@ python -m uvicorn app.main:app --reload --port 8000
 ```
 > **API Docs:** [http://localhost:8000/docs](http://localhost:8000/docs)
 
+### Crear el administrador inicial
+
+El rol `admin` no se puede asignar desde el registro público. Para crear la primera cuenta administrativa:
+
+```powershell
+cd backend
+$env:PYTHONPATH="."
+.\venv\Scripts\python.exe scripts\crear_admin.py
+```
+
+El comando solicita el correo y la contraseña sin guardarlos en archivos. Después del primer acceso, Administración y Empleados estarán disponibles para esa cuenta.
+
 ### Frontend (TypeScript)
 ```powershell
 cd frontend
 npm install
 npx tsc  # Compilar TypeScript a JS
 ```
-Abre `index.html` con **Live Server** o directamente en el navegador.
+El backend sirve la landing pública en `http://127.0.0.1:8000/` y el acceso en `http://127.0.0.1:8000/login`.
 
 ## 📜 Reglas de Trabajo
 

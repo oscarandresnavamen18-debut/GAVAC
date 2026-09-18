@@ -1,7 +1,11 @@
 import os
 import logging
+<<<<<<< HEAD
 from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
+=======
+from fastapi import Depends, FastAPI, Request
+>>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
@@ -10,6 +14,7 @@ from app.database import Base, engine
 from app.middleware.security import SecurityHeadersMiddleware
 from app.modules.cattle.router import router as cattle_router
 from app.modules.auth.router import router as auth_router
+from app.modules.auth.service import requerir_rol
 from app.modules.reportes.router import router as reportes_router
 from app.modules.empleados.router import router as empleados_router
 from app.modules.sanidad.router import router as sanidad_router
@@ -27,7 +32,7 @@ app = FastAPI(title="GAVAC API", version="1.0.0")
 # La creación automática solo se permite explícitamente en desarrollo.
 if os.getenv("AUTO_CREATE_TABLES", "false").lower() == "true":
     Base.metadata.create_all(bind=engine)
-    logger.info("✅ DB SYNC OK")
+    logger.info("DB SYNC OK")
 
 # --- CONFIGURACIÓN DE MIDDLEWARES (ORDEN CRÍTICO) ---
 
@@ -65,17 +70,25 @@ print(f"------------------------")
 if os.path.exists(FRONTEND_PATH):
     app.mount("/dist", StaticFiles(directory=os.path.join(FRONTEND_PATH, "dist")), name="dist")
     app.mount("/static", StaticFiles(directory=FRONTEND_PATH), name="static")
-    logger.info(f"✅ FRONTEND MOUNTED AT: {FRONTEND_PATH}")
+    logger.info(f"FRONTEND MOUNTED AT: {FRONTEND_PATH}")
 else:
     logger.error(f"❌ FRONTEND NOT FOUND")
 
 # Servir el Login como página de inicio
 @app.get("/")
 def root():
+<<<<<<< HEAD
     path = os.path.join(FRONTEND_PATH, "login.html")
     if os.path.exists(path):
         return FileResponse(path)
     return {"error": "No se encontró el archivo login.html"}
+=======
+    for name in ["landing.html", "index.html"]:
+        path = os.path.join(FRONTEND_PATH, name)
+        if os.path.exists(path):
+            return FileResponse(path)
+    return {"error": "No se encontró el archivo de inicio"}
+>>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
 
 # Servir el Login
 @app.get("/login")
@@ -122,14 +135,14 @@ def reportes_page():
     return {"error": "index.html de reportes no encontrado"}
 
 @app.get("/admin")
-def admin_page():
+def admin_page(_usuario=Depends(requerir_rol("admin"))):
     admin_file = os.path.join(FRONTEND_PATH, "src", "modules", "admin", "index.html")
     if os.path.exists(admin_file):
         return FileResponse(admin_file)
     return {"error": "index.html de administración no encontrado"}
 
 @app.get("/empleados")
-def empleados_page():
+def empleados_page(_usuario=Depends(requerir_rol("admin"))):
     empleados_file = os.path.join(FRONTEND_PATH, "src", "modules", "empleados", "index.html")
     if os.path.exists(empleados_file):
         return FileResponse(empleados_file)

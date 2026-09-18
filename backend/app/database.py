@@ -20,7 +20,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
     raise RuntimeError(
-        "⚠️ Error: No se encontró DATABASE_URL en el archivo .env. "
+        "Error: No se encontró DATABASE_URL en el archivo .env. "
         "Revisa la configuración de Supabase."
     )
 

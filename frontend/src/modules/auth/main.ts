@@ -49,9 +49,15 @@ form.addEventListener("submit", async (e) => {
 
     try {
         if (modoRegistro) {
+<<<<<<< HEAD
             const nombreOrg = (document.getElementById('org-name-input') as HTMLInputElement)?.value || "";
             await registrar({ email, password, nombre_organizacion: nombreOrg } as any);
             mostrarMensaje("✅ Registro exitoso. Iniciando sesión...", "exito");
+=======
+            console.log("Registrando con rol:", selectedRole);
+            await registrar({ email, password, rol: selectedRole as any });
+            mostrarMensaje("Cuenta creada con éxito. Iniciando sesión...", "exito");
+>>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
         }
 
         const resultado = await login({ email, password });
