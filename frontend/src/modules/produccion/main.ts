@@ -9,15 +9,15 @@ function renderProduccion(registros: Produccion[]): void {
     for (const reg of registros) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><span class="text-slate-500 font-medium">${reg.fecha}</span></td>
-            <td><span class="font-bold text-gavac-primary">AN-${reg.animal_id}</span></td>
-            <td><span class="font-bold text-slate-700">${reg.litros} Lts</span></td>
+            <td class="font-bold text-slate-400 text-xs">${reg.fecha}</td>
+            <td class="font-black text-gavac-primary tracking-tight">AN-${reg.animal_id}</td>
+            <td class="font-black text-blue-600">${reg.litros} Lts</td>
             <td>
-                <span class="badge ${reg.jornada === 'Mañana' ? 'badge-active' : 'badge-alert'}">
+                <span class="badge-gavac ${reg.jornada === 'Mañana' ? 'badge-gavac-info' : 'badge-gavac-warning'}">
                     ${reg.jornada}
                 </span>
             </td>
-            <td class="text-right text-xs text-slate-400 font-medium">${reg.created_at}</td>
+            <td class="text-right text-[10px] font-black text-slate-300 uppercase tracking-widest">${reg.created_at}</td>
         `;
         tableBody.appendChild(tr);
     }
@@ -57,9 +57,8 @@ form?.addEventListener("submit", async (e) => {
 });
 
 document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    localStorage.removeItem("gavac_token");
-    localStorage.removeItem("gavac_usuario");
-    window.location.href = "../../../index.html";
+    localStorage.clear();
+    window.location.href = "/";
 });
 
 cargarProduccion();

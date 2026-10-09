@@ -3,111 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-    <title>GAVAC — Administración</title>
-    <link rel="stylesheet" href="../../../dist/output.css">
+    <title>GAVAC — Administración Global</title>
+    <link rel="stylesheet" href="/dist/output.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .app-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
-        .sidebar { background-color: #1A3A32; color: white; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
-        .nav-link {
-            display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px;
-            color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 600; transition: all 0.3s;
-        }
-        .nav-link:hover { color: white; background: rgba(255,255,255,0.05); }
-        .nav-link.active { background: #E8F1EC; color: #1A3A32; }
-
+        .app-container { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
         @media (max-width: 1024px) {
-            .app-layout { grid-template-columns: 80px 1fr; }
-            .sidebar span { display: none; }
-            .sidebar { padding: 20px 10px; align-items: center; }
-=======
-    <title>GAVAC Admin — Command Center</title>
-    <link href="/static/dist/output.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F1F5F9; background-image: radial-gradient(circle at 85% 8%, rgba(16, 185, 129, .10), transparent 24%), radial-gradient(circle at 18% 92%, rgba(15, 23, 42, .08), transparent 28%); color: #0F172A; }
-        .serif { font-family: 'DM Serif Display', serif; }
-        .sidebar { width: 280px; background: #0F172A; position: fixed; height: 100vh; color: white; border-right: 1px solid rgba(255,255,255,0.05); }
-        .main-view { margin-left: 280px; padding: 40px; }
-        .kpi-card { background: white; border-radius: 20px; padding: 24px; border: 1px solid #E2E8F0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        .board-card {
-            background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid #CBD5E1;
-            transition: all 0.3s; cursor: grab;
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
         }
     </style>
 </head>
 <body class="bg-gavac-bg font-jakarta antialiased text-gavac-primary">
-    <div class="app-layout">
-        <aside class="sidebar p-8">
-            <div class="flex items-center gap-3 mb-12 px-2">
-                <span class="text-4xl font-extrabold tracking-tighter">GAVAC</span>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar bg-gavac-primary p-8 flex flex-col h-screen sticky top-0">
+            <div class="flex items-center gap-3 mb-16 px-2">
+                <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                </div>
+                <span class="text-3xl font-black text-white tracking-tighter">GAVAC</span>
             </div>
-            <nav class="flex-1 space-y-3" id="main-nav">
-                <a href="../../../dashboard.html" class="nav-link" data-module="inicio"><i data-lucide="layout-dashboard" class="w-6 h-6 opacity-70"></i><span>Inicio</span></a>
-                <a href="../ganado/index.html" class="nav-link" data-module="animales"><i data-lucide="layout-grid" class="w-6 h-6 opacity-70"></i><span>Animales</span></a>
-                <a href="index.html" class="nav-link active" data-module="admin"><i data-lucide="shield-check" class="w-6 h-6 opacity-70"></i><span>Admin</span></a>
+
+            <nav class="flex-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
+                <div class="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-4 ml-6">Menú Principal</div>
+
+                <a href="/dashboard" class="sidebar-item" data-module="inicio">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Panel de Control</span>
+                </a>
+                <a href="/ganado" class="sidebar-item" data-module="animales">
+                    <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                    <span>Inventario Ganado</span>
+                </a>
+                <a href="/sanidad" class="sidebar-item" data-module="sanidad">
+                    <i data-lucide="shield-plus" class="w-5 h-5"></i>
+                    <span>Control Sanitario</span>
+                </a>
+                <a href="/reproduccion" class="sidebar-item" data-module="reproduccion">
+                    <i data-lucide="heart" class="w-5 h-5"></i>
+                    <span>Gestión Reproductiva</span>
+                </a>
+                <a href="/produccion" class="sidebar-item" data-module="produccion">
+                    <i data-lucide="droplets" class="w-5 h-5"></i>
+                    <span>Producción</span>
+                </a>
+                <a href="/inventario" class="sidebar-item" data-module="inventario">
+                    <i data-lucide="package" class="w-5 h-5"></i>
+                    <span>Insumos</span>
+                </a>
+                <a href="/reportes" class="sidebar-item" data-module="reportes">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                    <span>Análisis y Reportes</span>
+                </a>
+
+                <div class="pt-8 mt-4 border-t border-white/5">
+                    <div class="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-4 ml-6">Soporte y Admin</div>
+                    <a href="/empleados" class="sidebar-item" data-module="empleados">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        <span>Gestión Personal</span>
+                    </a>
+                    <a href="/admin" class="sidebar-item active" data-module="admin">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                        <span>Administración</span>
+                    </a>
+                </div>
             </nav>
+
             <div class="mt-auto pt-8 border-t border-white/10">
-                <button id="logoutBtn" class="flex items-center gap-3 w-full py-4 px-6 rounded-2xl bg-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all font-bold text-sm text-white">
-                    <i data-lucide="log-out" class="w-5 h-5 opacity-70"></i>
-                    <span>Cerrar sesión</span>
+                <button id="logoutBtn" class="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 font-black text-xs uppercase tracking-widest group">
+                    <i data-lucide="log-out" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+                    <span>Salir del Sistema</span>
                 </button>
             </div>
         </aside>
 
-        <main class="p-10 lg:p-16">
-            <header class="flex justify-between items-end mb-12">
-                <div>
-                    <h1 class="text-4xl font-extrabold mb-2 text-gavac-primary">Administración</h1>
-                    <p class="text-slate-500 font-medium text-lg">Panel de control maestro y configuración</p>
+        <!-- Main Content Area -->
+        <main class="flex flex-col h-screen overflow-hidden">
+            <!-- Topbar Professional -->
+            <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 h-24 flex items-center justify-between px-12 z-40">
+                <div class="flex items-center gap-8">
+                    <div onclick="window.location.href='/fincas'" class="group bg-slate-50 border border-slate-200 rounded-2xl px-6 py-3 flex items-center gap-4 cursor-pointer hover:bg-white hover:border-gavac-primary/20 transition-all duration-300 shadow-sm">
+                        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-gavac-primary transition-colors">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-gavac-primary group-hover:text-white"></i>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Contexto:</p>
+                            <span id="active-finca-name" class="font-black text-gavac-primary tracking-tight italic">Panel Administrativo</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex gap-4">
-                    <button id="open-finca-modal" class="bg-white border-2 border-gavac-primary text-gavac-primary px-8 py-4 rounded-2xl font-extrabold shadow-sm hover:bg-slate-50 transition-all">+ Nueva Finca</button>
-                    <button id="open-user-modal" class="bg-emerald-600 text-white px-8 py-4 rounded-2xl font-extrabold shadow-lg hover:bg-emerald-700 transition-all">+ Nuevo Usuario</button>
-                    <button id="open-assign-modal" class="bg-gavac-primary text-white px-8 py-4 rounded-2xl font-extrabold shadow-lg hover:bg-gavac-accent transition-all">+ Asignar Personal</button>
+
+                <div class="flex items-center gap-4">
+                    <button id="open-finca-modal" class="btn-gavac-outline !py-3">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Nueva Finca
+                    </button>
+                    <button id="open-user-modal" class="btn-gavac-primary !py-3 !bg-emerald-600 !shadow-emerald-600/20">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i> Nuevo Usuario
+                    </button>
+                    <button id="open-assign-modal" class="btn-gavac-primary !py-3">
+                        <i data-lucide="link" class="w-4 h-4"></i> Asignar Personal
+                    </button>
                 </div>
             </header>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                <!-- Listado de Fincas -->
-                <div class="card-gavac p-0 overflow-hidden">
-                    <div class="bg-slate-50 p-6 border-b border-slate-100">
-                        <h3 class="font-extrabold">Fincas Registradas</h3>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="text-xs uppercase font-bold text-slate-400 bg-slate-50/50">
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-12 custom-scrollbar">
+                <header class="mb-12">
+                    <h1 class="text-4xl font-black text-gavac-primary tracking-tight">Centro Administrativo</h1>
+                    <p class="text-slate-500 font-medium mt-1 text-lg">Gestión centralizada de organizaciones, usuarios y roles.</p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <!-- Fincas List -->
+                    <div class="card-gavac p-0 overflow-hidden">
+                        <div class="p-8 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
+                            <h3 class="font-black text-gavac-primary tracking-tight">Fincas de la Organización</h3>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-slate-300"></i>
+                        </div>
+                        <table class="table-gavac">
+                            <thead>
                                 <tr>
-                                    <th class="px-6 py-4">Nombre</th>
-                                    <th class="px-6 py-4">Ubicación</th>
-                                    <th class="px-6 py-4 text-right">Acción</th>
+                                    <th>Nombre</th>
+                                    <th>Ubicación</th>
+                                    <th class="text-right">Gestión</th>
                                 </tr>
                             </thead>
-                            <tbody id="fincas-table-body" class="text-sm">
+                            <tbody id="fincas-table-body">
                                 <!-- JS -->
                             </tbody>
                         </table>
                     </div>
-                </div>
 
-                <!-- Listado de Usuarios -->
-                <div class="card-gavac p-0 overflow-hidden">
-                    <div class="bg-slate-50 p-6 border-b border-slate-100">
-                        <h3 class="font-extrabold">Gestión de Usuarios y Permisos</h3>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="text-xs uppercase font-bold text-slate-400 bg-slate-50/50">
+                    <!-- Users List -->
+                    <div class="card-gavac p-0 overflow-hidden">
+                        <div class="p-8 border-b border-slate-50 bg-slate-50/30 flex justify-between items-center">
+                            <h3 class="font-black text-gavac-primary tracking-tight">Usuarios y Permisos</h3>
+                            <i data-lucide="users" class="w-5 h-5 text-slate-300"></i>
+                        </div>
+                        <table class="table-gavac">
+                            <thead>
                                 <tr>
-                                    <th class="px-6 py-4">Email / Rol</th>
-                                    <th class="px-6 py-4">Permisos Módulos (Bloqueo)</th>
-                                    <th class="px-6 py-4 text-right">Acción</th>
+                                    <th>Email / Rol Org.</th>
+                                    <th>Fincas Asignadas</th>
+                                    <th class="text-right">Acción</th>
                                 </tr>
                             </thead>
-                            <tbody id="usuarios-table-body" class="text-sm">
+                            <tbody id="usuarios-table-body">
                                 <!-- JS -->
                             </tbody>
                         </table>
@@ -117,124 +160,179 @@
         </main>
     </div>
 
+    <!-- Modals (Standardized) -->
     <!-- Modal Finca -->
-    <div id="finca-modal" class="hidden fixed inset-0 bg-gavac-primary/20 backdrop-blur-md flex items-center justify-center z-50 p-6">
-        <div class="bg-white rounded-[3rem] w-full max-w-lg p-12 shadow-2xl border border-slate-100">
-            <h2 class="text-3xl font-bold mb-8 text-gavac-primary">Nueva Finca</h2>
-            <form id="finca-form" class="space-y-6">
-                <div class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Nombre de la Finca</label>
-                    <input name="nombre" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+    <div id="finca-modal" class="hidden fixed inset-0 bg-gavac-primary/40 backdrop-blur-sm flex items-center justify-center z-[100] p-6">
+        <div class="bg-white rounded-[3.5rem] w-full max-w-lg p-12 shadow-2xl border border-white">
+            <h2 class="text-4xl font-black text-gavac-primary mb-8 tracking-tighter">Nueva Finca</h2>
+            <form id="finca-form" class="space-y-8">
+                <div class="space-y-1.5">
+                    <label class="label-gavac">Nombre de la Finca</label>
+                    <input name="nombre" required class="input-gavac" placeholder="Ej: Finca San José">
                 </div>
-                <div class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Ubicación</label>
-                    <input name="ubicacion" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+                <div class="space-y-1.5">
+                    <label class="label-gavac">Ubicación / Región</label>
+                    <input name="ubicacion" class="input-gavac" placeholder="Ej: Antioquia, CO">
                 </div>
-                <div class="flex gap-6 pt-4">
-                    <button type="button" id="close-finca-modal" class="flex-1 border-2 border-slate-100 py-4 rounded-xl font-bold text-slate-400">Cancelar</button>
-                    <button type="submit" class="flex-1 bg-gavac-primary text-white py-4 rounded-xl font-bold">Guardar</button>
+                <div class="flex gap-4 pt-4">
+                    <button type="button" id="close-finca-modal" class="flex-1 btn-gavac-ghost">Cancelar</button>
+                    <button type="submit" class="flex-1 btn-gavac-primary">Guardar Finca</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Usuario -->
+    <div id="user-modal" class="hidden fixed inset-0 bg-gavac-primary/40 backdrop-blur-sm flex items-center justify-center z-[100] p-6">
+        <div class="bg-white rounded-[3.5rem] w-full max-w-lg p-12 shadow-2xl border border-white">
+            <h2 id="user-modal-title" class="text-4xl font-black text-gavac-primary mb-8 tracking-tighter">Nuevo Usuario</h2>
+            <form id="user-form" class="space-y-8">
+                <input type="hidden" name="id" id="edit-user-id">
+                <div class="space-y-1.5">
+                    <label class="label-gavac">Correo Electrónico</label>
+                    <input name="email" id="user-email" type="email" required class="input-gavac" placeholder="usuario@gavac.pro">
+                </div>
+                <div id="password-field" class="space-y-1.5">
+                    <label class="label-gavac">Contraseña Temporal</label>
+                    <input name="password" id="user-password" type="password" class="input-gavac" placeholder="••••••••">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="label-gavac">Rol en la Organización</label>
+                    <select name="rol" id="user-rol" class="input-gavac !py-4">
+                        <option value="operario">Operario de Campo</option>
+                        <option value="veterinario">Veterinario Externo</option>
+                        <option value="mayordomo">Mayordomo / Encargado</option>
+                        <option value="admin">Administrador General</option>
+                    </select>
+                </div>
+                <div class="flex gap-4 pt-4">
+                    <button type="button" id="close-user-modal" class="flex-1 btn-gavac-ghost">Cancelar</button>
+                    <button type="submit" class="flex-1 btn-gavac-primary !bg-emerald-600 hover:!bg-emerald-700">Crear Acceso</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Modal Asignación -->
-    <div id="assign-modal" class="hidden fixed inset-0 bg-gavac-primary/20 backdrop-blur-md flex items-center justify-center z-50 p-6">
-        <div class="bg-white rounded-[3rem] w-full max-w-lg p-12 shadow-2xl border border-slate-100">
-            <h2 class="text-3xl font-bold mb-8 text-gavac-primary">Asignar a Finca</h2>
-            <form id="assign-form" class="space-y-6">
-                <div class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Seleccionar Usuario</label>
-                    <select id="assign-user-select" name="usuario_id" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none"></select>
+    <div id="assign-modal" class="hidden fixed inset-0 bg-gavac-primary/40 backdrop-blur-sm flex items-center justify-center z-[100] p-6">
+        <div class="bg-white rounded-[3.5rem] w-full max-w-lg p-12 shadow-2xl border border-white">
+            <h2 class="text-4xl font-black text-gavac-primary mb-8 tracking-tighter">Asignar a Finca</h2>
+            <form id="assign-form" class="space-y-8">
+                <div class="space-y-1.5">
+                    <label class="label-gavac">Usuario a Vincular</label>
+                    <select id="assign-user-select" name="usuario_id" class="input-gavac !py-4" required>
+                        <option value="" disabled selected>Seleccione un usuario...</option>
+                    </select>
                 </div>
-                <div class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Seleccionar Finca</label>
-                    <select id="assign-finca-select" name="finca_id" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none"></select>
+                <div class="space-y-1.5">
+                    <label class="label-gavac">Finca Destino</label>
+                    <select id="assign-finca-select" name="finca_id" class="input-gavac !py-4" required>
+                        <option value="" disabled selected>Seleccione una finca...</option>
+                    </select>
                 </div>
-                <div class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Asignar Rol en esta Finca</label>
-                    <select name="rol" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none">
+                <div class="space-y-1.5">
+                    <label class="label-gavac">Rol en esta Finca</label>
+                    <select name="rol" class="input-gavac !py-4">
                         <option value="operario">Operario</option>
                         <option value="veterinario">Veterinario</option>
                         <option value="mayordomo">Mayordomo</option>
-                        <option value="ganadero">Ganadero</option>
-                        <option value="admin">Administrador</option>
+                        <option value="admin">Administrador Local</option>
                     </select>
                 </div>
-                <div class="flex gap-6 pt-4">
-                    <button type="button" id="close-assign-modal" class="flex-1 border-2 border-slate-100 py-4 rounded-xl font-bold text-slate-400">Cancelar</button>
-                    <button type="submit" class="flex-1 bg-gavac-primary text-white py-4 rounded-xl font-bold">Vincular</button>
+                <div class="flex gap-4 pt-4">
+                    <button type="button" id="close-assign-modal" class="flex-1 btn-gavac-ghost">Cancelar</button>
+                    <button type="submit" class="flex-1 btn-gavac-primary">Confirmar Vínculo</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal Usuario (Crear/Editar) -->
-    <div id="user-modal" class="hidden fixed inset-0 bg-gavac-primary/20 backdrop-blur-md flex items-center justify-center z-50 p-6">
-        <div class="bg-white rounded-[3rem] w-full max-w-lg p-12 shadow-2xl border border-slate-100">
-            <h2 id="user-modal-title" class="text-3xl font-bold mb-8 text-gavac-primary">Nuevo Usuario</h2>
-            <form id="user-form" class="space-y-6">
-                <input type="hidden" name="id" id="edit-user-id">
-                <div class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Correo Electrónico</label>
-                    <input name="email" id="user-email" type="email" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
-                </div>
-                <div id="password-field" class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Contraseña Inicial</label>
-                    <input name="password" id="user-password" type="password" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
-                </div>
-                <div class="space-y-2">
-                    <label class="text-sm font-bold text-slate-700 ml-1">Rol / Cargo</label>
-                    <select name="rol" id="user-rol" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none">
-                        <option value="operario">Operario</option>
-                        <option value="veterinario">Veterinario</option>
-                        <option value="mayordomo">Mayordomo</option>
-                        <option value="ganadero">Ganadero</option>
-                        <option value="admin">Administrador</option>
-                    </select>
-                </div>
-                <div class="flex gap-6 pt-4">
-                    <button type="button" id="close-user-modal" class="flex-1 border-2 border-slate-100 py-4 rounded-xl font-bold text-slate-400">Cancelar</button>
-                    <button type="submit" class="flex-1 bg-gavac-primary text-white py-4 rounded-xl font-bold">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script type="module" src="../../../dist/modules/admin/main.js"></script>
+    <script type="module" src="/dist/modules/admin/main.js"></script>
     <script>
-        if (window.lucide) { lucide.createIcons(); }
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) { lucide.createIcons(); }
 
-        const userData = JSON.parse(localStorage.getItem('gavac_usuario') || '{}');
-        const navLinks = document.querySelectorAll('#main-nav .nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const moduleName = link.getAttribute('data-module');
-                if (moduleName === 'inicio' || userData.rol === 'admin') return;
+            const activeFinca = JSON.parse(localStorage.getItem('gavac_active_finca') || '{}');
+            const userData = JSON.parse(localStorage.getItem('gavac_usuario') || '{}');
 
-                if (userData.permisos && userData.permisos[moduleName] === false) {
-                    e.preventDefault();
-                    alert("Este módulo está deshabilitado para tu perfil. Comunícate con el administrador.");
-                }
-            });
+            if (activeFinca.nombre) {
+                // En admin mostramos algo diferente o nada para no confundir
+            }
+
+            const fModal = document.getElementById('finca-modal');
+            const aModal = document.getElementById('assign-modal');
+            const uModal = document.getElementById('user-modal');
+
+            document.getElementById('open-finca-modal').onclick = () => fModal.classList.remove('hidden');
+            document.getElementById('close-finca-modal').onclick = () => fModal.classList.add('hidden');
+            document.getElementById('open-assign-modal').onclick = () => aModal.classList.remove('hidden');
+            document.getElementById('close-assign-modal').onclick = () => aModal.classList.add('hidden');
+            document.getElementById('open-user-modal').onclick = () => {
+                document.getElementById('user-modal-title').textContent = "Nuevo Usuario";
+                document.getElementById('edit-user-id').value = "";
+                document.getElementById('password-field').classList.remove('hidden');
+                document.getElementById('user-form').reset();
+                uModal.classList.remove('hidden');
+            };
+            document.getElementById('close-user-modal').onclick = () => uModal.classList.add('hidden');
         });
+    </script>
+    <script>
+        // Dynamic route adjustment for port 5434 (live-server) vs FastAPI clean routes (port 8000)
+        (function() {
+            const isLiveServer = window.location.port === '5434';
+            const mapToLiveServer = {
+                '/dashboard': '/dashboard.html',
+                '/fincas': '/fincas.html',
+                '/ganado': '/src/modules/ganado/index.html',
+                '/sanidad': '/src/modules/sanidad/index.html',
+                '/reproduccion': '/src/modules/reproduccion/index.html',
+                '/produccion': '/src/modules/produccion/index.html',
+                '/inventario': '/src/modules/inventario/index.html',
+                '/reportes': '/src/modules/reportes/index.html',
+                '/empleados': '/src/modules/empleados/index.html',
+                '/admin': '/src/modules/admin/index.html'
+            };
+            const mapToFastAPI = {
+                'dashboard.html': '/dashboard',
+                '/dashboard.html': '/dashboard',
+                'fincas.html': '/fincas',
+                '/fincas.html': '/fincas',
+                '/src/modules/ganado/index.html': '/ganado',
+                '/src/modules/sanidad/index.html': '/sanidad',
+                '/src/modules/reproduccion/index.html': '/reproduccion',
+                '/src/modules/produccion/index.html': '/produccion',
+                '/src/modules/inventario/index.html': '/inventario',
+                '/src/modules/reportes/index.html': '/reportes',
+                '/src/modules/empleados/index.html': '/empleados',
+                '/src/modules/admin/index.html': '/admin'
+            };
 
-        const fModal = document.getElementById('finca-modal');
-        const aModal = document.getElementById('assign-modal');
-        const uModal = document.getElementById('user-modal');
+            document.addEventListener('DOMContentLoaded', () => {
+                const mapping = isLiveServer ? mapToLiveServer : mapToFastAPI;
+                document.querySelectorAll('aside nav a, a.sidebar-item, a[href]').forEach(a => {
+                    const href = a.getAttribute('href');
+                    if (href && mapping[href]) {
+                        a.setAttribute('href', mapping[href]);
+                    }
+                });
 
-        document.getElementById('open-finca-modal').onclick = () => fModal.classList.remove('hidden');
-        document.getElementById('close-finca-modal').onclick = () => fModal.classList.add('hidden');
-        document.getElementById('open-assign-modal').onclick = () => aModal.classList.remove('hidden');
-        document.getElementById('close-assign-modal').onclick = () => aModal.classList.add('hidden');
-        document.getElementById('open-user-modal').onclick = () => {
-            document.getElementById('user-modal-title').textContent = "Nuevo Usuario";
-            document.getElementById('edit-user-id').value = "";
-            document.getElementById('password-field').classList.remove('hidden');
-            document.getElementById('user-form').reset();
-            uModal.classList.remove('hidden');
-        };
-        document.getElementById('close-user-modal').onclick = () => uModal.classList.add('hidden');
+                document.querySelectorAll('[onclick]').forEach(el => {
+                    let onclick = el.getAttribute('onclick');
+                    if (onclick) {
+                        if (onclick.includes('fincas')) {
+                            const target = isLiveServer ? 'fincas.html' : '/fincas';
+                            onclick = onclick.replace(/['"](\/fincas|fincas\.html)['"]/g, `'${target}'`);
+                        }
+                        if (onclick.includes('dashboard')) {
+                            const target = isLiveServer ? 'dashboard.html' : '/dashboard';
+                            onclick = onclick.replace(/['"](\/dashboard|dashboard\.html)['"]/g, `'${target}'`);
+                        }
+                        el.setAttribute('onclick', onclick);
+                    }
+                });
+            });
+        })();
     </script>
 </body>
 </html>

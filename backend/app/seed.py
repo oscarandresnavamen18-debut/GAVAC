@@ -35,7 +35,7 @@ def seed_data():
 
         # 1. Admin Principal
         admin = Usuario(
-            email="admin@gavac.test",
+            email="admin@gavac.pro",
             password_hash=hash_password("admin123"),
             organizacion_id=org.id,
             rol_organizacion=RolEnum.admin
@@ -43,7 +43,7 @@ def seed_data():
 
         # 2. Veterinario
         vete = Usuario(
-            email="vete@gavac.test",
+            email="vete@gavac.pro",
             password_hash=hash_password("vete123"),
             organizacion_id=org.id,
             rol_organizacion=RolEnum.veterinario
@@ -51,7 +51,7 @@ def seed_data():
 
         # 3. Operario de Campo
         campo = Usuario(
-            email="campo@gavac.test",
+            email="campo@gavac.pro",
             password_hash=hash_password("campo123"),
             organizacion_id=org.id,
             rol_organizacion=RolEnum.operario
@@ -86,9 +86,9 @@ def seed_data():
 
         print("\n✅ ¡SISTEMA LISTO PARA PRUEBAS!")
         print("--------------------------------------")
-        print("USUARIO 1: admin@gavac.test / admin123")
-        print("USUARIO 2: vete@gavac.test / vete123")
-        print("USUARIO 3: campo@gavac.test / campo123")
+        print("USUARIO 1: admin@gavac.pro / admin123")
+        print("USUARIO 2: vete@gavac.pro / vete123")
+        print("USUARIO 3: campo@gavac.pro / campo123")
         print("--------------------------------------")
 
     except Exception as e:

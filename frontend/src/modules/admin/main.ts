@@ -16,11 +16,13 @@ async function cargarDatos() {
         // Render Fincas
         if (fincasTable) {
             fincasTable.innerHTML = fincas.map((f: any) => `
-                <tr class="border-b border-slate-50">
-                    <td class="px-6 py-4 font-bold">${f.nombre}</td>
-                    <td class="px-6 py-4 text-slate-500">${f.ubicacion ?? "—"}</td>
-                    <td class="px-6 py-4 text-right">
-                        <button class="text-gavac-primary font-bold text-xs uppercase hover:underline">Gestionar</button>
+                <tr>
+                    <td class="font-black text-gavac-primary tracking-tight">${f.nombre}</td>
+                    <td class="text-slate-500 font-medium">${f.ubicacion ?? "—"}</td>
+                    <td class="text-right">
+                        <button class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-gavac-primary hover:text-white transition-all shadow-sm">
+                            <i data-lucide="edit-3" class="w-4 h-4"></i>
+                        </button>
                     </td>
                 </tr>
             `).join("");
@@ -32,26 +34,26 @@ async function cargarDatos() {
                 const roles = u.finca_roles || [];
 
                 return `
-                <tr class="border-b border-slate-50">
-                    <td class="px-6 py-4">
-                        <p class="font-bold">${u.email}</p>
-                        <span class="text-[10px] font-black uppercase text-slate-400">Rol Base: ${u.rol_organizacion}</span>
+                <tr>
+                    <td>
+                        <p class="font-black text-gavac-primary tracking-tighter text-sm">${u.email}</p>
+                        <span class="text-[9px] font-black uppercase text-emerald-600 tracking-widest">${u.rol_organizacion}</span>
                     </td>
-                    <td class="px-6 py-4">
+                    <td>
                         <div class="flex flex-wrap gap-2">
                             ${roles.length > 0 ? roles.map((r: any) => `
-                                <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-slate-50 text-slate-600 border border-slate-100">
-                                    ${r.finca_nombre}: ${r.rol.toUpperCase()}
+                                <span class="badge-gavac badge-gavac-info !text-[8px]">
+                                    ${r.finca_nombre}: ${r.rol}
                                 </span>
-                            `).join("") : '<span class="text-xs text-slate-400 italic">Sin fincas asignadas</span>'}
+                            `).join("") : '<span class="text-[10px] text-slate-300 font-bold uppercase tracking-tighter">Sin accesos</span>'}
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-right">
-                        <div class="flex justify-end gap-3">
-                            <button onclick="window.prepareEditUser(${u.id}, '${u.email}', '${u.rol_organizacion}')" class="text-slate-400 hover:text-gavac-primary">
-                                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                    <td class="text-right">
+                        <div class="flex justify-end gap-2">
+                            <button onclick="window.prepareEditUser(${u.id}, '${u.email}', '${u.rol_organizacion}')" class="w-9 h-9 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 hover:bg-gavac-primary hover:text-white transition-all shadow-sm">
+                                <i data-lucide="user-cog" class="w-4 h-4"></i>
                             </button>
-                            <button onclick="window.deleteUser(${u.id})" class="text-slate-400 hover:text-red-500">
+                            <button onclick="window.deleteUser(${u.id})" class="w-9 h-9 bg-red-50 rounded-lg flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-sm">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i>
                             </button>
                         </div>
@@ -62,10 +64,20 @@ async function cargarDatos() {
 
         // Populate Selects
         if (userSelect) {
-            userSelect.innerHTML = usuarios.map((u: any) => `<option value="${u.id}">${u.email}</option>`).join("");
+            if (usuarios.length === 0) {
+                userSelect.innerHTML = `<option value="" disabled selected>No hay usuarios registrados</option>`;
+            } else {
+                userSelect.innerHTML = `<option value="" disabled selected>Seleccione un usuario...</option>` +
+                    usuarios.map((u: any) => `<option value="${u.id}">${u.email} (${u.rol_organizacion})</option>`).join("");
+            }
         }
         if (fincaSelect) {
-            fincaSelect.innerHTML = fincas.map((f: any) => `<option value="${f.id}">${f.nombre}</option>`).join("");
+            if (fincas.length === 0) {
+                fincaSelect.innerHTML = `<option value="" disabled selected>No hay fincas registradas</option>`;
+            } else {
+                fincaSelect.innerHTML = `<option value="" disabled selected>Seleccione una finca...</option>` +
+                    fincas.map((f: any) => `<option value="${f.id}">${f.nombre}</option>`).join("");
+            }
         }
 
         // @ts-ignore
@@ -155,5 +167,10 @@ window.deleteUser = async (id: number) => {
         }
     }
 };
+
+document.getElementById('logoutBtn')?.addEventListener('click', () => {
+    localStorage.clear();
+    window.location.href = "/";
+});
 
 cargarDatos();

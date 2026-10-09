@@ -2,40 +2,8 @@
 import { listarAnimales, registrarAnimal, eliminarAnimal, Animal, Filtros } from "./api.js";
 
 const form = document.getElementById("animal-form") as HTMLFormElement;
-<<<<<<< HEAD
 const tableBody = document.getElementById("animal-table-body") as HTMLTableSectionElement;
 const searchInput = document.getElementById("search-input") as HTMLInputElement;
-=======
-const tagInput = document.getElementById("tag") as HTMLInputElement;
-const formError = document.getElementById("form-error") as HTMLParagraphElement;
-const tableBody = document.getElementById("animal-table-body") as HTMLTableSectionElement;
-const emptyState = document.getElementById("empty-state") as HTMLDivElement;
-
-const filterTagInput = document.getElementById("filter-tag") as HTMLInputElement;
-const filterBreedInput = document.getElementById("filter-breed") as HTMLInputElement;
-const filterBtn = document.getElementById("filter-btn") as HTMLButtonElement;
-const clearFilterBtn = document.getElementById("clear-filter-btn") as HTMLButtonElement;
-
-const statusDot = document.getElementById("api-status-dot") as HTMLSpanElement;
-const statusText = document.getElementById("api-status-text") as HTMLSpanElement;
-
-tagInput.addEventListener("input", () => {
-  tagInput.value = tagInput.value.toUpperCase().replace(/[^A-Z0-9-]/g, "");
-});
-
-async function actualizarEstadoApi(): Promise<void> {
-  try {
-    const health = await checkApiHealth();
-    statusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
-    statusText.textContent = "ONLINE";
-    statusText.style.color = "#10b981";
-  } catch (err) {
-    statusDot.className = "w-2 h-2 rounded-full bg-red-500";
-    statusText.textContent = "OFFLINE";
-    statusText.style.color = "#ef4444";
-  }
-}
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
 
 function renderAnimales(animales: Animal[]): void {
   tableBody.innerHTML = "";
@@ -43,23 +11,28 @@ function renderAnimales(animales: Animal[]): void {
   for (const animal of animales) {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><span class="font-bold text-gavac-primary">${animal.tag}</span></td>
-      <td><span class="font-medium text-slate-600">${animal.nombre ?? "—"}</span></td>
-      <td><span class="text-slate-500">${animal.raza ?? "—"}</span></td>
-      <td><span class="text-slate-500 capitalize">${animal.sexo ?? "—"}</span></td>
+      <td class="font-black text-gavac-primary tracking-tight">${animal.tag}</td>
+      <td class="font-bold text-slate-600">${animal.nombre ?? "—"}</td>
+      <td class="text-slate-500 font-medium">${animal.raza ?? "—"}</td>
+      <td class="text-slate-500 capitalize font-medium">${animal.sexo ?? "—"}</td>
       <td>
-        <span class="badge ${animal.status === 'active' ? 'badge-active' : 'badge-alert'}">
+        <div class="flex items-center gap-2">
+            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+            <span class="text-xs font-black text-slate-400 uppercase tracking-widest">${animal.lote ?? "Sin Lote"}</span>
+        </div>
+      </td>
+      <td>
+        <span class="badge-gavac ${animal.status === 'active' ? 'badge-gavac-success' : 'badge-gavac-warning'}">
           ${animal.status === 'active' ? 'Activo' : animal.status}
         </span>
       </td>
-      <td><span class="text-slate-500 font-medium">${animal.lote ?? "—"}</span></td>
-      <td>
-        <div class="flex gap-2">
-            <button class="p-2 hover:bg-slate-100 rounded-lg transition-colors">
-                <i data-lucide="edit-2" class="w-4 h-4 text-slate-400"></i>
+      <td class="text-right">
+        <div class="flex justify-end gap-3">
+            <button class="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 hover:bg-gavac-primary hover:text-white transition-all shadow-sm">
+                <i data-lucide="eye" class="w-4 h-4"></i>
             </button>
-            <button data-id="${animal.id}" class="delete-btn p-2 hover:bg-red-50 rounded-lg transition-colors">
-                <i data-lucide="trash-2" class="w-4 h-4 text-red-400"></i>
+            <button data-id="${animal.id}" class="delete-btn w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
             </button>
         </div>
       </td>
@@ -127,9 +100,8 @@ form?.addEventListener("submit", async (event) => {
 
 // Botón de salir
 document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    localStorage.removeItem("gavac_token");
-    localStorage.removeItem("gavac_usuario");
-    window.location.href = "/login.html";
+    localStorage.clear();
+    window.location.href = "/";
 });
 
 // Carga inicial

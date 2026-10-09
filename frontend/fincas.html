@@ -7,23 +7,35 @@
     <link rel="stylesheet" href="dist/output.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        .finca-card:hover { transform: translateY(-8px); border-color: #1A3A32; background: white; }
-    </style>
 </head>
-<body class="bg-gavac-bg font-jakarta antialiased min-h-screen flex items-center justify-center p-6">
-    <div class="max-w-4xl w-full">
-        <header class="text-center mb-16">
-            <h1 class="text-6xl font-extrabold tracking-tighter text-gavac-primary mb-4">GAVAC</h1>
-            <p class="text-xl text-slate-500 font-medium">Selecciona el contexto de trabajo para hoy</p>
+<body class="bg-gavac-bg font-jakarta antialiased min-h-screen flex flex-col justify-center items-center p-8 relative overflow-hidden">
+    <!-- Background Decor -->
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 via-gavac-primary to-emerald-900"></div>
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-gavac-primary/5 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl"></div>
+
+    <div class="max-w-6xl w-full relative z-10">
+        <header class="text-center mb-16 space-y-4">
+            <div class="flex items-center justify-center gap-2 mb-8">
+                <div class="w-10 h-10 bg-gavac-primary rounded-xl flex items-center justify-center">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                </div>
+                <span class="text-3xl font-black text-gavac-primary tracking-tighter">GAVAC</span>
+            </div>
+            <h1 class="text-5xl font-black text-gavac-primary tracking-tight">Hola, <span id="user-display-name" class="text-emerald-600">Usuario</span></h1>
+            <p class="text-xl text-slate-500 font-medium">Selecciona la finca para gestionar hoy</p>
         </header>
 
         <div id="fincas-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Cargando... -->
         </div>
 
-        <div class="mt-16 text-center">
-            <button id="logoutBtn" class="text-slate-400 font-bold hover:text-red-500 transition-colors uppercase tracking-widest text-sm">Cerrar sesión</button>
+        <div class="mt-20 flex flex-col items-center gap-6">
+            <p class="text-sm font-bold text-slate-400 uppercase tracking-[0.2em]">¿No ves tu finca?</p>
+            <div class="flex gap-4">
+                <button class="btn-gavac-outline !px-8">Solicitar Acceso</button>
+                <button id="logoutBtn" class="btn-gavac-ghost !text-red-500 hover:!bg-red-50">Cerrar Sesión</button>
+            </div>
         </div>
     </div>
 
@@ -33,36 +45,78 @@
             const fincas = userData.fincas_autorizadas || [];
             const grid = document.getElementById('fincas-grid');
 
+            const userShort = userData.email ? userData.email.split('@')[0] : 'Usuario';
+            document.getElementById('user-display-name').textContent = userShort.charAt(0).toUpperCase() + userShort.slice(1);
+
             if (fincas.length === 0) {
                 grid.innerHTML = `
                     <div class="col-span-full text-center p-20 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
-                        <p class="text-slate-400 italic font-medium">No tienes fincas asignadas. Contacta con tu administrador.</p>
+                        <i data-lucide="map-pinned" class="w-16 h-16 text-slate-200 mx-auto mb-6"></i>
+                        <p class="text-slate-400 italic font-medium text-lg">No tienes fincas asignadas actualmente.<br>Contacta con el administrador de tu organización.</p>
                     </div>
                 `;
             } else {
                 grid.innerHTML = fincas.map(f => `
                     <div onclick="selectFinca(${f.id}, '${f.nombre}', '${f.rol}')"
-                         class="finca-card p-10 rounded-[3rem] border-2 border-slate-100 bg-slate-50/50 cursor-pointer transition-all shadow-sm">
-                        <div class="w-16 h-16 bg-gavac-primary rounded-2xl flex items-center justify-center mb-6 text-white">
-                            <i data-lucide="map-pin" class="w-8 h-8"></i>
+                         class="card-gavac card-gavac-hover group cursor-pointer border-2 hover:border-gavac-primary/20">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="w-16 h-16 bg-slate-50 group-hover:bg-gavac-primary rounded-2xl flex items-center justify-center transition-colors duration-300">
+                                <i data-lucide="map-pin" class="w-8 h-8 text-gavac-primary group-hover:text-white"></i>
+                            </div>
+                            <span class="badge-gavac badge-gavac-info">${f.rol}</span>
                         </div>
-                        <h3 class="text-2xl font-bold text-gavac-primary mb-2">${f.nombre}</h3>
-                        <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-400">${f.rol}</p>
+                        <h3 class="text-2xl font-black text-gavac-primary mb-2 group-hover:text-emerald-700 transition-colors">${f.nombre}</h3>
+                        <p class="text-slate-400 font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                             <i data-lucide="layout-grid" class="w-4 h-4"></i>
+                             Contexto Activo
+                        </p>
+
+                        <div class="mt-8 pt-8 border-t border-slate-50 flex items-center justify-between">
+                            <span class="text-sm font-black text-gavac-primary group-hover:translate-x-1 transition-transform inline-flex items-center gap-2">
+                                Ingresar ahora <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </span>
+                        </div>
                     </div>
                 `).join('');
-                if (window.lucide) lucide.createIcons();
             }
+            if (window.lucide) lucide.createIcons();
 
             window.selectFinca = (id, nombre, rol) => {
                 localStorage.setItem('gavac_active_finca', JSON.stringify({ id, nombre, rol }));
-                window.location.href = 'dashboard.html';
+                window.location.href = window.location.port === '5434' ? 'dashboard.html' : '/dashboard';
             };
 
             document.getElementById('logoutBtn').onclick = () => {
                 localStorage.clear();
-                window.location.href = 'login.html';
+                window.location.href = window.location.port === '5434' ? '/index.html' : '/';
             };
         });
+    </script>
+    <script>
+        // Dynamic route adjustment for port 5434 (live-server) vs FastAPI clean routes (port 8000)
+        (function() {
+            const isLiveServer = window.location.port === '5434';
+            const mapToLiveServer = {
+                '/dashboard': '/dashboard.html',
+                '/fincas': '/fincas.html'
+            };
+            const mapToFastAPI = {
+                'dashboard.html': '/dashboard',
+                '/dashboard.html': '/dashboard',
+                'fincas.html': '/fincas',
+                '/fincas.html': '/fincas'
+            };
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const mapping = isLiveServer ? mapToLiveServer : mapToFastAPI;
+                document.querySelectorAll('a[href]').forEach(a => {
+                    const href = a.getAttribute('href');
+                    if (href && mapping[href]) {
+                        a.setAttribute('href', mapping[href]);
+                    }
+                });
+            });
+        })();
     </script>
 </body>
 </html>

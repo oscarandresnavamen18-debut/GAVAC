@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.modules.auth.service import get_usuario_actual, requerir_rol_organizacion, hash_password
+from app.modules.auth.service import get_usuario_actual, requerir_admin_org_o_finca, hash_password
 from app.modules.auth.audit_service import registrar_accion
 from app.modules.auth.models import Finca, Usuario, UsuarioFincaRol
 from .schemas import FincaCreate, FincaOut, UsuarioFincaAssignment, UsuarioCreateAdmin, UsuarioUpdateAdmin
@@ -15,7 +15,7 @@ router = APIRouter(prefix="/api/admin", tags=["Administración"])
 def crear_finca(
     data: FincaCreate,
     db: Session = Depends(get_db),
-    admin = Depends(requerir_rol_organizacion("admin", "ganadero"))
+    admin = Depends(requerir_admin_org_o_finca())
 ):
     db_finca = Finca(**data.model_dump(), organizacion_id=admin.organizacion_id)
     db.add(db_finca)
@@ -27,7 +27,7 @@ def crear_finca(
 @router.get("/fincas/", response_model=List[FincaOut])
 def listar_fincas(
     db: Session = Depends(get_db),
-    admin = Depends(requerir_rol_organizacion("admin", "ganadero"))
+    admin = Depends(requerir_admin_org_o_finca())
 ):
     return db.query(Finca).filter(Finca.organizacion_id == admin.organizacion_id).all()
 
@@ -37,7 +37,7 @@ def listar_fincas(
 def asignar_rol_finca(
     data: UsuarioFincaAssignment,
     db: Session = Depends(get_db),
-    admin = Depends(requerir_rol_organizacion("admin"))
+    admin = Depends(requerir_admin_org_o_finca())
 ):
     usuario = db.query(Usuario).filter(Usuario.id == data.usuario_id, Usuario.organizacion_id == admin.organizacion_id).first()
     finca = db.query(Finca).filter(Finca.id == data.finca_id, Finca.organizacion_id == admin.organizacion_id).first()
@@ -70,7 +70,7 @@ def asignar_rol_finca(
 @router.get("/usuarios/", response_model=List[dict])
 def listar_usuarios(
     db: Session = Depends(get_db),
-    admin = Depends(requerir_rol_organizacion("admin"))
+    admin = Depends(requerir_admin_org_o_finca())
 ):
     usuarios = db.query(Usuario).filter(Usuario.organizacion_id == admin.organizacion_id).all()
     resultado = []
@@ -96,7 +96,7 @@ def listar_usuarios(
 def crear_usuario_admin(
     data: UsuarioCreateAdmin,
     db: Session = Depends(get_db),
-    admin = Depends(requerir_rol_organizacion("admin"))
+    admin = Depends(requerir_admin_org_o_finca())
 ):
     existente = db.query(Usuario).filter(Usuario.email == data.email).first()
     if existente:
@@ -121,7 +121,7 @@ def actualizar_usuario_admin(
     usuario_id: int,
     data: UsuarioUpdateAdmin,
     db: Session = Depends(get_db),
-    admin = Depends(requerir_rol_organizacion("admin"))
+    admin = Depends(requerir_admin_org_o_finca())
 ):
     usuario = db.query(Usuario).filter(Usuario.id == usuario_id, Usuario.organizacion_id == admin.organizacion_id).first()
     if not usuario:
@@ -140,7 +140,7 @@ def actualizar_usuario_admin(
 def eliminar_usuario_admin(
     usuario_id: int,
     db: Session = Depends(get_db),
-    admin = Depends(requerir_rol_organizacion("admin"))
+    admin = Depends(requerir_admin_org_o_finca())
 ):
     if admin.id == usuario_id:
         raise HTTPException(status_code=400, detail="No puedes eliminarte a ti mismo")

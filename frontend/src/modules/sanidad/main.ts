@@ -9,20 +9,27 @@ function renderSanidad(registros: Sanidad[]): void {
     for (const reg of registros) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><span class="text-slate-500 font-medium">${reg.fecha_aplicacion ?? "—"}</span></td>
-            <td><span class="font-bold text-gavac-primary">AN-${reg.animal_id}</span></td>
+            <td class="font-bold text-slate-400 text-xs">${reg.fecha_aplicacion ?? "—"}</td>
+            <td class="font-black text-gavac-primary tracking-tight">AN-${reg.animal_id}</td>
             <td>
                 <div class="flex flex-col">
                     <span class="font-bold text-slate-700">${reg.producto}</span>
-                    <span class="text-xs text-slate-400">${reg.tipo}</span>
+                    <span class="text-[10px] font-black text-slate-300 uppercase tracking-tighter">${reg.tipo}</span>
                 </div>
             </td>
-            <td><span class="text-slate-500 font-medium">${reg.dosis ?? "—"}</span></td>
-            <td><span class="text-slate-500 font-medium">${reg.proxima_fecha ?? "—"}</span></td>
+            <td class="font-medium text-slate-500">${reg.dosis ?? "—"}</td>
+            <td class="text-xs font-bold ${reg.proxima_fecha ? 'text-amber-600' : 'text-slate-300'}">
+                ${reg.proxima_fecha ?? "No programada"}
+            </td>
             <td>
-                <span class="badge ${reg.estado === 'Completada' ? 'badge-done' : 'badge-pending'}">
+                <span class="badge-gavac ${reg.estado === 'Completada' ? 'badge-gavac-success' : 'badge-gavac-warning'}">
                     ${reg.estado}
                 </span>
+            </td>
+            <td class="text-right">
+                <button class="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-slate-300 hover:text-gavac-primary transition-all">
+                    <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                </button>
             </td>
         `;
         tableBody.appendChild(tr);
@@ -64,9 +71,8 @@ form?.addEventListener("submit", async (e) => {
 });
 
 document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    localStorage.removeItem("gavac_token");
-    localStorage.removeItem("gavac_usuario");
-    window.location.href = "/login.html";
+    localStorage.clear();
+    window.location.href = "/";
 });
 
 cargarSanidad();

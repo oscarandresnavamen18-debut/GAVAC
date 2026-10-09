@@ -27,7 +27,7 @@ class FincaBreve(BaseModel):
     rol: RolEnum
 
 class UsuarioBase(BaseModel):
-    email: EmailStr
+    email: str
 
 class UsuarioCreate(UsuarioBase):
     password: str
@@ -35,7 +35,7 @@ class UsuarioCreate(UsuarioBase):
     nombre_organizacion: Optional[str] = None # Para crear una nueva org al registrarse
 
 class UsuarioLogin(BaseModel):
-    email: str # Simplificado de EmailStr para depuración
+    email: str
     password: str
 
 class UsuarioOut(UsuarioBase):

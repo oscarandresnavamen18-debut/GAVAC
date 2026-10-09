@@ -10,46 +10,93 @@
   }
 
   /* Custom Scrollbar */
-  ::-webkit-scrollbar {
+  .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
-  ::-webkit-scrollbar-track {
+  .custom-scrollbar::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
-  ::-webkit-scrollbar-thumb {
+  .custom-scrollbar::-webkit-scrollbar-thumb {
     @apply bg-slate-200 rounded-full;
   }
-  ::-webkit-scrollbar-thumb:hover {
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     @apply bg-slate-300;
   }
 }
 
 @layer components {
-  .btn-primary {
-    @apply bg-gavac-primary text-white font-bold py-3 px-6 rounded-xl hover:bg-gavac-accent transition-all shadow-lg shadow-gavac-primary/10 active:scale-95;
+  /* BOTONES PROFESIONALES */
+  .btn-gavac {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-extrabold text-sm tracking-tight transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-gavac-primary {
+    @apply btn-gavac bg-gavac-primary text-white shadow-xl shadow-gavac-primary/20 hover:bg-gavac-accent hover:-translate-y-0.5;
+  }
+  .btn-gavac-outline {
+    @apply btn-gavac border-2 border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300;
+  }
+  .btn-gavac-ghost {
+    @apply btn-gavac text-slate-500 hover:bg-slate-100 hover:text-gavac-primary;
   }
 
-  .field-input {
-    @apply w-full border border-slate-200 rounded-xl px-4 py-3 bg-white focus:ring-4 focus:ring-gavac-primary/5 outline-none transition-all placeholder:text-slate-400;
+  /* INPUTS DE ALTA PRECISIÓN */
+  .input-gavac {
+    @apply w-full bg-slate-50 border border-slate-200 rounded-2xl p-5 outline-none font-medium text-slate-900 transition-all duration-300 placeholder:text-slate-400 focus:bg-white focus:ring-4 focus:ring-gavac-primary/5 focus:border-gavac-primary/20;
+  }
+  .label-gavac {
+    @apply block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1;
   }
 
+  /* TARJETAS PREMIUM */
   .card-gavac {
-    @apply bg-white rounded-[2rem] p-8 shadow-sm border border-slate-100;
+    @apply bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 transition-all duration-300;
+  }
+  .card-gavac-hover {
+    @apply hover:shadow-2xl hover:shadow-gavac-primary/5 hover:-translate-y-1;
   }
 
-  .nav-item {
-    @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-slate-400 hover:text-white hover:bg-white/5;
+  /* TABLAS DE DATOS */
+  .table-gavac-container {
+    @apply overflow-hidden rounded-[2rem] border border-slate-100 bg-white;
+  }
+  .table-gavac {
+    @apply w-full text-left border-collapse;
+  }
+  .table-gavac th {
+    @apply px-6 py-5 bg-slate-50/50 text-[11px] font-black text-slate-400 uppercase tracking-[0.1em] border-b border-slate-100;
+  }
+  .table-gavac td {
+    @apply px-6 py-5 text-sm font-medium text-slate-600 border-b border-slate-50 transition-colors duration-200;
+  }
+  .table-gavac tr:last-child td {
+    @apply border-b-0;
+  }
+  .table-gavac tr:hover td {
+    @apply bg-slate-50/30;
   }
 
-  .nav-item.active {
-    @apply bg-gavac-accent text-white;
+  /* BADGES Y ESTADOS */
+  .badge-gavac {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border;
   }
+  .badge-gavac-success { @apply bg-emerald-50 text-emerald-600 border-emerald-100; }
+  .badge-gavac-warning { @apply bg-amber-50 text-amber-600 border-amber-100; }
+  .badge-gavac-danger { @apply bg-red-50 text-red-600 border-red-100; }
+  .badge-gavac-info { @apply bg-blue-50 text-blue-600 border-blue-100; }
 
+  /* FEEDBACK VISUAL */
   .msg-error {
-    @apply bg-red-50 text-red-600 border border-red-100;
+    @apply bg-red-50 text-red-700 border border-red-100 p-4 rounded-2xl text-sm font-bold animate-in fade-in slide-in-from-top-2;
+  }
+  .msg-success {
+    @apply bg-emerald-50 text-emerald-800 border border-emerald-100 p-4 rounded-2xl text-sm font-bold animate-in fade-in slide-in-from-top-2;
   }
 
-  .msg-success {
-    @apply bg-emerald-50 text-emerald-700 border border-emerald-100;
+  /* SIDEBAR NAVIGATION */
+  .sidebar-item {
+    @apply flex items-center gap-4 px-6 py-4 rounded-2xl text-white/50 font-bold transition-all duration-300 hover:bg-white/5 hover:text-white;
+  }
+  .sidebar-item.active {
+    @apply bg-white/10 text-white shadow-xl shadow-black/10;
   }
 }

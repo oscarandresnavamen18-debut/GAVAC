@@ -3,124 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC — Excelencia en Gestión Ganadera</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>GAVAC — Gestión Ganadera Inteligente</title>
+    <link rel="stylesheet" href="dist/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root { --p: #1B5E20; --s: #2E7D32; --bg: #F7F4EF; --t: #1A1A14; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--t); line-height: 1.5; }
-        .serif { font-family: 'DM Serif Display', serif; }
-
-        /* Navegación */
-        nav { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(247, 244, 239, 0.9); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .logo { display: flex; align-items: center; gap: 10px; font-size: 24px; font-weight: 900; }
-        .logo-box { width: 40px; height: 40px; background: var(--p); color: white; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
-        .nav-links { display: flex; gap: 30px; list-style: none; }
-        .nav-links a { text-decoration: none; color: var(--t); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-nav { background: var(--t); color: white; padding: 10px 25px; border-radius: 50px; font-size: 11px; font-weight: 900; text-decoration: none; }
-
-        /* Hero */
-        .hero { min-height: 100vh; display: flex; align-items: center; padding: 0 10%; background: linear-gradient(90deg, rgba(247,244,239,1) 40%, rgba(247,244,239,0) 100%), url('https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=2000&auto=format&fit=crop'); background-size: cover; background-position: right; }
-        .hero-content { max-width: 700px; }
-        .hero h1 { font-size: 80px; line-height: 1; color: var(--t); margin-bottom: 20px; }
-        .hero p { font-size: 18px; color: #555; margin-bottom: 30px; max-width: 500px; }
-        .btn-main { background: var(--p); color: white; padding: 20px 45px; border-radius: 15px; font-weight: 900; text-decoration: none; display: inline-block; box-shadow: 0 15px 30px rgba(27,94,32,0.2); transition: 0.3s; }
-        .btn-main:hover { transform: translateY(-5px); background: var(--s); }
-
-        /* Stats */
-        .stats { background: var(--p); color: white; padding: 80px 10%; display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
-        .stat-item h3 { font-size: 60px; margin-bottom: 5px; }
-        .stat-item p { font-size: 12px; font-weight: 700; text-transform: uppercase; opacity: 0.7; letter-spacing: 2px; }
-
-        /* Footer */
-        footer { background: #111; color: white; padding: 100px 10% 50px; }
-        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 50px; margin-bottom: 50px; }
-        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); pt: 30px; display: flex; justify-content: space-between; font-size: 10px; opacity: 0.5; font-weight: 700; }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 50px; }
-            .stats { grid-template-columns: 1fr; gap: 40px; }
-            .nav-links { display: none; }
+        .login-layout { display: grid; grid-template-columns: 1.2fr 1fr; min-height: 100vh; }
+        .hero-side {
+            background: linear-gradient(rgba(26, 58, 50, 0.75), rgba(26, 58, 50, 0.75)),
+                        url('https://images.unsplash.com/photo-1545465241-ac4d5285fb7f?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        @media (max-width: 1024px) {
+            .login-layout { grid-template-columns: 1fr; }
+            .hero-side { display: none; }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
     </style>
 </head>
-<body>
-
-    <nav>
-        <div class="logo">
-            <div class="logo-box">G</div>
-            <span class="serif">GAVAC</span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="#soluciones">Soluciones</a></li>
-            <li><a href="#tecnologia">Tecnología</a></li>
-            <li><a href="#empresa">Empresa</a></li>
-        </ul>
-        <a href="/login" class="btn-nav">LOGIN PRO</a>
-    </nav>
-
-    <header class="hero">
-        <div class="hero-content">
-            <p style="text-transform: uppercase; letter-spacing: 4px; font-weight: 900; color: var(--p); margin-bottom: 15px; font-size: 12px;">Agrotech Solutions 2026</p>
-            <h1 class="serif">Gestión real <br>para gente <em style="color: var(--p);">del campo.</em></h1>
-            <p>La plataforma más robusta de América Latina para el control de inventarios, salud y trazabilidad ganadera.</p>
-            <a href="/login" class="btn-main">EMPEZAR AHORA</a>
-        </div>
-    </header>
-
-    <section class="stats">
-        <div class="stat-item">
-            <h3 class="serif">+2,400</h3>
-            <p>Fincas Activas</p>
-        </div>
-        <div class="stat-item">
-            <h3 class="serif">98%</h3>
-            <p>Satisfacción</p>
-        </div>
-        <div class="stat-item">
-            <h3 class="serif">+120k</h3>
-            <p>Animales</p>
-        </div>
-    </section>
-
-    <section style="padding: 150px 10%; background: white;">
-        <h2 class="serif" style="font-size: 50px; margin-bottom: 50px;">Potencia de clase mundial.</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-            <div style="background: #f9f9f9; padding: 40px; border-radius: 20px;">
-                <span style="font-size: 14px; font-weight: 900; letter-spacing: 2px;">GEN</span>
-                <h4 class="serif" style="font-size: 24px; margin: 20px 0;">Genética Avanzada</h4>
-                <p style="color: #666; font-size: 14px;">Control total de árboles genealógicos y mejora selectiva del hato.</p>
-            </div>
-            <div style="background: #f9f9f9; padding: 40px; border-radius: 20px;">
-                <span style="font-size: 14px; font-weight: 900; letter-spacing: 2px;">SAN</span>
-                <h4 class="serif" style="font-size: 24px; margin: 20px 0;">Sanidad Integral</h4>
-                <p style="color: #666; font-size: 14px;">Alertas de vacunación y trazabilidad médica por animal.</p>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-grid">
+<body class="bg-gavac-bg font-jakarta antialiased overflow-hidden">
+    <div class="login-layout">
+        <!-- Hero Side -->
+        <div class="hero-side flex flex-col justify-between p-16 text-white relative">
             <div>
-                <h2 class="serif" style="font-size: 30px; margin-bottom: 20px;">GAVAC <span style="color: var(--p);">Enterprise</span></h2>
-                <p style="max-width: 300px; font-size: 14px; opacity: 0.6;">Elevando la tecnología del agro colombiano a estándares globales.</p>
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-7 h-7 text-gavac-primary"></i>
+                    </div>
+                    <span class="text-3xl font-black tracking-tighter">GAVAC</span>
+                </div>
+                <h1 class="text-7xl font-extrabold leading-[1.1] mb-6">
+                    Administración <br>
+                    <span class="text-emerald-400">Ganadera</span> <br>
+                    Profesional.
+                </h1>
+                <p class="text-xl font-medium opacity-80 max-w-lg">
+                    Transformamos la gestión del campo colombiano con tecnología de precisión y análisis de datos en tiempo real.
+                </p>
             </div>
-            <div>
-                <h4 style="font-size: 12px; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 2px;">Producto</h4>
-                <p style="font-size: 14px; margin-bottom: 10px; opacity: 0.6;">Consola Admin</p>
-                <p style="font-size: 14px; margin-bottom: 10px; opacity: 0.6;">Analítica</p>
-            </div>
-            <div>
-                <h4 style="font-size: 12px; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 2px;">Legal</h4>
-                <p style="font-size: 14px; margin-bottom: 10px; opacity: 0.6;">Privacidad</p>
-                <p style="font-size: 14px; margin-bottom: 10px; opacity: 0.6;">Términos</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2026 GAVAC ASSET MANAGEMENT. TODOS LOS DERECHOS RESERVADOS.</p>
-            <p>MADE IN COLOMBIA</p>
-        </div>
-    </footer>
 
+            <div class="relative z-10">
+                <div class="flex gap-12">
+                    <div class="space-y-1">
+                        <p class="text-3xl font-extrabold">100%</p>
+                        <p class="text-sm font-bold opacity-60 uppercase tracking-widest">Nube Segura</p>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-3xl font-extrabold">SAAS</p>
+                        <p class="text-sm font-bold opacity-60 uppercase tracking-widest">Multi-finca</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Abstract element -->
+            <div class="absolute right-0 bottom-0 opacity-10 animate-float">
+                <i data-lucide="layout-grid" class="w-[400px] h-[400px]"></i>
+            </div>
+        </div>
+
+        <!-- Form Side -->
+        <div class="bg-white flex flex-col justify-center px-8 lg:px-24 py-12 relative overflow-y-auto">
+            <div class="max-w-md w-full mx-auto">
+                <header class="mb-12">
+                    <div class="lg:hidden flex items-center gap-2 mb-8">
+                        <div class="w-10 h-10 bg-gavac-primary rounded-xl flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                        </div>
+                        <span class="text-2xl font-black text-gavac-primary tracking-tighter">GAVAC</span>
+                    </div>
+                    <h2 id="form-title" class="text-4xl font-extrabold text-gavac-primary mb-3">Bienvenido</h2>
+                    <p id="form-subtitle" class="text-slate-500 font-medium text-lg leading-relaxed">Ingresa al centro de mando ganadero.</p>
+                </header>
+
+                <form id="loginForm" class="space-y-8">
+                    <div class="space-y-6">
+                        <!-- Email -->
+                        <div class="space-y-1.5">
+                            <label class="label-gavac" for="email">Correo Electrónico</label>
+                            <div class="relative group">
+                                <i data-lucide="mail" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-gavac-primary transition-colors"></i>
+                                <input type="email" id="email" required class="input-gavac !pl-14" placeholder="usuario@gavac.pro">
+                            </div>
+                        </div>
+
+                        <!-- Organization (Hidden initially) -->
+                        <div id="roleSelectorContainer" class="hidden space-y-1.5 animate-in fade-in slide-in-from-top-4 duration-300">
+                            <label class="label-gavac" for="org-name-input">Nombre de tu Ganadería</label>
+                            <div class="relative group">
+                                <i data-lucide="building-2" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-gavac-primary transition-colors"></i>
+                                <input type="text" id="org-name-input" class="input-gavac !pl-14" placeholder="Ej: Ganadería El Porvenir">
+                            </div>
+                            <input type="hidden" id="selected-rol-input" value="admin">
+                        </div>
+
+                        <!-- Password -->
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between items-center mb-0.5">
+                                <label class="label-gavac !mb-0" for="password">Contraseña</label>
+                                <button type="button" class="text-[10px] font-black text-gavac-primary/40 uppercase hover:text-gavac-primary transition-colors tracking-tighter">¿Olvidaste tu clave?</button>
+                            </div>
+                            <div class="relative group">
+                                <i data-lucide="lock" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-gavac-primary transition-colors"></i>
+                                <input type="password" id="password" required class="input-gavac !pl-14 !pr-14" placeholder="••••••••">
+                                <button type="button" id="togglePass" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 transition-colors">
+                                    <i data-lucide="eye" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 ml-1">
+                        <input type="checkbox" id="remember" class="w-5 h-5 rounded-lg border-slate-200 text-gavac-primary focus:ring-gavac-primary/10 transition-all cursor-pointer">
+                        <label for="remember" class="text-sm font-bold text-slate-500 cursor-pointer select-none">Mantener sesión iniciada</label>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn-gavac-primary w-full !text-lg !py-5">
+                        <span id="btnText">Acceder al Sistema</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </form>
+
+                <div class="mt-12 text-center">
+                    <p class="text-slate-400 font-medium">
+                        <span id="toggleText">¿Nuevo en GAVAC?</span>
+                        <button id="toggleMode" class="text-gavac-primary font-black ml-1 hover:underline decoration-2 underline-offset-4">Regístrate aquí</button>
+                    </p>
+                </div>
+
+                <div id="loginMessage" class="mt-8 hidden"></div>
+            </div>
+
+            <!-- Footer Small -->
+            <div class="absolute bottom-8 left-0 right-0 text-center">
+                <p class="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">© 2026 GAVAC Colombia — Cloud Enterprise</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="dist/modules/auth/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) { lucide.createIcons(); }
+
+            const passInput = document.getElementById('password');
+            const toggleBtn = document.getElementById('togglePass');
+
+            toggleBtn.addEventListener('click', () => {
+                const isPass = passInput.type === 'password';
+                passInput.type = isPass ? 'text' : 'password';
+                toggleBtn.innerHTML = isPass ? '<i data-lucide="eye-off" class="w-5 h-5"></i>' : '<i data-lucide="eye" class="w-5 h-5"></i>';
+                lucide.createIcons();
+            });
+        });
+    </script>
 </body>
 </html>

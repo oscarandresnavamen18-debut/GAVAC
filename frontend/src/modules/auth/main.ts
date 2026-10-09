@@ -10,11 +10,14 @@ const roleContainer = document.getElementById("roleSelectorContainer") as HTMLDi
 const formTitle = document.getElementById("form-title") as HTMLHeadingElement;
 const formSubtitle = document.getElementById("form-subtitle") as HTMLParagraphElement;
 
+const btnText = document.getElementById("btnText") as HTMLSpanElement;
+const toggleText = document.getElementById("toggleText") as HTMLSpanElement;
+
 let modoRegistro = false;
 
 function mostrarMensaje(texto: string, tipo: "error" | "exito"): void {
     messageBox.textContent = texto;
-    messageBox.className = `block mt-8 p-5 rounded-2xl font-bold text-center text-sm shadow-sm transition-all ${tipo === "error" ? "msg-error" : "msg-success"}`;
+    messageBox.className = `msg-${tipo === "error" ? "error" : "success"} mt-8`;
     messageBox.classList.remove("hidden");
 }
 
@@ -22,10 +25,11 @@ toggleLink.addEventListener("click", (e) => {
     e.preventDefault();
     modoRegistro = !modoRegistro;
 
-    if (formTitle) formTitle.textContent = modoRegistro ? "Crear Perfil" : "Iniciar Sesión";
-    if (formSubtitle) formSubtitle.textContent = modoRegistro ? "Únase a la gestión inteligente del agro." : "Introduce tus credenciales para acceder al centro de mando.";
-    if (submitBtn) submitBtn.textContent = modoRegistro ? "Finalizar Registro" : "Ingresar al Sistema";
-    if (toggleLink) toggleLink.textContent = modoRegistro ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate aquí";
+    if (formTitle) formTitle.textContent = modoRegistro ? "Crear Perfil" : "Bienvenido";
+    if (formSubtitle) formSubtitle.textContent = modoRegistro ? "Únete a la gestión inteligente del agro." : "Ingresa al centro de mando ganadero.";
+    if (btnText) btnText.textContent = modoRegistro ? "Finalizar Registro" : "Acceder al Sistema";
+    if (toggleText) toggleText.textContent = modoRegistro ? "¿Ya tienes cuenta?" : "¿Nuevo en GAVAC?";
+    if (toggleLink) toggleLink.textContent = modoRegistro ? "Inicia sesión" : "Regístrate aquí";
 
     roleContainer?.classList.toggle("hidden", !modoRegistro);
     messageBox?.classList.add("hidden");
@@ -39,7 +43,6 @@ form.addEventListener("submit", async (e) => {
 
     const email = emailInput.value.trim();
     const password = passwordInput.value;
-    const selectedRole = (document.getElementById('selected-rol-input') as HTMLInputElement)?.value || "operario";
 
     if (!email || !password) {
         mostrarMensaje("Por favor, complete todos los campos.", "error");
@@ -49,15 +52,9 @@ form.addEventListener("submit", async (e) => {
 
     try {
         if (modoRegistro) {
-<<<<<<< HEAD
             const nombreOrg = (document.getElementById('org-name-input') as HTMLInputElement)?.value || "";
             await registrar({ email, password, nombre_organizacion: nombreOrg } as any);
             mostrarMensaje("✅ Registro exitoso. Iniciando sesión...", "exito");
-=======
-            console.log("Registrando con rol:", selectedRole);
-            await registrar({ email, password, rol: selectedRole as any });
-            mostrarMensaje("Cuenta creada con éxito. Iniciando sesión...", "exito");
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
         }
 
         const resultado = await login({ email, password });

@@ -9,15 +9,20 @@ function renderReproduccion(registros: Reproduccion[]): void {
     for (const reg of registros) {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><span class="text-slate-500 font-medium">${reg.fecha_evento}</span></td>
-            <td><span class="font-bold text-gavac-primary">AN-${reg.animal_id}</span></td>
-            <td><span class="font-bold text-slate-700">${reg.tipo}</span></td>
+            <td class="font-bold text-slate-400 text-xs">${reg.fecha_evento}</td>
+            <td class="font-black text-gavac-primary tracking-tight">AN-${reg.animal_id}</td>
+            <td class="font-bold text-slate-700">${reg.tipo}</td>
             <td>
-                <span class="badge ${reg.estado === 'Completada' || reg.estado === 'Confirmada' ? 'badge-done' : 'badge-process'}">
+                <span class="badge-gavac ${reg.estado === 'Completada' || reg.estado === 'Confirmada' ? 'badge-gavac-success' : 'badge-gavac-warning'}">
                     ${reg.estado}
                 </span>
             </td>
-            <td><span class="text-slate-500 italic text-sm">${reg.observaciones ?? "—"}</span></td>
+            <td class="text-slate-400 font-medium text-xs">Vet. Responsable</td>
+            <td class="text-right">
+                <button class="w-8 h-8 bg-slate-50 rounded-lg flex items-center justify-center text-slate-300 hover:text-gavac-primary transition-all">
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                </button>
+            </td>
         `;
         tableBody.appendChild(tr);
     }
@@ -57,9 +62,8 @@ form?.addEventListener("submit", async (e) => {
 });
 
 document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    localStorage.removeItem("gavac_token");
-    localStorage.removeItem("gavac_usuario");
-    window.location.href = "/login.html";
+    localStorage.clear();
+    window.location.href = "/";
 });
 
 cargarReproduccion();

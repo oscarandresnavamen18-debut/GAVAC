@@ -3,326 +3,317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC — Animales</title>
+    <title>GAVAC — Inventario Ganado</title>
     <link rel="stylesheet" href="/dist/output.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .app-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
-        .sidebar { background-color: #1A3A32; color: white; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
-        .nav-link {
-            display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px;
-            color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 600; transition: all 0.3s;
-        }
-        .nav-link:hover { color: white; background: rgba(255,255,255,0.05); }
-        .nav-link.active { background: #E8F1EC; color: #1A3A32; }
-
-        .table-gavac { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
-        .table-gavac th { text-align: left; padding: 12px 24px; font-size: 13px; font-weight: 800; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; }
-        .table-gavac td { padding: 20px 24px; background: white; border-top: 1px solid #F1F5F9; border-bottom: 1px solid #F1F5F9; transition: all 0.2s; }
-        .table-gavac tr:hover td { background: #F8FAFC; border-color: #E2E8F0; }
-        .table-gavac td:first-child { border-left: 1px solid #F1F5F9; border-top-left-radius: 20px; border-bottom-left-radius: 20px; }
-        .table-gavac td:last-child { border-right: 1px solid #F1F5F9; border-top-right-radius: 20px; border-bottom-right-radius: 20px; }
-
-        .badge { padding: 6px 14px; border-radius: 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; }
-        .badge-active { background: #ECFDF5; color: #059669; }
-        .badge-alert { background: #FFF7ED; color: #EA580C; }
-
+        .app-container { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
         @media (max-width: 1024px) {
-            .app-layout { grid-template-columns: 80px 1fr; }
-            .sidebar span { display: none; }
-            .sidebar { padding: 20px 10px; align-items: center; }
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
         }
-<<<<<<< HEAD
-=======
-        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.05); color: white; }
-        .nav-item.active { border-left: 4px solid #1B5E20; border-radius: 0 12px 12px 0; }
-
-        /* Main Content */
-        .main-content { margin-left: 280px; flex: 1; padding: 60px 8%; }
-        .page-header { margin-bottom: 48px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .page-header h1 { font-family: 'DM Serif Display', serif; font-size: 48px; line-height: 1; }
-
-        /* Premium Components */
-        .card-panel { background: white; border-radius: 24px; padding: 40px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 18px 45px rgba(27, 94, 32, 0.05); }
-
-        .input-group { margin-bottom: 24px; }
-        .label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #6F6F61; margin-bottom: 8px; }
-        .input {
-            width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid #D8D3C7; background: #F8F9FA;
-            font-size: 14px; transition: 0.3s; outline: none;
-        }
-        .input:focus { border-color: #1B5E20; background: white; box-shadow: 0 0 0 4px rgba(27, 94, 32, 0.08); }
-
-        .btn-green {
-            width: 100%; background: linear-gradient(90deg, #1B5E20 0%, #2E7D32 100%); color: white;
-            padding: 16px; border-radius: 12px; border: none; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(27, 94, 32, 0.2); transition: 0.3s;
-        }
-        .btn-green:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(27, 94, 32, 0.3); }
-
-        /* Table */
-        .table-wrap { overflow-x: auto; border-radius: 20px; border: 1px solid #E2E8F0; background: white; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { background: #FAFBFC; padding: 20px 24px; font-size: 11px; font-weight: 900; text-transform: uppercase; color: #64748B; letter-spacing: 1px; border-bottom: 1px solid #E2E8F0; }
-        td { padding: 18px 24px; border-bottom: 1px solid #F1F5F9; font-size: 14px; }
-        .tr-hover:hover { background: #F8FAFC; }
-
-        .badge { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
-        .badge-active { background: #DCFCE7; color: #15803D; }
-
-        .delete-link { color: #B42318; text-decoration: none; font-weight: 700; cursor: pointer; }
-        .delete-link:hover { text-decoration: underline; }
-
-        @media (max-width: 1024px) {
-            .sidebar { width: 80px; padding: 40px 10px; }
-            .sidebar span { display: none; }
-            .main-content { margin-left: 80px; padding: 40px 5%; }
-            .page-header h1 { font-size: 42px; }
-        }
-        @media (max-width: 720px) {
-            .app-layout { display: block; }
-            .sidebar {
-                width: 100%; height: auto; position: static; padding: 16px;
-                display: block;
-            }
-            .sidebar-logo { margin-bottom: 16px; }
-            .sidebar nav { display: flex; gap: 6px; overflow-x: auto; }
-            .sidebar span { display: inline; }
-            .nav-item { flex: 0 0 auto; padding: 10px 12px; font-size: 11px; }
-            .sidebar > div:last-child { margin-top: 12px; }
-            .main-content { margin-left: 0; padding: 28px 16px 48px; }
-            .page-header { display: block; margin-bottom: 28px; }
-            .page-header > div:last-child { margin-top: 18px; text-align: left !important; }
-            .page-header h1 { font-size: clamp(36px, 12vw, 48px); }
-            .main-content > div { grid-template-columns: 1fr !important; gap: 24px !important; }
-            .card-panel { padding: 24px; border-radius: 18px; }
-            .table-wrap { border-radius: 14px; }
-            table { min-width: 680px; }
-        }
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
     </style>
 </head>
 <body class="bg-gavac-bg font-jakarta antialiased text-gavac-primary">
-    <div class="app-layout">
+    <div class="app-container">
         <!-- Sidebar -->
-        <aside class="sidebar p-8">
-            <div class="flex items-center gap-3 mb-12 px-2">
-                <span class="text-4xl font-extrabold tracking-tighter">GAVAC</span>
+        <aside class="sidebar bg-gavac-primary p-8 flex flex-col h-screen sticky top-0">
+            <div class="flex items-center gap-3 mb-16 px-2">
+                <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                </div>
+                <span class="text-3xl font-black text-white tracking-tighter">GAVAC</span>
             </div>
-<<<<<<< HEAD
-            <nav class="flex-1 space-y-3" id="main-nav">
-                <a href="../../../dashboard.html" class="nav-link" data-module="inicio"><i data-lucide="layout-dashboard" class="w-6 h-6 opacity-70"></i><span>Inicio</span></a>
-                <a href="index.html" class="nav-link active" data-module="animales"><i data-lucide="layout-grid" class="w-6 h-6 opacity-70"></i><span>Animales</span></a>
-                <a href="../sanidad/index.html" class="nav-link" data-module="sanidad"><i data-lucide="shield-plus" class="w-6 h-6 opacity-70"></i><span>Sanidad</span></a>
-                <a href="../reproduccion/index.html" class="nav-link" data-module="reproduccion"><i data-lucide="heart" class="w-6 h-6 opacity-70"></i><span>Reproducción</span></a>
-                <a href="../produccion/index.html" class="nav-link" data-module="produccion"><i data-lucide="droplets" class="w-6 h-6 opacity-70"></i><span>Producción</span></a>
-                <a href="../inventario/index.html" class="nav-link" data-module="inventario"><i data-lucide="package" class="w-6 h-6 opacity-70"></i><span>Inventario</span></a>
-                <a href="../reportes/index.html" class="nav-link" data-module="reportes"><i data-lucide="bar-chart-3" class="w-6 h-6 opacity-70"></i><span>Reportes</span></a>
-                <a href="../admin/index.html" class="nav-link" data-module="admin"><i data-lucide="shield-check" class="w-6 h-6 opacity-70"></i><span>Admin</span></a>
-=======
 
-            <nav style="flex: 1;">
-                <a href="/dashboard" class="nav-item"><span>01</span> <span>Dashboard</span></a>
-                <a href="/ganado" class="nav-item active"><span>02</span> <span>Inventario</span></a>
-                <a href="/reportes" class="nav-item"><span>03</span> <span>Analítica</span></a>
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
+            <nav class="flex-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
+                <div class="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-4 ml-6">Menú Principal</div>
+
+                <a href="/dashboard" class="sidebar-item" data-module="inicio">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Panel de Control</span>
+                </a>
+                <a href="/ganado" class="sidebar-item active" data-module="animales">
+                    <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                    <span>Inventario Ganado</span>
+                </a>
+                <a href="/sanidad" class="sidebar-item" data-module="sanidad">
+                    <i data-lucide="shield-plus" class="w-5 h-5"></i>
+                    <span>Control Sanitario</span>
+                </a>
+                <a href="/reproduccion" class="sidebar-item" data-module="reproduccion">
+                    <i data-lucide="heart" class="w-5 h-5"></i>
+                    <span>Gestión Reproductiva</span>
+                </a>
+                <a href="/produccion" class="sidebar-item" data-module="produccion">
+                    <i data-lucide="droplets" class="w-5 h-5"></i>
+                    <span>Producción</span>
+                </a>
+                <a href="/inventario" class="sidebar-item" data-module="inventario">
+                    <i data-lucide="package" class="w-5 h-5"></i>
+                    <span>Insumos</span>
+                </a>
+                <a href="/reportes" class="sidebar-item" data-module="reportes">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                    <span>Análisis y Reportes</span>
+                </a>
+
+                <div class="pt-8 mt-4 border-t border-white/5">
+                    <div class="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-4 ml-6">Soporte y Admin</div>
+                    <a href="/admin" class="sidebar-item" data-module="admin">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                        <span>Administración</span>
+                    </a>
+                </div>
             </nav>
+
             <div class="mt-auto pt-8 border-t border-white/10">
-                <button id="logoutBtn" class="flex items-center gap-3 w-full py-4 px-6 rounded-2xl bg-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all font-bold text-sm text-white">
-                    <i data-lucide="log-out" class="w-5 h-5 opacity-70"></i>
-                    <span>Cerrar sesión</span>
+                <button id="logoutBtn" class="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 font-black text-xs uppercase tracking-widest group">
+                    <i data-lucide="log-out" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+                    <span>Salir del Sistema</span>
                 </button>
             </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="p-10 lg:p-16">
-            <header class="flex justify-between items-end mb-12">
-                <div>
-                    <h1 class="text-4xl font-extrabold mb-2 text-gavac-primary">Animales</h1>
-                    <p class="text-slate-500 font-medium text-lg">Gestiona el registro y estado de tus animales</p>
+        <!-- Main Content Area -->
+        <main class="flex flex-col h-screen overflow-hidden">
+            <!-- Topbar Professional -->
+            <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 h-24 flex items-center justify-between px-12 z-40">
+                <div class="flex items-center gap-8">
+                    <div onclick="window.location.href='/fincas'" class="group bg-slate-50 border border-slate-200 rounded-2xl px-6 py-3 flex items-center gap-4 cursor-pointer hover:bg-white hover:border-gavac-primary/20 transition-all duration-300 shadow-sm">
+                        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-gavac-primary transition-colors">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-gavac-primary group-hover:text-white"></i>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Trabajando en:</p>
+                            <span id="active-finca-name" class="font-black text-gavac-primary tracking-tight">Cargando...</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-300 group-hover:text-gavac-primary transition-all"></i>
+                    </div>
                 </div>
-                <button id="open-modal-btn" class="bg-gavac-primary text-white px-8 py-4 rounded-2xl font-extrabold flex items-center gap-3 shadow-2xl shadow-gavac-primary/20 hover:bg-gavac-accent hover:-translate-y-1 transition-all active:scale-95">
-                    <span>+ Nuevo animal</span>
-                </button>
+
+                <div class="flex items-center gap-6">
+                    <button id="open-modal-btn" class="btn-gavac-primary !py-3 !px-5">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Nuevo Animal</span>
+                    </button>
+                    <div class="h-8 w-[1px] bg-slate-100 mx-2"></div>
+                    <div class="flex items-center gap-3">
+                         <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center font-black text-white text-xs shadow-sm">
+                            <span id="user-initial">U</span>
+                        </div>
+                    </div>
+                </div>
             </header>
 
-<<<<<<< HEAD
-            <!-- Search & Filters -->
-            <div class="flex gap-6 mb-10">
-                <div class="flex-1 relative">
-                    <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-400"></i>
-                    <input type="text" id="search-input" placeholder="Buscar por chapeta, nombre o lote..." class="w-full bg-white border border-slate-200 rounded-[1.5rem] py-4 pl-14 pr-6 outline-none focus:ring-4 focus:ring-gavac-primary/5 transition-all shadow-sm">
-                </div>
-                <button class="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center shadow-sm hover:bg-slate-50 transition-colors">
-                    <i data-lucide="sliders-horizontal" class="w-6 h-6 text-slate-400"></i>
-                </button>
-            </div>
-=======
-            <div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 40px; align-items: flex-start;">
-                <!-- Registration Form -->
-                <section class="card-panel">
-                    <h3 class="serif" style="font-size: 24px; margin-bottom: 30px;">Nuevo Activo</h3>
-                    <form id="animal-form">
-                        <div class="input-group">
-                            <label class="label">Identificación (Tag)</label>
-                            <input id="tag" name="tag" type="text" required class="input" placeholder="GAV-001"
-                                   pattern="[A-Za-z]{2,10}-[0-9]{1,6}" maxlength="17"
-                                   title="Use entre 2 y 10 letras, un guion y entre 1 y 6 números. Ejemplo: GAV-001"
-                                   style="text-transform: uppercase;">
-                            <small style="display:block; margin-top:6px; color:#6F6F61; font-size:11px;">Formato obligatorio: letras-guion-números (ej. GAV-001).</small>
-                        </div>
-                        <div class="input-group">
-                            <label class="label">Raza Genética</label>
-                            <select id="breed" name="breed" class="input" required style="background: #F8F9FA;">
-                                <option value="">Seleccione una raza</option>
-                                <option value="Angus">Angus</option>
-                                <option value="Brahman">Brahman</option>
-                                <option value="Brangus">Brangus</option>
-                                <option value="Brown Swiss">Brown Swiss</option>
-                                <option value="Cebu">Cebu</option>
-                                <option value="Gyr">Gyr</option>
-                                <option value="Holstein">Holstein</option>
-                                <option value="Jersey">Jersey</option>
-                                <option value="Normando">Normando</option>
-                                <option value="Pardo Suizo">Pardo Suizo</option>
-                                <option value="Simmental">Simmental</option>
-                                <option value="Otra">Otra</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label class="label">Género</label>
-                            <select id="sex" name="sex" class="input" style="background: #F8F9FA;">
-                                <option value="hembra">Hembra</option>
-                                <option value="macho">Macho</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label class="label">Fecha Nacimiento</label>
-                            <input id="birth_date" name="birth_date" type="date" class="input">
-                        </div>
-                        <button type="submit" class="btn-green">Registrar Activo</button>
-                    </form>
-                    <p id="form-error" style="color:#B42318; font-size:12px; margin-top:15px; text-align:center; font-weight:700;"></p>
-                </section>
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-12 custom-scrollbar">
+                <header class="mb-12">
+                    <h1 class="text-4xl font-black text-gavac-primary tracking-tight">Inventario de Ganado</h1>
+                    <p class="text-slate-500 font-medium mt-1 text-lg">Listado oficial y control biológico por lote.</p>
+                </header>
 
-            <!-- Table -->
-            <div class="overflow-x-auto">
-                <table class="table-gavac">
-                    <thead>
-                        <tr>
-                            <th>Chapeta</th>
-                            <th>Nombre</th>
-                            <th>Raza</th>
-                            <th>Sexo</th>
-                            <th>Estado</th>
-                            <th>Lote</th>
-                            <th class="text-right">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="animal-table-body">
-                        <!-- Cargado vía JS -->
-                    </tbody>
-                </table>
-                <div id="empty-state" class="py-32 flex flex-col items-center justify-center text-slate-300">
-                    <i data-lucide="inbox" class="w-20 h-20 mb-4 opacity-20"></i>
-                    <p class="text-xl font-bold italic">No hay animales registrados aún</p>
+                <!-- Search & Filters Bar -->
+                <div class="flex flex-wrap gap-4 mb-10 items-center">
+                    <div class="flex-1 min-w-[300px] relative group">
+                        <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-gavac-primary transition-colors"></i>
+                        <input type="text" id="search-input" placeholder="Buscar por chapeta (tag), nombre o lote..." class="input-gavac !pl-14 !py-4 shadow-sm">
+                    </div>
+
+                    <div class="flex bg-white p-1 rounded-2xl border border-slate-100 shadow-sm">
+                        <button class="px-6 py-3 bg-gavac-primary text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-gavac-primary/20">Todos</button>
+                        <button class="px-6 py-3 text-slate-400 hover:text-gavac-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all">Activos</button>
+                        <button class="px-6 py-3 text-slate-400 hover:text-gavac-primary rounded-xl text-xs font-black uppercase tracking-widest transition-all">Vendidos</button>
+                    </div>
+
+                    <button class="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 hover:bg-slate-50 hover:text-gavac-primary transition-all shadow-sm">
+                        <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Table Professional -->
+                <div class="table-gavac-container shadow-2xl shadow-gavac-primary/5">
+                    <table class="table-gavac">
+                        <thead>
+                            <tr>
+                                <th>Identificación (Tag)</th>
+                                <th>Nombre Ejemplar</th>
+                                <th>Raza Genética</th>
+                                <th>Género</th>
+                                <th>Ubicación (Lote)</th>
+                                <th>Estado</th>
+                                <th class="text-right">Gestión</th>
+                            </tr>
+                        </thead>
+                        <tbody id="animal-table-body">
+                            <!-- JS Load -->
+                        </tbody>
+                    </table>
+
+                    <!-- Empty State -->
+                    <div id="empty-state" class="hidden py-32 flex flex-col items-center justify-center text-slate-200">
+                        <div class="w-24 h-24 bg-slate-50 rounded-[2.5rem] flex items-center justify-center mb-6">
+                            <i data-lucide="inbox" class="w-12 h-12"></i>
+                        </div>
+                        <p class="text-xl font-black text-slate-300 italic tracking-tighter uppercase">Sin animales registrados aún</p>
+                        <button class="mt-6 btn-gavac-outline" onclick="document.getElementById('open-modal-btn').click()">Comenzar Registro</button>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Modal Registro -->
-    <div id="animal-modal" class="hidden fixed inset-0 bg-gavac-primary/20 backdrop-blur-md flex items-center justify-center z-50 p-6">
-        <div class="bg-white rounded-[3rem] w-full max-w-2xl p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.25)] border border-slate-100">
-            <header class="mb-10">
-                <h2 class="text-4xl font-extrabold text-gavac-primary mb-2">Nuevo Activo</h2>
-                <p class="text-slate-500 font-medium">Completa la información para el registro oficial.</p>
+    <!-- Modal Registro Profesional -->
+    <div id="animal-modal" class="hidden fixed inset-0 bg-gavac-primary/40 backdrop-blur-sm flex items-center justify-center z-[100] p-6">
+        <div class="bg-white rounded-[3.5rem] w-full max-w-2xl p-12 shadow-2xl border border-white animate-in slide-in-from-bottom-8 duration-300 overflow-y-auto max-h-[90vh] custom-scrollbar">
+            <header class="flex justify-between items-start mb-12">
+                <div>
+                    <h2 class="text-4xl font-black text-gavac-primary tracking-tighter">Nuevo Activo</h2>
+                    <p class="text-slate-400 font-medium mt-1">Ingresa la información biológica básica.</p>
+                </div>
+                <button id="close-modal-btn" class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
             </header>
 
-            <form id="animal-form" class="space-y-8">
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-slate-700 ml-1">Identificación (Tag/Chapeta)</label>
-                        <input name="tag" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none focus:bg-white focus:ring-4 focus:ring-gavac-primary/5 transition-all" placeholder="Ej: GAV-0010">
+            <form id="animal-form" class="space-y-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-1.5">
+                        <label class="label-gavac">Identificación (Tag/Chapeta)</label>
+                        <input name="tag" required class="input-gavac" placeholder="Ej: GAV-1002">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-slate-700 ml-1">Nombre del Animal</label>
-                        <input name="nombre" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none focus:bg-white focus:ring-4 focus:ring-gavac-primary/5 transition-all" placeholder="Ej: Estrella">
+                    <div class="space-y-1.5">
+                        <label class="label-gavac">Nombre del Animal</label>
+                        <input name="nombre" class="input-gavac" placeholder="Nombre opcional">
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-slate-700 ml-1">Especie</label>
-                        <select name="especie" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="space-y-1.5">
+                        <label class="label-gavac">Especie</label>
+                        <select name="especie" class="input-gavac !py-4 cursor-pointer">
                             <option value="Bovino">Bovino</option>
                             <option value="Equino">Equino</option>
                             <option value="Porcino">Porcino</option>
                             <option value="Ovino">Ovino</option>
                         </select>
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-slate-700 ml-1">Raza</label>
-                        <input name="raza" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none" placeholder="Ej: Brahman">
+                    <div class="space-y-1.5">
+                        <label class="label-gavac">Raza Principal</label>
+                        <input name="raza" class="input-gavac" placeholder="Ej: Brahman">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-slate-700 ml-1">Sexo</label>
-                        <select name="sexo" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none appearance-none">
+                    <div class="space-y-1.5">
+                        <label class="label-gavac">Sexo</label>
+                        <select name="sexo" class="input-gavac !py-4 cursor-pointer">
                             <option value="hembra">Hembra</option>
                             <option value="macho">Macho</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-6">
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-slate-700 ml-1">Peso Actual (Kg)</label>
-                        <input name="peso_actual" type="number" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="space-y-1.5">
+                        <label class="label-gavac">Peso Actual (Kg)</label>
+                        <input name="peso_actual" type="number" step="0.01" class="input-gavac" placeholder="0.00">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-slate-700 ml-1">Edad (Meses)</label>
-                        <input name="edad_meses" type="number" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none">
+                    <div class="space-y-1.5">
+                        <label class="label-gavac">Edad (Meses)</label>
+                        <input name="edad_meses" type="number" class="input-gavac" placeholder="0">
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-bold text-slate-700 ml-1">Lote</label>
-                        <input name="lote" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 outline-none" placeholder="Lote 1">
+                    <div class="space-y-1.5">
+                        <label class="label-gavac">Lote Destino</label>
+                        <input name="lote" class="input-gavac" placeholder="Ej: Lote 1">
                     </div>
                 </div>
 
-                <div class="flex gap-6 pt-6">
-                    <button type="button" id="close-modal-btn" class="flex-1 border-2 border-slate-100 py-5 rounded-2xl font-extrabold text-slate-400 hover:bg-slate-50 transition-all">Cancelar</button>
-                    <button type="submit" class="flex-1 bg-gavac-primary text-white py-5 rounded-2xl font-extrabold text-lg shadow-xl shadow-gavac-primary/20 hover:bg-gavac-accent hover:-translate-y-1 transition-all active:scale-95">Guardar Registro</button>
+                <div class="flex gap-6 pt-8 border-t border-slate-50">
+                    <button type="button" class="flex-1 btn-gavac-ghost" onclick="document.getElementById('close-modal-btn').click()">Cancelar</button>
+                    <button type="submit" class="flex-1 btn-gavac-primary !py-5">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i>
+                        <span>Confirmar Registro</span>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script type="module" src="../../../dist/modules/ganado/main.js"></script>
+    <script type="module" src="/dist/modules/ganado/main.js"></script>
     <script>
-        if (window.lucide) { lucide.createIcons(); }
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) { lucide.createIcons(); }
 
-        const activeFinca = JSON.parse(localStorage.getItem('gavac_active_finca') || '{}');
-        const navLinks = document.querySelectorAll('#main-nav .nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const moduleName = link.getAttribute('data-module');
-                const userRol = activeFinca.rol;
-                if (moduleName === 'inicio' || userRol === 'admin' || userRol === 'ganadero') return;
+            const activeFinca = JSON.parse(localStorage.getItem('gavac_active_finca') || '{}');
+            const userData = JSON.parse(localStorage.getItem('gavac_usuario') || '{}');
 
-                if (userRol === 'operario' && ['admin', 'reportes'].includes(moduleName)) {
-                    e.preventDefault();
-                    alert("Este módulo requiere permisos administrativos en esta finca.");
-                }
-            });
+            if (activeFinca.nombre) {
+                document.getElementById('active-finca-name').textContent = activeFinca.nombre;
+            }
+
+            const userShort = userData.email ? userData.email.split('@')[0] : 'U';
+            document.getElementById('user-initial').textContent = userShort.charAt(0).toUpperCase();
+
+            // Modal visibility
+            const modal = document.getElementById('animal-modal');
+            document.getElementById('open-modal-btn').onclick = () => modal.classList.remove('hidden');
+            document.getElementById('close-modal-btn').onclick = () => modal.classList.add('hidden');
         });
+    </script>
+    <script>
+        // Dynamic route adjustment for port 5434 (live-server) vs FastAPI clean routes (port 8000)
+        (function() {
+            const isLiveServer = window.location.port === '5434';
+            const mapToLiveServer = {
+                '/dashboard': '/dashboard.html',
+                '/fincas': '/fincas.html',
+                '/ganado': '/src/modules/ganado/index.html',
+                '/sanidad': '/src/modules/sanidad/index.html',
+                '/reproduccion': '/src/modules/reproduccion/index.html',
+                '/produccion': '/src/modules/produccion/index.html',
+                '/inventario': '/src/modules/inventario/index.html',
+                '/reportes': '/src/modules/reportes/index.html',
+                '/empleados': '/src/modules/empleados/index.html',
+                '/admin': '/src/modules/admin/index.html'
+            };
+            const mapToFastAPI = {
+                'dashboard.html': '/dashboard',
+                '/dashboard.html': '/dashboard',
+                'fincas.html': '/fincas',
+                '/fincas.html': '/fincas',
+                '/src/modules/ganado/index.html': '/ganado',
+                '/src/modules/sanidad/index.html': '/sanidad',
+                '/src/modules/reproduccion/index.html': '/reproduccion',
+                '/src/modules/produccion/index.html': '/produccion',
+                '/src/modules/inventario/index.html': '/inventario',
+                '/src/modules/reportes/index.html': '/reportes',
+                '/src/modules/empleados/index.html': '/empleados',
+                '/src/modules/admin/index.html': '/admin'
+            };
 
-        const modal = document.getElementById('animal-modal');
-        document.getElementById('open-modal-btn').onclick = () => modal.classList.remove('hidden');
-        document.getElementById('close-modal-btn').onclick = () => modal.classList.add('hidden');
-        window.onclick = (e) => { if(e.target === modal) modal.classList.add('hidden'); }
+            document.addEventListener('DOMContentLoaded', () => {
+                const mapping = isLiveServer ? mapToLiveServer : mapToFastAPI;
+                document.querySelectorAll('aside nav a, a.sidebar-item, a[href]').forEach(a => {
+                    const href = a.getAttribute('href');
+                    if (href && mapping[href]) {
+                        a.setAttribute('href', mapping[href]);
+                    }
+                });
+
+                document.querySelectorAll('[onclick]').forEach(el => {
+                    let onclick = el.getAttribute('onclick');
+                    if (onclick) {
+                        if (onclick.includes('fincas')) {
+                            const target = isLiveServer ? 'fincas.html' : '/fincas';
+                            onclick = onclick.replace(/['"](\/fincas|fincas\.html)['"]/g, `'${target}'`);
+                        }
+                        if (onclick.includes('dashboard')) {
+                            const target = isLiveServer ? 'dashboard.html' : '/dashboard';
+                            onclick = onclick.replace(/['"](\/dashboard|dashboard\.html)['"]/g, `'${target}'`);
+                        }
+                        el.setAttribute('onclick', onclick);
+                    }
+                });
+            });
+        })();
     </script>
 </body>
 </html>

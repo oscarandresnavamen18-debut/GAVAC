@@ -75,29 +75,34 @@ function renderResumenTable(data: ResumenReporte): void {
   let filasHtml = "";
   for (const item of data.resumen) {
     filasHtml += `
-      <tr class="hover:bg-slate-50 transition-colors">
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-900 capitalize">${item.sexo ?? "No definido"}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 uppercase">${item.estado}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-slate-800 text-right">${item.cantidad}</td>
+      <tr>
+        <td class="capitalize font-black text-gavac-primary tracking-tight">${item.sexo ?? "No definido"}</td>
+        <td>
+           <span class="badge-gavac ${item.estado === 'active' ? 'badge-gavac-success' : 'badge-gavac-warning'}">${item.estado}</span>
+        </td>
+        <td class="font-black text-lg text-slate-800 text-right">${item.cantidad}</td>
       </tr>
     `;
   }
 
   reportResult.innerHTML = `
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-        <h3 class="font-bold text-slate-800 text-base">Resumen de Inventario Ganadero</h3>
-        <span class="text-xs text-slate-500">Generado el: ${fechaFormateada}</span>
+    <div class="card-gavac p-0 overflow-hidden shadow-2xl shadow-gavac-primary/5">
+      <div class="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
+        <div>
+            <h3 class="font-black text-gavac-primary text-xl tracking-tight">Censo Ganadero en Tiempo Real</h3>
+            <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Sincronizado: ${fechaFormateada}</p>
+        </div>
+        <button class="btn-gavac-outline !py-2 !text-[10px]">Exportar PDF</button>
       </div>
-      <table class="min-w-full divide-y divide-slate-200">
-        <thead class="bg-slate-100/70 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+      <table class="table-gavac">
+        <thead>
           <tr>
-            <th class="px-6 py-3 text-left">Sexo</th>
-            <th class="px-6 py-3 text-left">Estado</th>
-            <th class="px-6 py-3 text-right">Cantidad</th>
+            <th>Género</th>
+            <th>Estado Biológico</th>
+            <th class="text-right">Cantidad Cabeza</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100 bg-white">
+        <tbody>
           ${filasHtml}
         </tbody>
       </table>
@@ -297,9 +302,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Cerrar Sesión
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem(TOKEN_STORAGE_KEY);
-      localStorage.removeItem("gavac_usuario");
-      window.location.href = "/login";
+      localStorage.clear();
+      window.location.href = "/";
     });
   }
 });

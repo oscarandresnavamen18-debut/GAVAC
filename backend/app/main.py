@@ -1,11 +1,7 @@
 import os
 import logging
-<<<<<<< HEAD
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, Depends
 from fastapi.exceptions import RequestValidationError
-=======
-from fastapi import Depends, FastAPI, Request
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
@@ -32,7 +28,7 @@ app = FastAPI(title="GAVAC API", version="1.0.0")
 # La creación automática solo se permite explícitamente en desarrollo.
 if os.getenv("AUTO_CREATE_TABLES", "false").lower() == "true":
     Base.metadata.create_all(bind=engine)
-    logger.info("DB SYNC OK")
+    logger.info("✅ DB SYNC OK")
 
 # --- CONFIGURACIÓN DE MIDDLEWARES (ORDEN CRÍTICO) ---
 
@@ -70,37 +66,27 @@ print(f"------------------------")
 if os.path.exists(FRONTEND_PATH):
     app.mount("/dist", StaticFiles(directory=os.path.join(FRONTEND_PATH, "dist")), name="dist")
     app.mount("/static", StaticFiles(directory=FRONTEND_PATH), name="static")
-    logger.info(f"FRONTEND MOUNTED AT: {FRONTEND_PATH}")
+    logger.info(f"✅ FRONTEND MOUNTED AT: {FRONTEND_PATH}")
 else:
     logger.error(f"❌ FRONTEND NOT FOUND")
 
 # Servir el Login como página de inicio
 @app.get("/")
 def root():
-<<<<<<< HEAD
-    path = os.path.join(FRONTEND_PATH, "login.html")
+    path = os.path.join(FRONTEND_PATH, "index.html")
     if os.path.exists(path):
         return FileResponse(path)
-    return {"error": "No se encontró el archivo login.html"}
-=======
-    for name in ["landing.html", "index.html"]:
-        path = os.path.join(FRONTEND_PATH, name)
-        if os.path.exists(path):
-            return FileResponse(path)
-    return {"error": "No se encontró el archivo de inicio"}
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
+    return {"error": "No se encontró el archivo index.html"}
 
 # Servir el Login
 @app.get("/login")
 def login_page():
-    path = os.path.join(FRONTEND_PATH, "login.html")
+    path = os.path.join(FRONTEND_PATH, "index.html")
     if os.path.exists(path):
         return FileResponse(path)
 
-
-
     # Si no está en la raíz, buscar en el módulo de auth
-    auth_path = os.path.join(FRONTEND_PATH, "src", "modules", "auth", "login.html")
+    auth_path = os.path.join(FRONTEND_PATH, "src", "modules", "auth", "index.html")
     if os.path.exists(auth_path):
         return FileResponse(auth_path)
 

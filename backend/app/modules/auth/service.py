@@ -1,11 +1,7 @@
 import os
 from datetime import datetime, timedelta
-<<<<<<< HEAD
 from typing import List, Tuple
-from fastapi import Depends, HTTPException, status, Header
-=======
-from fastapi import Cookie, Depends, HTTPException, status
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
+from fastapi import Cookie, Depends, HTTPException, status, Header
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -23,7 +19,7 @@ SECRET_KEY = os.getenv("AUTH_SECRET_KEY", "cambia-esta-clave-en-.env")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 8
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -155,6 +151,24 @@ def requerir_rol_organizacion(*roles_permitidos: str):
         if rol_usuario not in roles_permitidos:
             raise HTTPException(status_code=403, detail="Sin permisos administrativos en la organización")
         return usuario
+    return verificador
+
+def requerir_admin_org_o_finca():
+    def verificador(usuario=Depends(get_usuario_actual), db: Session = Depends(get_db)):
+        rol_org = usuario.rol_organizacion.value if hasattr(usuario.rol_organizacion, "value") else str(usuario.rol_organizacion)
+        if rol_org == "admin":
+            return usuario
+
+        admin_en_finca = db.query(UsuarioFincaRol).join(Finca).filter(
+            UsuarioFincaRol.usuario_id == usuario.id,
+            Finca.organizacion_id == usuario.organizacion_id,
+            UsuarioFincaRol.rol == RolEnum.admin
+        ).first()
+
+        if admin_en_finca:
+            return usuario
+
+        raise HTTPException(status_code=403, detail="Se requieren permisos de administrador")
     return verificador
 
 def requerir_rol(*roles_permitidos: str):

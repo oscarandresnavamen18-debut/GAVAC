@@ -3,147 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAVAC — Reportes</title>
+    <title>GAVAC — Análisis y Reportes</title>
     <link rel="stylesheet" href="/dist/output.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .app-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
-        .sidebar { background-color: #1A3A32; color: white; display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
-        .nav-link {
-            display: flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px;
-            color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 600; transition: all 0.3s;
-        }
-        .nav-link:hover { color: white; background: rgba(255,255,255,0.05); }
-        .nav-link.active { background: #E8F1EC; color: #1A3A32; }
-
+        .app-container { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
         @media (max-width: 1024px) {
-            .app-layout { grid-template-columns: 80px 1fr; }
-            .sidebar span { display: none; }
-            .sidebar { padding: 20px 10px; align-items: center; }
+            .app-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
         }
+        .report-card:hover { @apply border-emerald-500/30 bg-emerald-50/10; }
     </style>
 </head>
-<<<<<<< HEAD
 <body class="bg-gavac-bg font-jakarta antialiased text-gavac-primary">
-    <div class="app-layout">
-        <aside class="sidebar p-8">
-            <div class="flex items-center gap-3 mb-12 px-2">
-                <span class="text-4xl font-extrabold tracking-tighter">GAVAC</span>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar bg-gavac-primary p-8 flex flex-col h-screen sticky top-0">
+            <div class="flex items-center gap-3 mb-16 px-2">
+                <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                </div>
+                <span class="text-3xl font-black text-white tracking-tighter">GAVAC</span>
             </div>
-            <nav class="flex-1 space-y-3" id="main-nav">
-                <a href="../../../dashboard.html" class="nav-link" data-module="inicio"><i data-lucide="layout-dashboard" class="w-6 h-6 opacity-70"></i><span>Inicio</span></a>
-                <a href="../ganado/index.html" class="nav-link" data-module="animales"><i data-lucide="layout-grid" class="w-6 h-6 opacity-70"></i><span>Animales</span></a>
-                <a href="../sanidad/index.html" class="nav-link" data-module="sanidad"><i data-lucide="shield-plus" class="w-6 h-6 opacity-70"></i><span>Sanidad</span></a>
-                <a href="../reproduccion/index.html" class="nav-link" data-module="reproduccion"><i data-lucide="heart" class="w-6 h-6 opacity-70"></i><span>Reproducción</span></a>
-                <a href="../produccion/index.html" class="nav-link" data-module="produccion"><i data-lucide="droplets" class="w-6 h-6 opacity-70"></i><span>Producción</span></a>
-                <a href="../inventario/index.html" class="nav-link" data-module="inventario"><i data-lucide="package" class="w-6 h-6 opacity-70"></i><span>Inventario</span></a>
-                <a href="index.html" class="nav-link active" data-module="reportes"><i data-lucide="bar-chart-3" class="w-6 h-6 opacity-70"></i><span>Reportes</span></a>
-                <a href="../admin/index.html" class="nav-link" data-module="admin"><i data-lucide="shield-check" class="w-6 h-6 opacity-70"></i><span>Admin</span></a>
+
+            <nav class="flex-1 space-y-2 overflow-y-auto pr-2 custom-scrollbar">
+                <div class="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-4 ml-6">Menú Principal</div>
+
+                <a href="/dashboard" class="sidebar-item" data-module="inicio">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>Panel de Control</span>
+                </a>
+                <a href="/ganado" class="sidebar-item" data-module="animales">
+                    <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                    <span>Inventario Ganado</span>
+                </a>
+                <a href="/sanidad" class="sidebar-item" data-module="sanidad">
+                    <i data-lucide="shield-plus" class="w-5 h-5"></i>
+                    <span>Control Sanitario</span>
+                </a>
+                <a href="/reproduccion" class="sidebar-item" data-module="reproduccion">
+                    <i data-lucide="heart" class="w-5 h-5"></i>
+                    <span>Gestión Reproductiva</span>
+                </a>
+                <a href="/produccion" class="sidebar-item" data-module="produccion">
+                    <i data-lucide="droplets" class="w-5 h-5"></i>
+                    <span>Producción</span>
+                </a>
+                <a href="/inventario" class="sidebar-item" data-module="inventario">
+                    <i data-lucide="package" class="w-5 h-5"></i>
+                    <span>Insumos</span>
+                </a>
+                <a href="/reportes" class="sidebar-item active" data-module="reportes">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                    <span>Análisis y Reportes</span>
+                </a>
+
+                <div class="pt-8 mt-4 border-t border-white/5">
+                    <div class="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] mb-4 ml-6">Soporte y Admin</div>
+                    <a href="/empleados" class="sidebar-item" data-module="empleados">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        <span>Gestión Personal</span>
+                    </a>
+                    <a href="/admin" class="sidebar-item" data-module="admin">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                        <span>Administración</span>
+                    </a>
+                </div>
             </nav>
+
             <div class="mt-auto pt-8 border-t border-white/10">
-                <button id="logoutBtn" class="flex items-center gap-3 w-full py-4 px-6 rounded-2xl bg-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all font-bold text-sm text-white">
-                    <i data-lucide="log-out" class="w-5 h-5 opacity-70"></i>
-                    <span>Cerrar sesión</span>
+                <button id="logoutBtn" class="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 font-black text-xs uppercase tracking-widest group">
+                    <i data-lucide="log-out" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
+                    <span>Salir del Sistema</span>
                 </button>
             </div>
         </aside>
-=======
-<body>
 
-    <header class="app-header">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div style="width: 44px; height: 44px; background: #1B5E20; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 22px;">G</div>
-            <h2 class="serif" style="font-size: 24px; letter-spacing: -1px;">GAVAC Analytics</h2>
-        </div>
-        <div class="nav-actions">
-            <a href="/dashboard" class="btn-back">← Volver al Inicio</a>
-            <button id="logoutBtn" style="background:#B42318; border:none; color:white; padding:10px 25px; border-radius:12px; font-weight:800; font-size:11px; cursor:pointer;">SALIR</button>
-        </div>
-    </header>
-
-    <main>
-        <section class="page-title">
-            <h1 class="serif">Dashboard de <br><em>Inteligencia.</em></h1>
-            <p style="color: #6F6F61; font-size: 18px;">Monitoreo de rendimiento biológico y financiero en tiempo real.</p>
-        </section>
-
-        <div class="kpi-grid">
-            <div id="card-resumen" class="kpi-card">
-                <span style="font-size: 14px; font-weight: 900; letter-spacing: 2px; display: block; margin-bottom: 20px;">BI</span>
-                <h3>Inventario</h3>
-                <p>Análisis demográfico por raza y distribución de género del hato completo.</p>
-            </div>
-            <div id="card-produccion" class="kpi-card">
-                <span style="font-size: 14px; font-weight: 900; letter-spacing: 2px; display: block; margin-bottom: 20px;">PRO</span>
-                <h3>Producción</h3>
-                <p>Métricas de pesaje, rendimiento diario y comparativas históricas de eficiencia.</p>
-            </div>
-            <div id="card-auditoria" class="kpi-card">
-                <span style="font-size: 14px; font-weight: 900; letter-spacing: 2px; display: block; margin-bottom: 20px;">AUD</span>
-                <h3>Seguridad</h3>
-                <p>Trazabilidad inmutable de todas las operaciones realizadas en el sistema.</p>
-            </div>
-        </div>
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
-
-        <main class="p-10 lg:p-16">
-            <header class="flex justify-between items-end mb-12">
-                <div>
-                    <h1 class="text-4xl font-extrabold mb-2 text-gavac-primary">Reportes</h1>
-                    <p class="text-slate-500 font-medium text-lg">Consulta y genera reportes de tu finca</p>
-                </div>
-<<<<<<< HEAD
-                <div class="flex items-center gap-4">
-                    <div class="bg-white border border-slate-200 rounded-2xl px-6 py-3 flex items-center gap-3 shadow-sm">
-                        <i data-lucide="calendar" class="w-5 h-5 text-slate-400"></i>
-                        <span class="text-sm font-bold text-slate-600">01/07/2026 - 31/07/2026</span>
+        <!-- Main Content Area -->
+        <main class="flex flex-col h-screen overflow-hidden">
+            <!-- Topbar Professional -->
+            <header class="bg-white/80 backdrop-blur-md border-b border-slate-100 h-24 flex items-center justify-between px-12 z-40">
+                <div class="flex items-center gap-8">
+                    <div onclick="window.location.href='/fincas'" class="group bg-slate-50 border border-slate-200 rounded-2xl px-6 py-3 flex items-center gap-4 cursor-pointer hover:bg-white hover:border-gavac-primary/20 transition-all duration-300 shadow-sm">
+                        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-gavac-primary transition-colors">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-gavac-primary group-hover:text-white"></i>
+                        </div>
+                        <div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Trabajando en:</p>
+                            <span id="active-finca-name" class="font-black text-gavac-primary tracking-tight">Cargando...</span>
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-slate-300 group-hover:text-gavac-primary transition-all"></i>
                     </div>
-                    <button class="bg-gavac-primary text-white px-6 py-3 rounded-xl font-bold">Generar reporte</button>
-=======
-                <div style="text-align: center; opacity: 0.2;">
-                    <div aria-hidden="true" style="font-size: 56px; margin-bottom: 30px;">BI</div>
-                    <p class="serif" style="font-size: 36px;">Seleccione un módulo</p>
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-3">
+                         <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center font-black text-white text-xs shadow-sm">
+                            <span id="user-initial">U</span>
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-                <div class="card-gavac hover:-translate-y-2 transition-all cursor-pointer group">
-                    <div class="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-gavac-primary transition-colors">
-                        <i data-lucide="shopping-cart" class="w-6 h-6 text-gavac-primary group-hover:text-white"></i>
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-12 custom-scrollbar">
+                <header class="mb-12">
+                    <h1 class="text-4xl font-black text-gavac-primary tracking-tight">Centro de Inteligencia</h1>
+                    <p class="text-slate-500 font-medium mt-1 text-lg">Consulta indicadores clave y genera reportes para exportación.</p>
+                </header>
+
+                <!-- Report Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Report 1 -->
+                    <div id="card-resumen" class="card-gavac report-card cursor-pointer border-2 border-transparent">
+                        <div class="w-14 h-14 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 mb-8">
+                            <i data-lucide="layout-grid" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-gavac-primary tracking-tighter mb-2">Inventario General</h3>
+                        <p class="text-sm text-slate-400 font-medium leading-relaxed">Resumen demográfico por raza, género y estado actual del hato.</p>
+                        <div class="mt-8 flex items-center gap-2 text-xs font-black text-emerald-600 uppercase tracking-widest">
+                            Generar Consulta <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </div>
                     </div>
-                    <h3 class="font-extrabold mb-2">Inventario de animales</h3>
-                    <p class="text-sm text-slate-400">Listado completo del ganado por finca y lote.</p>
+
+                    <!-- Report 2 -->
+                    <div id="card-produccion" class="card-gavac report-card cursor-pointer border-2 border-transparent">
+                        <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 mb-8">
+                            <i data-lucide="droplets" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-gavac-primary tracking-tighter mb-2">Rendimiento Lechero</h3>
+                        <p class="text-sm text-slate-400 font-medium leading-relaxed">Análisis de pesaje diario y comparativa histórica por animal o lote.</p>
+                        <div class="mt-8 flex items-center gap-2 text-xs font-black text-blue-600 uppercase tracking-widest">
+                            Generar Consulta <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+
+                    <!-- Report 3 -->
+                    <div id="card-auditoria" class="card-gavac report-card cursor-pointer border-2 border-transparent">
+                        <div class="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-500 mb-8">
+                            <i data-lucide="shield-check" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-gavac-primary tracking-tighter mb-2">Trazabilidad y Auditoría</h3>
+                        <p class="text-sm text-slate-400 font-medium leading-relaxed">Historial completo de acciones y movimientos en el sistema.</p>
+                        <div class="mt-8 flex items-center gap-2 text-xs font-black text-slate-600 uppercase tracking-widest">
+                            Generar Consulta <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </div>
+                    </div>
                 </div>
-                <!-- Repetir estructura para otros -->
+
+                <!-- Analysis Space -->
+                <div class="mt-12">
+                    <div id="reportLoader" class="hidden flex flex-col items-center justify-center py-20 bg-white rounded-[2.5rem] border border-slate-100">
+                        <div class="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                        <p class="mt-6 text-sm font-black text-slate-400 uppercase tracking-[0.2em]">Consultando Supabase...</p>
+                    </div>
+
+                    <div id="reportResult" class="min-h-[400px]">
+                        <!-- Resultado dinámico -->
+                        <div class="flex flex-col items-center justify-center py-32 bg-slate-50/50 rounded-[3rem] border-2 border-dashed border-slate-100 text-slate-300">
+                            <i data-lucide="pie-chart" class="w-16 h-16 mb-6 opacity-30"></i>
+                            <p class="text-lg font-bold italic tracking-tight">Selecciona un módulo para visualizar los datos</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
-    <script type="module" src="../../../dist/modules/reportes/main.js"></script>
+    <script type="module" src="/dist/modules/reportes/main.js"></script>
     <script>
-        if (window.lucide) { lucide.createIcons(); }
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) { lucide.createIcons(); }
 
-        const userData = JSON.parse(localStorage.getItem('gavac_usuario') || '{}');
-        const navLinks = document.querySelectorAll('#main-nav .nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const moduleName = link.getAttribute('data-module');
-                if (moduleName === 'inicio' || userData.rol === 'admin') return;
+            const activeFinca = JSON.parse(localStorage.getItem('gavac_active_finca') || '{}');
+            const userData = JSON.parse(localStorage.getItem('gavac_usuario') || '{}');
 
-                if (userData.permisos && userData.permisos[moduleName] === false) {
-                    e.preventDefault();
-                    alert("Este módulo está deshabilitado para tu perfil. Comunícate con el administrador.");
-                }
+            if (activeFinca.nombre) {
+                document.getElementById('active-finca-name').textContent = activeFinca.nombre;
+            }
+
+            const userShort = userData.email ? userData.email.split('@')[0] : 'U';
+            document.getElementById('user-initial').textContent = userShort.charAt(0).toUpperCase();
+        });
+    </script>
+    <script>
+        // Dynamic route adjustment for port 5434 (live-server) vs FastAPI clean routes (port 8000)
+        (function() {
+            const isLiveServer = window.location.port === '5434';
+            const mapToLiveServer = {
+                '/dashboard': '/dashboard.html',
+                '/fincas': '/fincas.html',
+                '/ganado': '/src/modules/ganado/index.html',
+                '/sanidad': '/src/modules/sanidad/index.html',
+                '/reproduccion': '/src/modules/reproduccion/index.html',
+                '/produccion': '/src/modules/produccion/index.html',
+                '/inventario': '/src/modules/inventario/index.html',
+                '/reportes': '/src/modules/reportes/index.html',
+                '/empleados': '/src/modules/empleados/index.html',
+                '/admin': '/src/modules/admin/index.html'
+            };
+            const mapToFastAPI = {
+                'dashboard.html': '/dashboard',
+                '/dashboard.html': '/dashboard',
+                'fincas.html': '/fincas',
+                '/fincas.html': '/fincas',
+                '/src/modules/ganado/index.html': '/ganado',
+                '/src/modules/sanidad/index.html': '/sanidad',
+                '/src/modules/reproduccion/index.html': '/reproduccion',
+                '/src/modules/produccion/index.html': '/produccion',
+                '/src/modules/inventario/index.html': '/inventario',
+                '/src/modules/reportes/index.html': '/reportes',
+                '/src/modules/empleados/index.html': '/empleados',
+                '/src/modules/admin/index.html': '/admin'
+            };
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const mapping = isLiveServer ? mapToLiveServer : mapToFastAPI;
+                document.querySelectorAll('aside nav a, a.sidebar-item, a[href]').forEach(a => {
+                    const href = a.getAttribute('href');
+                    if (href && mapping[href]) {
+                        a.setAttribute('href', mapping[href]);
+                    }
+                });
+
+                document.querySelectorAll('[onclick]').forEach(el => {
+                    let onclick = el.getAttribute('onclick');
+                    if (onclick) {
+                        if (onclick.includes('fincas')) {
+                            const target = isLiveServer ? 'fincas.html' : '/fincas';
+                            onclick = onclick.replace(/['"](\/fincas|fincas\.html)['"]/g, `'${target}'`);
+                        }
+                        if (onclick.includes('dashboard')) {
+                            const target = isLiveServer ? 'dashboard.html' : '/dashboard';
+                            onclick = onclick.replace(/['"](\/dashboard|dashboard\.html)['"]/g, `'${target}'`);
+                        }
+                        el.setAttribute('onclick', onclick);
+                    }
+                });
             });
-        });
-
-        document.getElementById('logoutBtn')?.addEventListener('click', () => {
-            localStorage.removeItem("gavac_token");
-            localStorage.removeItem("gavac_usuario");
-            window.location.href = "../../../index.html";
-        });
+        })();
     </script>
 </body>
 </html>

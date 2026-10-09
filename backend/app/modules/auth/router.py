@@ -1,10 +1,5 @@
 from typing import List
-<<<<<<< HEAD
-from fastapi import APIRouter, Depends, Request, Header, HTTPException
-=======
-import os
-from fastapi import APIRouter, Depends, Request, Response
->>>>>>> a583192508a8de8f5f8a80617669f41a01d080f0
+from fastapi import APIRouter, Depends, Request, Header, HTTPException, Response
 from sqlalchemy.orm import Session
 import os
 
