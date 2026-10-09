@@ -1,0 +1,76 @@
+
+from typing import Optional, List
+from fastapi import APIRouter, Depends, status, Request
+from sqlalchemy.orm import Session
+
+from app.core.database import get_db
+from app.schemas.cattle_schemas import AnimalCreate, AnimalUpdate, AnimalOut, TrasladoCreate
+import app.services.cattle_service as service
+from app.services.auth_service import get_usuario_actual
+
+router = APIRouter(prefix="/api/ganado", tags=["Ganado"])
+
+@router.post("/mover/", response_model=AnimalOut)
+def mover_animal(
+    data: TrasladoCreate,
+    request: Request,
+    db: Session = Depends(get_db),
+    usuario_actual = Depends(get_usuario_actual)
+):
+    return service.move_animal(db, data, usuario_actual, request.client.host)
+
+
+@router.get("/", response_model=List[AnimalOut])
+def listar_animales(
+    breed: Optional[str] = None,
+    sex: Optional[str] = None,
+    status_: Optional[str] = None,
+    tag: Optional[str] = None,
+    request: Request = None,
+    db: Session = Depends(get_db),
+    usuario_actual = Depends(get_usuario_actual) # Protegido por JWT
+):
+    ip = request.client.host if request else None
+    return service.list_animals(db, breed=breed, sex=sex, status_=status_, tag=tag, usuario=usuario_actual, ip_address=ip)
+
+
+@router.get("/{animal_id}", response_model=AnimalOut)
+def obtener_animal(
+    animal_id: int, 
+    request: Request = None,
+    db: Session = Depends(get_db),
+    usuario_actual = Depends(get_usuario_actual)
+):
+    ip = request.client.host if request else None
+    return service.get_animal(db, animal_id, usuario=usuario_actual, ip_address=ip)
+
+
+@router.post("/", response_model=AnimalOut, status_code=status.HTTP_201_CREATED)
+def registrar_animal(
+    data: AnimalCreate, 
+    request: Request,
+    db: Session = Depends(get_db),
+    usuario_actual = Depends(get_usuario_actual) # Solo usuarios autenticados
+):
+    return service.register_animal(db, data, usuario_actual, request.client.host)
+
+
+@router.put("/{animal_id}", response_model=AnimalOut)
+def actualizar_animal(
+    animal_id: int, 
+    data: AnimalUpdate, 
+    request: Request,
+    db: Session = Depends(get_db),
+    usuario_actual = Depends(get_usuario_actual)
+):
+    return service.update_animal(db, animal_id, data, usuario_actual, request.client.host)
+
+
+@router.delete("/{animal_id}", status_code=status.HTTP_204_NO_CONTENT)
+def eliminar_animal(
+    animal_id: int, 
+    request: Request,
+    db: Session = Depends(get_db),
+    usuario_actual = Depends(get_usuario_actual) # Auditoría de eliminación
+):
+    service.delete_animal(db, animal_id, usuario_actual, request.client.host)

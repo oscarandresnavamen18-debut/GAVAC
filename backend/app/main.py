@@ -6,18 +6,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
-from app.database import Base, engine
-from app.middleware.security import SecurityHeadersMiddleware
-from app.modules.cattle.router import router as cattle_router
-from app.modules.auth.router import router as auth_router
-from app.modules.auth.service import requerir_rol
-from app.modules.reportes.router import router as reportes_router
-from app.modules.empleados.router import router as empleados_router
-from app.modules.sanidad.router import router as sanidad_router
-from app.modules.reproduccion.router import router as reproduccion_router
-from app.modules.inventario.router import router as inventario_router
-from app.modules.produccion.router import router as produccion_router
-from app.modules.admin.router import router as admin_api_router
+from app.core.database import Base, engine
+from app.core.security import SecurityHeadersMiddleware
+from app.api.cattle_router import router as cattle_router
+from app.api.auth_router import router as auth_router
+from app.services.auth_service import requerir_rol
+from app.api.reportes_router import router as reportes_router
+from app.api.empleados_router import router as empleados_router
+from app.api.sanidad_router import router as sanidad_router
+from app.api.reproduccion_router import router as reproduccion_router
+from app.api.inventario_router import router as inventario_router
+from app.api.produccion_router import router as produccion_router
+from app.api.admin_router import router as admin_api_router
 
 # Configuración de Logs
 logging.basicConfig(level=logging.INFO)
@@ -63,10 +63,13 @@ print(f"FRONTEND_PATH: {FRONTEND_PATH}")
 print(f"LOGIN EXISTS: {os.path.exists(os.path.join(FRONTEND_PATH, 'login.html'))}")
 print(f"------------------------")
 
-if os.path.exists(FRONTEND_PATH):
-    app.mount("/dist", StaticFiles(directory=os.path.join(FRONTEND_PATH, "dist")), name="dist")
+FLUTTER_WEB_PATH = os.path.join(FRONTEND_PATH, "build", "web")
+if os.path.exists(FLUTTER_WEB_PATH):
+    app.mount("/", StaticFiles(directory=FLUTTER_WEB_PATH, html=True), name="flutter_web")
+    logger.info(f"✅ FLUTTER WEB MOUNTED AT: {FLUTTER_WEB_PATH}")
+elif os.path.exists(FRONTEND_PATH):
     app.mount("/static", StaticFiles(directory=FRONTEND_PATH), name="static")
-    logger.info(f"✅ FRONTEND MOUNTED AT: {FRONTEND_PATH}")
+    logger.info(f"✅ FLUTTER FRONTEND SOURCE MOUNTED AT: {FRONTEND_PATH}")
 else:
     logger.error(f"❌ FRONTEND NOT FOUND")
 
